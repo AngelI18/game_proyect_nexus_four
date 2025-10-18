@@ -2,3 +2,32 @@
 .godot/
 /android/
 .vscode/
+
+# Godot-specific ignores
+*.import
+.import/
+export.cfg
+export_presets.cfg
+
+# Imported translations (automatically generated from CSV files)
+*.translation
+
+# Mono-specific ignores (si usas C#)
+.mono/
+data_*/
+mono_crash.*.json
+
+# System/Editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Build/Export folders
+builds/
+exports/
+dist/
+
+# Logs
+*.log
