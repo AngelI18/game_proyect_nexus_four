@@ -216,6 +216,7 @@ size = Vector2(20, 9)
 radius = 4.12311
 
 [node name="player" type="CharacterBody2D"]
+collision_layer = 3
 script = ExtResource("1_yj2nq")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -223,8 +224,6 @@ position = Vector2(2, -16)
 sprite_frames = SubResource("SpriteFrames_dqix7")
 animation = &"jump"
 autoplay = "idle"
-frame = 5
-frame_progress = 0.347097
 
 [node name="idle" type="CollisionShape2D" parent="."]
 visible = false
