@@ -1,7 +1,8 @@
-[gd_scene load_steps=46 format=3 uid="uid://ccg021l8va1nb"]
+[gd_scene load_steps=51 format=3 uid="uid://ccg021l8va1nb"]
 
 [ext_resource type="Script" uid="uid://bvfhmbyfrdwry" path="res://scripts/player/player.gd" id="1_yj2nq"]
 [ext_resource type="Texture2D" uid="uid://dpws1jqb86o3k" path="res://assets/characters/enemies/sword attack.png" id="2_igqbg"]
+[ext_resource type="Texture2D" uid="uid://ukcnydiuw7bq" path="res://assets/characters/player/Player Hurt 48x48.png" id="3_3yyo8"]
 [ext_resource type="Texture2D" uid="uid://n5kg423v8b7n" path="res://assets/characters/enemies/sword Idle.png" id="3_6igro"]
 [ext_resource type="Texture2D" uid="uid://dh0rkbth5j2qj" path="res://assets/characters/player/player new jump 48x48.png" id="3_kai5h"]
 [ext_resource type="Texture2D" uid="uid://du6ellrn8fokb" path="res://assets/characters/enemies/sowrd run.png" id="5_3yyo8"]
@@ -29,6 +30,22 @@ region = Rect2(256, 0, 64, 64)
 [sub_resource type="AtlasTexture" id="AtlasTexture_tnwcq"]
 atlas = ExtResource("2_igqbg")
 region = Rect2(320, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uj01l"]
+atlas = ExtResource("3_3yyo8")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dqix7"]
+atlas = ExtResource("3_3yyo8")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v4x4j"]
+atlas = ExtResource("3_3yyo8")
+region = Rect2(96, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nkdkw"]
+atlas = ExtResource("3_3yyo8")
+region = Rect2(144, 0, 48, 48)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_iqrax"]
 atlas = ExtResource("3_6igro")
@@ -153,6 +170,23 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
+"texture": SubResource("AtlasTexture_uj01l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dqix7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v4x4j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nkdkw")
+}],
+"loop": true,
+"name": &"hurt",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
 "texture": SubResource("AtlasTexture_iqrax")
 }, {
 "duration": 1.0,
@@ -273,8 +307,9 @@ script = ExtResource("1_yj2nq")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(2, -16)
 sprite_frames = SubResource("SpriteFrames_dqix7")
-animation = &"attack"
+animation = &"hurt"
 autoplay = "idle"
+frame_progress = 0.401853
 
 [node name="idle" type="CollisionShape2D" parent="."]
 visible = false
@@ -337,7 +372,11 @@ rotation_smoothing_enabled = true
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
 
+[node name="player_is_hurt" type="Timer" parent="."]
+wait_time = 0.5
+
 [connection signal="body_entered" from="player_hit_box" to="." method="_on_player_hit_box_body_entered"]
 [connection signal="body_exited" from="player_hit_box" to="." method="_on_player_hit_box_body_exited"]
 [connection signal="timeout" from="attack_cooldown" to="." method="_on_attack_cooldown_timeout"]
 [connection signal="timeout" from="deal_attack_timer" to="." method="_on_deal_attack_timer_timeout"]
+[connection signal="timeout" from="player_is_hurt" to="." method="_on_player_is_hurt_timeout"]

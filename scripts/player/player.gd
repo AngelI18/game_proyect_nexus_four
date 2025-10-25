@@ -14,6 +14,7 @@ var enemy_attack_cooldown = true
 var health = 200
 var player_alive = true
 var attack_ip = false
+var player_hurt_ip = false
 
 func _physics_process(delta: float) -> void:
 	# Gravedad
@@ -57,11 +58,11 @@ func _update_animation(direction: float) -> void:
 		$AnimatedSprite2D.play("jump")
 	elif direction == 0:
 		# Animación de reposo
-		if attack_ip == false:
+		if attack_ip == false and player_hurt_ip == false:
 			$AnimatedSprite2D.play("idle")
 	else:
 		# Animación de correr
-		if attack_ip == false:
+		if attack_ip == false and player_hurt_ip == false:
 			$AnimatedSprite2D.play("run")
 			$AnimatedSprite2D.flip_h = direction < 0
 
@@ -86,6 +87,9 @@ func _on_player_hit_box_body_exited(body: Node2D) -> void:
 func enemyAttack():
 	if enemy_in_attack_range and enemy_attack_cooldown:
 		health -= 20
+		$player_is_hurt.start()
+		$AnimatedSprite2D.play("hurt")
+		player_hurt_ip = true
 		enemy_attack_cooldown = false
 		$attack_cooldown.start()
 		print(health)
@@ -109,3 +113,8 @@ func _on_deal_attack_timer_timeout() -> void:
 	$deal_attack_timer.stop()
 	Global.player_current_attack = false
 	attack_ip = false
+
+
+func _on_player_is_hurt_timeout() -> void:
+	$player_is_hurt.stop()
+	player_hurt_ip = false
