@@ -307,9 +307,8 @@ script = ExtResource("1_yj2nq")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(2, -16)
 sprite_frames = SubResource("SpriteFrames_dqix7")
-animation = &"hurt"
+animation = &"attack"
 autoplay = "idle"
-frame_progress = 0.401853
 
 [node name="idle" type="CollisionShape2D" parent="."]
 visible = false

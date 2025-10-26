@@ -64,7 +64,8 @@ func _physics_process(delta: float) -> void:
 func _update_animation(direction: float) -> void:
 	if not is_on_floor():
 		# Animación de salto
-		$AnimatedSprite2D.play("jump")
+		if player_hurt_ip == false:
+			$AnimatedSprite2D.play("jump")
 	elif direction == 0:
 		# Animación de reposo
 		if attack_ip == false and player_hurt_ip == false:
