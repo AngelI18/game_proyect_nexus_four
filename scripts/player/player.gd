@@ -25,6 +25,14 @@ var player_alive = true
 var attack_ip = false
 var direction = 0
 
+func _ready():
+	var joystick = get_tree().get_first_node_in_group("attack_joystick")
+	if joystick:
+		joystick.attack_triggered.connect(_on_joystick_attack_triggered)
+		print("Joystick conectado!")
+	else:
+		print("Joystick no encontrado")
+
 func _physics_process(delta: float) -> void:
 	direction = 0
 	# Gravedad
@@ -46,8 +54,7 @@ func _physics_process(delta: float) -> void:
 				jump_less -= 1
 			elif jump_less == 0:
 				can_double_jump = false
-		elif Input.is_action_just_pressed("attack") and is_on_floor():
-			attack()
+				
 		elif Input.is_action_pressed("ui_left"):
 			direction = -1
 		elif Input.is_action_pressed("ui_right"):
@@ -161,3 +168,12 @@ func _on_deal_attack_timer_timeout() -> void:
 
 func _on_invulnerability_timer_timeout() -> void:
 	is_invulnerable = false
+
+func _on_joystick_attack_triggered(direction_attack: Vector2):
+	if is_on_floor() and !attack_ip and !is_taking_damage:
+		# Aplicar flip según dirección del joystick
+		if direction_attack.x < -0.3:
+			$AnimatedSprite2D.flip_h = true  # Izquierda
+		elif direction_attack.x > 0.3:
+			$AnimatedSprite2D.flip_h = false  # Derecha
+		attack()

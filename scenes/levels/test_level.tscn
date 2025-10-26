@@ -1,9 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://dymk3gekb17o"]
+[gd_scene load_steps=8 format=3 uid="uid://dymk3gekb17o"]
 
 [ext_resource type="PackedScene" uid="uid://cxtrnhx07y64i" path="res://scenes/environment/parallax_backgrounds/sea.tscn" id="1_fr1um"]
 [ext_resource type="PackedScene" uid="uid://ccg021l8va1nb" path="res://scenes/charactes/player/player.tscn" id="1_jbqir"]
 [ext_resource type="Texture2D" uid="uid://bovpvkaxv4apr" path="res://assets/environment/tilesets/terreno-tierra-pasto.png" id="2_yautc"]
 [ext_resource type="PackedScene" uid="uid://do6i7mtwk50p1" path="res://scenes/charactes/enemies/enemy.tscn" id="4_v45ci"]
+[ext_resource type="PackedScene" uid="uid://dyh5kfftkhqjp" path="res://scenes/ui/hud.tscn" id="5_48ne7"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fr1um"]
 texture = ExtResource("2_yautc")
@@ -140,3 +141,5 @@ layer_0/tile_data = PackedInt32Array(196601, 458754, 7, 262137, 458754, 7, 32767
 
 [node name="Enemy" parent="." instance=ExtResource("4_v45ci")]
 position = Vector2(341, 67)
+
+[node name="HUD" parent="." instance=ExtResource("5_48ne7")]
