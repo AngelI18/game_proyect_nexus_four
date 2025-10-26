@@ -9,12 +9,16 @@ var cant_double_jump = 10
 var jump_less = cant_double_jump
 
 #configurarAtaque
-var enemy_in_attack_range = false
+var enemy_node_in_range: Node2D = null
 var enemy_attack_cooldown = true
 var health = 200
 var player_alive = true
 var attack_ip = false
 var player_hurt_ip = false
+
+#retroceso
+const KNOCKBACK_STRENGTH = 150.0
+const KNOCKBACK_JUMP = -150.0
 
 func _physics_process(delta: float) -> void:
 	# Gravedad
@@ -37,7 +41,12 @@ func _physics_process(delta: float) -> void:
 
 	# Movimiento horizontal sin inercia
 	var direction := Input.get_axis("ui_left", "ui_right")
-	if attack_ip == false:
+	if attack_ip == true:
+		velocity.x = 0.0 # Detener al jugador mientras ataca
+	elif player_hurt_ip == true:
+		pass
+	else:
+		# Movimiento normal si no estamos ni atacando ni heridos
 		velocity.x = direction * SPEED
 		
 	
@@ -77,15 +86,20 @@ func player():
 
 func _on_player_hit_box_body_entered(body: Node2D) -> void:
 	if body.has_method("enemy"):
-		enemy_in_attack_range = true
+		enemy_node_in_range = body
 
 
 func _on_player_hit_box_body_exited(body: Node2D) -> void:
 	if body.has_method("enemy"):
-		enemy_in_attack_range = false
-		
+		if body == enemy_node_in_range:
+			enemy_node_in_range = null
+
 func enemyAttack():
-	if enemy_in_attack_range and enemy_attack_cooldown:
+	if enemy_node_in_range != null and enemy_attack_cooldown:
+		var knockback_direction = (global_position - enemy_node_in_range.global_position).normalized()
+		#velocidad del retroceso
+		velocity.x = knockback_direction.x * KNOCKBACK_STRENGTH
+		velocity.y = KNOCKBACK_JUMP
 		health -= 20
 		$player_is_hurt.start()
 		$AnimatedSprite2D.play("hurt")
