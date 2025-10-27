@@ -28,7 +28,7 @@ La modalidad en línea se enfoca en la competencia indirecta entre jugadores.
 * **Objetivo:** El jugador busca **sabotear** y derrotar al jugador contrincante mientras avanza en su propia partida.
 * **Emparejamiento:** El juego busca automáticamente a otro jugador en línea al presionar el botón de inicio.
 * **Mecánica de Sabotaje:** Al alcanzar un hito de enemigos eliminados, se envía una señal de "sabotaje" al oponente.
-    * **Efectos:** El jugador afectado experimenta contratiempos temporales como **debuffs**, un **mayor número de enemigos**, o enemigos que generan **mayor daño**.
+	* **Efectos:** El jugador afectado experimenta contratiempos temporales como **debuffs**, un **mayor número de enemigos**, o enemigos que generan **mayor daño**.
 * **Condición de Victoria:** Se consigue al ser el **último jugador con vida** en la ronda.
 
 ---
