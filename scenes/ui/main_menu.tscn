@@ -1,0 +1,118 @@
+[gd_scene load_steps=10 format=3 uid="uid://bnsfiig238cpu"]
+
+[ext_resource type="Script" uid="uid://b4aqhwnq4b348" path="res://scripts/ui/main_menu.gd" id="1_fe2o3"]
+[ext_resource type="Texture2D" uid="uid://7qdlucxcqs2l" path="res://assets/ui/hud/Image_fx (2).jpg" id="2_1g8jr"]
+[ext_resource type="FontFile" uid="uid://bl4v5etmmwsm4" path="res://assets/ui/buttons/ka1.ttf" id="3_1g8jr"]
+
+[sub_resource type="Theme" id="Theme_m1kxf"]
+default_font = ExtResource("3_1g8jr")
+
+[sub_resource type="Theme" id="Theme_x2yvf"]
+default_font = ExtResource("3_1g8jr")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1g8jr"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_m1kxf"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_x2yvf"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_uhagc"]
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -87.0
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+script = ExtResource("1_fe2o3")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 680.0
+offset_top = 345.0
+offset_right = 680.0
+offset_bottom = 345.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 10.748
+anchor_bottom = 17.975
+offset_left = 73.0
+offset_top = 5.0
+offset_right = 0.0040283203
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_1g8jr")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+modulate = Color(0, 0, 0, 1)
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 10.787001
+anchor_bottom = 17.550001
+offset_left = 52.0
+offset_top = 146.0
+offset_right = 0.05090332
+offset_bottom = -6.1035156e-05
+grow_vertical = 2
+theme = SubResource("Theme_m1kxf")
+theme_override_constants/separation = 12
+
+[node name="Play" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = SubResource("Theme_x2yvf")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxTexture_1g8jr")
+text = "Un jugador"
+
+[node name="MultiPlayer" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxTexture_m1kxf")
+text = "Multijugador"
+
+[node name="Options" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxTexture_x2yvf")
+text = "opciones"
+
+[node name="Quit" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxTexture_uhagc")
+text = "salir"
+
+[node name="TextureButton" type="TextureButton" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 5.6970005
+anchor_top = 5.1250005
+anchor_right = 5.6970005
+anchor_bottom = 5.1250005
+offset_left = -117.51904
+offset_top = -36.000015
+offset_right = 117.48096
+offset_bottom = 35.999985
+
+[connection signal="pressed" from="VBoxContainer/Play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="VBoxContainer/MultiPlayer" to="." method="_on_multi_player_pressed"]
+[connection signal="pressed" from="VBoxContainer/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="VBoxContainer/Quit" to="." method="_on_quit_pressed"]

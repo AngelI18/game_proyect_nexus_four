@@ -12,8 +12,13 @@ config_version=5
 
 config/name="gameMobile"
 run/main_scene="uid://dymk3gekb17o"
-config/features=PackedStringArray("4.4", "Mobile")
+config/features=PackedStringArray("4.5", "Mobile")
 config/icon="res://icon.svg"
+
+[display]
+
+window/size/viewport_width=1280
+window/size/viewport_height=720
 
 [rendering]
 
