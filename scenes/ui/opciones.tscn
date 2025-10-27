@@ -1,0 +1,85 @@
+[gd_scene load_steps=7 format=3 uid="uid://hrpwgk7o6b1r"]
+
+[ext_resource type="Texture2D" uid="uid://7qdlucxcqs2l" path="res://assets/ui/hud/Image_fx (2).jpg" id="2_bghl6"]
+[ext_resource type="Script" uid="uid://0s78ywh5mxw2" path="res://scripts/ui/opciones.gd" id="2_inluw"]
+[ext_resource type="FontFile" uid="uid://bl4v5etmmwsm4" path="res://assets/ui/buttons/ka1.ttf" id="2_shw8h"]
+
+[sub_resource type="Theme" id="Theme_yuibf"]
+default_font = ExtResource("2_shw8h")
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_shw8h"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_yuibf"]
+
+[node name="Opciones" type="Control"]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -87.0
+offset_right = 40.0
+offset_bottom = 40.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -226.0
+offset_top = 372.0
+offset_right = -226.0
+offset_bottom = 372.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 10.748
+anchor_bottom = 17.975
+offset_left = 73.0
+offset_top = 5.0
+offset_right = 0.0040283203
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_bghl6")
+expand_mode = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+modulate = Color(0.08875313, 0.08875309, 0.08875309, 1)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 481.5
+offset_top = 180.0
+offset_right = 805.5
+offset_bottom = 346.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_yuibf")
+theme_override_constants/separation = 12
+
+[node name="Volumen" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxTexture_shw8h")
+text = "volumen
+"
+
+[node name="Back" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxTexture_yuibf")
+text = "atras"
+script = ExtResource("2_inluw")
+
+[connection signal="pressed" from="VBoxContainer/Volumen" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="VBoxContainer/Back" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="VBoxContainer/Back" to="VBoxContainer/Back" method="_on_pressed"]
