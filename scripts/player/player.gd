@@ -3,7 +3,16 @@ extends CharacterBody2D
 # Velocidad ajustada para tiles de 24x24 (5 tiles por segundo)
 const SPEED = 170.0
 const JUMP_VELOCITY = -350.0
+# velocidad de knockback force
+const KNOCKBACK_FORCE = 100.0
 
+# config knockback force 
+var current_enemy: Node2D = null  
+var is_taking_damage = false
+var is_taking_knockback = false
+var is_invulnerable = false
+
+# double jump
 var can_double_jump = true
 var cant_double_jump = 2
 var jump_less = cant_double_jump
@@ -20,8 +29,18 @@ var player_hurt_ip = false
 const KNOCKBACK_STRENGTH = 150.0
 const KNOCKBACK_JUMP = -150.0
 var is_invulnerable = false
+var direction = 0
+
+func _ready():
+	var joystick = get_tree().get_first_node_in_group("attack_joystick")
+	if joystick:
+		joystick.attack_triggered.connect(_on_joystick_attack_triggered)
+		print("Joystick conectado!")
+	else:
+		print("Joystick no encontrado")
 
 func _physics_process(delta: float) -> void:
+	direction = 0
 	# Gravedad
 	if not is_on_floor():
 		velocity += get_gravity() * delta
@@ -51,6 +70,9 @@ func _physics_process(delta: float) -> void:
 		velocity.x = direction * SPEED
 		
 	
+	if !is_taking_knockback:
+		velocity.x = SPEED * direction
+		
 	if health <= 0:
 		player_alive = false
 		health = 0
@@ -64,6 +86,12 @@ func _physics_process(delta: float) -> void:
 	update_health()
 
 func _update_animation(direction: float) -> void:
+	if is_taking_damage:
+		return 
+	
+	if direction != 0:
+		$AnimatedSprite2D.flip_h = direction <0
+	
 	if not is_on_floor():
 		# Animación de salto
 		if player_hurt_ip == false:
@@ -78,11 +106,6 @@ func _update_animation(direction: float) -> void:
 			$AnimatedSprite2D.play("run")
 			$AnimatedSprite2D.flip_h = direction < 0
 
-
-func _update_collision(animation_name: String) -> void:
-		$CollisionShape2D_idle.set_disabled(animation_name != "idle")
-		$CollisionShape2D_run.set_disabled(animation_name != "run")
-		$CollisionShape2D_jump.set_disabled(animation_name != "jump")
 
 func player():
 	pass
@@ -131,14 +154,10 @@ func _on_attack_cooldown_timeout() -> void:
 	enemy_attack_cooldown = true
 
 func attack():
-	var direction := Input.get_axis("ui_left", "ui_right")
-	if Input.is_action_just_pressed("attack"):
-		Global.player_current_attack = true
-		attack_ip = true
-		$AnimatedSprite2D.play("attack")
-		if (direction < 0):
-			$AnimatedSprite2D.flip_h = true
-		$deal_attack_timer.start()
+	Global.player_current_attack = true
+	attack_ip = true
+	$AnimatedSprite2D.play("attack")
+	$deal_attack_timer.start()
 
 
 func _on_deal_attack_timer_timeout() -> void:
@@ -174,3 +193,14 @@ func _on_regen_timer_timeout() -> void:
 			health = 200
 	if (health <= 0):
 		health = 0
+func _on_invulnerability_timer_timeout() -> void:
+	is_invulnerable = false
+
+func _on_joystick_attack_triggered(direction_attack: Vector2):
+	if is_on_floor() and !attack_ip and !is_taking_damage:
+		# Aplicar flip según dirección del joystick
+		if direction_attack.x < -0.3:
+			$AnimatedSprite2D.flip_h = true  # Izquierda
+		elif direction_attack.x > 0.3:
+			$AnimatedSprite2D.flip_h = false  # Derecha
+		attack()

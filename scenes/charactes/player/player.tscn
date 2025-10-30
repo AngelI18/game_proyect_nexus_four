@@ -239,7 +239,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_uyddv")
 }],
-"loop": true,
+"loop": false,
 "name": &"jump",
 "speed": 8.0
 }, {
@@ -274,7 +274,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_enrq2"]
-size = Vector2(13, 21)
+size = Vector2(17.25, 21)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_so2s4"]
 radius = 3.16228
@@ -293,15 +293,15 @@ animation = &"hurt"
 autoplay = "idle"
 
 [node name="idle" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2(1, -10)
+position = Vector2(0.625, -10)
 shape = SubResource("RectangleShape2D_enrq2")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="idle"]
-position = Vector2(2, -14)
+position = Vector2(2, -15)
 shape = SubResource("CircleShape2D_so2s4")
 
 [node name="player_hit_box" type="Area2D" parent="."]
+visible = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="player_hit_box"]
 position = Vector2(-1, -14)

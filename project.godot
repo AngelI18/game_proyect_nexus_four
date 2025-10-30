@@ -12,7 +12,7 @@ config_version=5
 
 config/name="gameMobile"
 run/main_scene="uid://dymk3gekb17o"
-config/features=PackedStringArray("4.4", "Mobile")
+config/features=PackedStringArray("4.5", "Mobile")
 config/icon="res://icon.svg"
 
 [autoload]
@@ -21,8 +21,13 @@ Global="*res://scripts/global.gd"
 
 [display]
 
-window/size/viewport_width=1280
+window/size/viewport_width=1440
 window/size/viewport_height=720
+window/stretch/mode="viewport"
+
+[dotnet]
+
+project/assembly_name="gameMobile"
 
 [input]
 
@@ -32,7 +37,12 @@ attack={
 ]
 }
 
+[input_devices]
+
+pointing/emulate_touch_from_mouse=true
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="mobile"
+textures/vram_compression/import_etc2_astc=true
