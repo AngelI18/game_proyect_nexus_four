@@ -1,52 +1,100 @@
-extends CanvasLayer
+extends Control
 
-#iniciar algunas variable para evitar uso continuo de $
-@onready var left_button = $Control/left
-@onready var right_button = $Control/right
-@onready var jump_button = $Control/jump
-@onready var joystick = $Control/joystick_attack
+@onready var left_button = $left
+@onready var right_button = $right
+@onready var jump_button = $jump
+@onready var joystick = $joystick_attack
 
-#obtener informacion de resolucion
-@onready var viewport_size = get_viewport().get_visible_rect().size
-
-func _ready() -> void:
-	#iniciar con transparencia
+func _ready():
+	_resize_ui()
+	# inicial transparencia
 	left_button.modulate = Color(1,1,1,0.5)
 	right_button.modulate = Color(1,1,1,0.5)
 	jump_button.modulate = Color(1,1,1,0.5)
-	#iniciar posiciones de botones
-	_position_controls()
 
-#definir posicion de botones por porcentaje en pantalla para compatibilidad en distintas pantallas
-func _position_controls():
-	var screen_width = viewport_size.x
-	var screen_height = viewport_size.y
+func _resize_ui():
+	var screen = get_viewport_rect().size
+	var w = screen.x
+	var h = screen.y
+	var aspect = w / h
+
+	# Márgenes dinámicos según relación de aspecto
+	var margin_x : float
+	var margin_y : float
+	var spacing : float
+
+	if aspect < 2.05: # ~18:9
+		margin_x = h * 0.1
+		margin_y = h * 0.12
+		spacing = h * 0.05
+	elif aspect < 2.25: # ~19.5:9–20:9
+		margin_x = h * 0.12
+		spacing = h * 0.065
+		margin_y = h * 0.1
+	else: # 21:9+
+		margin_x = h * 0.13
+		spacing = h * 0.075
+		margin_y = h * 0.09
+
+
+	# ----------------- POSICIONES (TouchScreenButton usa position) -----------------
+
+	# LEFT
+	left_button.position = Vector2(
+		margin_x,
+		h - left_button.texture_normal.get_height() - margin_y
+	)
+
+	# RIGHT
+	right_button.position = Vector2(
+		left_button.position.x + left_button.texture_normal.get_width() + spacing,
+		left_button.position.y
+	)
+
+	_position_joystick()
+	_position_jump()
+
+func _position_joystick():
+	var base = joystick.get_node("base") as TextureRect
+	var base_size = base.size * joystick.scale  # tamaño real en pantalla
+
+	var screen = get_viewport_rect().size
+	var w = screen.x
+	var h = screen.y
+	var margin = h * 0.06  # margen ergonómico basado en altura
+
+	joystick.position = Vector2(
+		w - base_size.x - margin,
+		h - base_size.y - margin
+	)
+
+func _position_jump():
+	var base = joystick.get_node("base") as TextureRect
+	var base_size = base.size * joystick.scale
+	var jump_tex = jump_button.texture_normal.get_size() * jump_button.scale
+
+	var screen = get_viewport_rect().size
+	var w = screen.x
+	var h = screen.y
+
+	var margin = h * 0.06 # mismo margen usado en joystick.position
+
+	# Obtener el centro real del joystick en X
+	var joystick_center_x = w - (base_size.x / 2) - margin
+	var joystick_top_y = h - base_size.y - margin
+
 	
-	left_button.position = Vector2(screen_width * 0.047, screen_height * 0.833)
-	right_button.position = Vector2(screen_width * 0.14, screen_height * 0.833)
-	jump_button.position = Vector2(screen_width*0.879,screen_height*0.6)
-	joystick.position = Vector2(screen_width*0.86,screen_height*0.77)
+	jump_button.position = Vector2(
+		joystick_center_x - (jump_tex.x / 2),
+		joystick_top_y - (jump_tex.y*1.4)
+	)
+	
+# Eventos de transparencia
+func _on_left_pressed(): left_button.modulate = Color(1,1,1,1)
+func _on_left_released(): left_button.modulate = Color(1,1,1,0.5)
 
-#quitar transparencia de left_button
-func _on_left_pressed() -> void:
-	left_button.modulate =  Color(1,1,1,1)
+func _on_right_pressed(): right_button.modulate = Color(1,1,1,1)
+func _on_right_released(): right_button.modulate = Color(1,1,1,0.5)
 
-#poner transparencia de left_button
-func _on_left_released() -> void:
-	left_button.modulate = Color(1,1,1,0.5)
-
-#quitar transparencia de right_button
-func _on_right_pressed() -> void:
-	right_button.modulate = Color(1,1,1,1)
-
-#poner transparencia de left_button
-func _on_right_released() -> void:
-	right_button.modulate = Color(1,1,1,0.5)
-
-#quitar transparencia de jump_button
-func _on_jump_pressed() -> void:
-	jump_button.modulate = Color(1,1,1,1)
-
-#poner transparencia de jump_button
-func _on_jump_released() -> void:
-	jump_button.modulate = Color(1,1,1,0.5)
+func _on_jump_pressed(): jump_button.modulate = Color(1,1,1,1)
+func _on_jump_released(): jump_button.modulate = Color(1,1,1,0.5)
