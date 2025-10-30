@@ -26,6 +26,7 @@ func _physics_process(delta: float) -> void:
 		
 	move_and_slide()
 	deal_with_damage()
+	update_health()
 
 
 
@@ -62,3 +63,14 @@ func deal_with_damage():
 func _on_take_damage_cooldown_timeout() -> void:
 	can_take_damage = true
 	$take_damage_cooldown.stop()
+	
+
+func update_health():
+	var healthbar = $"health_bar"
+	healthbar.value = health
+	
+	if (health >= 100):
+		healthbar.visible = false
+	else:
+		healthbar.visible = true
+	
