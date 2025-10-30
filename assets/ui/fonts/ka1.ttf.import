@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://bl4v5etmmwsm4"
-path="res://.godot/imported/ka1.ttf-9407ade9fc6c610efa650b9572c6cfdd.fontdata"
+path="res://.godot/imported/ka1.ttf-22815a2bc4ef467357e9e9ab72cbab14.fontdata"
 
 [deps]
 
-source_file="res://assets/ui/buttons/ka1.ttf"
-dest_files=["res://.godot/imported/ka1.ttf-9407ade9fc6c610efa650b9572c6cfdd.fontdata"]
+source_file="res://assets/ui/fonts/ka1.ttf"
+dest_files=["res://.godot/imported/ka1.ttf-22815a2bc4ef467357e9e9ab72cbab14.fontdata"]
 
 [params]
 
