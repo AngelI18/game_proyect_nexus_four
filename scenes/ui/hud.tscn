@@ -83,9 +83,9 @@ grow_vertical = 2
 texture = ExtResource("7_h022r")
 stretch_mode = 3
 
-[connection signal="pressed" from="Control/left" to="." method="_on_left_pressed"]
-[connection signal="released" from="Control/left" to="." method="_on_left_released"]
-[connection signal="pressed" from="Control/right" to="." method="_on_right_pressed"]
-[connection signal="released" from="Control/right" to="." method="_on_right_released"]
-[connection signal="pressed" from="Control/jump" to="." method="_on_jump_pressed"]
-[connection signal="released" from="Control/jump" to="." method="_on_jump_released"]
+[connection signal="pressed" from="Control/left" to="Control" method="_on_left_pressed"]
+[connection signal="released" from="Control/left" to="Control" method="_on_left_released"]
+[connection signal="pressed" from="Control/right" to="Control" method="_on_right_pressed"]
+[connection signal="released" from="Control/right" to="Control" method="_on_right_released"]
+[connection signal="pressed" from="Control/jump" to="Control" method="_on_jump_pressed"]
+[connection signal="released" from="Control/jump" to="Control" method="_on_jump_released"]

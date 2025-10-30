@@ -61,7 +61,7 @@ func _position_joystick():
 	var screen = get_viewport_rect().size
 	var w = screen.x
 	var h = screen.y
-	var margin = h * 0.06  # margen ergonómico basado en altura
+	var margin = h * 0.06  
 
 	joystick.position = Vector2(
 		w - base_size.x - margin,
@@ -90,11 +90,17 @@ func _position_jump():
 	)
 	
 # Eventos de transparencia
-func _on_left_pressed(): left_button.modulate = Color(1,1,1,1)
-func _on_left_released(): left_button.modulate = Color(1,1,1,0.5)
+func _on_left_pressed(): 
+	left_button.modulate = Color(1,1,1,1)
+func _on_left_released(): 
+	left_button.modulate = Color(1,1,1,0.5)
 
-func _on_right_pressed(): right_button.modulate = Color(1,1,1,1)
-func _on_right_released(): right_button.modulate = Color(1,1,1,0.5)
+func _on_right_pressed(): 
+	right_button.modulate = Color(1,1,1,1)
+func _on_right_released(): 
+	right_button.modulate = Color(1,1,1,0.5)
 
-func _on_jump_pressed(): jump_button.modulate = Color(1,1,1,1)
-func _on_jump_released(): jump_button.modulate = Color(1,1,1,0.5)
+func _on_jump_pressed(): 
+	jump_button.modulate = Color(1,1,1,1)
+func _on_jump_released(): 
+	jump_button.modulate = Color(1,1,1,0.5)

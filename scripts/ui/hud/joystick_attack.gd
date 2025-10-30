@@ -4,7 +4,7 @@ signal attack_triggered(direction: Vector2)
 signal direction_changed(direction: Vector2)
 
 @export var tolerance_zone: float = 50.0 
-@export var dead_zone: float = 0.5
+@export var dead_zone: float = 0.1
 
 @onready var base = $base
 @onready var stick = $stick
