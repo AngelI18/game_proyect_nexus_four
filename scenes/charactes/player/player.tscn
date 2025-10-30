@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=3 uid="uid://ccg021l8va1nb"]
+[gd_scene load_steps=45 format=3 uid="uid://ccg021l8va1nb"]
 
 [ext_resource type="Script" uid="uid://bvfhmbyfrdwry" path="res://scripts/player/player.gd" id="1_yj2nq"]
 [ext_resource type="Texture2D" uid="uid://dpws1jqb86o3k" path="res://assets/characters/enemies/sword attack.png" id="2_igqbg"]
@@ -279,24 +279,6 @@ size = Vector2(13, 21)
 [sub_resource type="CircleShape2D" id="CircleShape2D_so2s4"]
 radius = 3.16228
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_kai5h"]
-size = Vector2(11.5, 20)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_dolh7"]
-size = Vector2(16, 7)
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_kai5h"]
-radius = 4.12311
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_1fo2x"]
-size = Vector2(10.5, 17)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_jft68"]
-size = Vector2(20, 9)
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_5amry"]
-radius = 4.12311
-
 [sub_resource type="CircleShape2D" id="CircleShape2D_dolh7"]
 radius = 23.0
 
@@ -307,7 +289,7 @@ script = ExtResource("1_yj2nq")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(2, -16)
 sprite_frames = SubResource("SpriteFrames_dqix7")
-animation = &"attack"
+animation = &"hurt"
 autoplay = "idle"
 
 [node name="idle" type="CollisionShape2D" parent="."]
@@ -318,36 +300,6 @@ shape = SubResource("RectangleShape2D_enrq2")
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="idle"]
 position = Vector2(2, -14)
 shape = SubResource("CircleShape2D_so2s4")
-
-[node name="jump" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2(-1, -8)
-shape = SubResource("RectangleShape2D_kai5h")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="jump"]
-position = Vector2(0, -10)
-shape = SubResource("RectangleShape2D_dolh7")
-
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="jump"]
-position = Vector2(0, -17)
-shape = SubResource("CircleShape2D_kai5h")
-
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="jump"]
-position = Vector2(0, -17)
-shape = SubResource("CircleShape2D_kai5h")
-
-[node name="run" type="CollisionShape2D" parent="."]
-visible = false
-position = Vector2(2, -13)
-shape = SubResource("RectangleShape2D_1fo2x")
-
-[node name="piernas" type="CollisionShape2D" parent="run"]
-position = Vector2(-1, 8)
-shape = SubResource("RectangleShape2D_jft68")
-
-[node name="cabeza" type="CollisionShape2D" parent="run"]
-position = Vector2(4, -13)
-shape = SubResource("CircleShape2D_5amry")
 
 [node name="player_hit_box" type="Area2D" parent="."]
 
@@ -374,8 +326,27 @@ drag_vertical_enabled = true
 [node name="player_is_hurt" type="Timer" parent="."]
 wait_time = 0.5
 
+[node name="invulnerability_timer" type="Timer" parent="."]
+wait_time = 2.0
+
+[node name="health_bar" type="ProgressBar" parent="."]
+modulate = Color(0, 1, 0.219608, 1)
+offset_left = -14.0
+offset_top = -39.0
+offset_right = 266.0
+offset_bottom = 31.0
+scale = Vector2(0.1, 0.1)
+max_value = 200.0
+show_percentage = false
+
+[node name="regen_timer" type="Timer" parent="."]
+wait_time = 5.0
+autostart = true
+
 [connection signal="body_entered" from="player_hit_box" to="." method="_on_player_hit_box_body_entered"]
 [connection signal="body_exited" from="player_hit_box" to="." method="_on_player_hit_box_body_exited"]
 [connection signal="timeout" from="attack_cooldown" to="." method="_on_attack_cooldown_timeout"]
 [connection signal="timeout" from="deal_attack_timer" to="." method="_on_deal_attack_timer_timeout"]
 [connection signal="timeout" from="player_is_hurt" to="." method="_on_player_is_hurt_timeout"]
+[connection signal="timeout" from="invulnerability_timer" to="." method="_on_invulnerability_timer_timeout"]
+[connection signal="timeout" from="regen_timer" to="." method="_on_regen_timer_timeout"]

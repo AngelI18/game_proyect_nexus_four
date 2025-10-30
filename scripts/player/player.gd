@@ -5,7 +5,7 @@ const SPEED = 170.0
 const JUMP_VELOCITY = -350.0
 
 var can_double_jump = true
-var cant_double_jump = 10
+var cant_double_jump = 2
 var jump_less = cant_double_jump
 
 #configurarAtaque
@@ -19,6 +19,7 @@ var player_hurt_ip = false
 #retroceso
 const KNOCKBACK_STRENGTH = 150.0
 const KNOCKBACK_JUMP = -150.0
+var is_invulnerable = false
 
 func _physics_process(delta: float) -> void:
 	# Gravedad
@@ -27,7 +28,7 @@ func _physics_process(delta: float) -> void:
 	if is_on_floor():
 		can_double_jump = true
 		jump_less = cant_double_jump
-		
+	
 	# Salto
 	if Input.is_action_just_pressed("ui_up"):
 		if is_on_floor():
@@ -60,6 +61,7 @@ func _physics_process(delta: float) -> void:
 	_update_animation(direction)
 	enemyAttack()
 	attack()
+	update_health()
 
 func _update_animation(direction: float) -> void:
 	if not is_on_floor():
@@ -96,18 +98,33 @@ func _on_player_hit_box_body_exited(body: Node2D) -> void:
 			enemy_node_in_range = null
 
 func enemyAttack():
-	if enemy_node_in_range != null and enemy_attack_cooldown:
+	if enemy_node_in_range != null and enemy_attack_cooldown and !is_invulnerable:
 		var knockback_direction = (global_position - enemy_node_in_range.global_position).normalized()
 		#velocidad del retroceso
 		velocity.x = knockback_direction.x * KNOCKBACK_STRENGTH
 		velocity.y = KNOCKBACK_JUMP
 		health -= 20
-		$player_is_hurt.start()
-		$AnimatedSprite2D.play("hurt")
+		is_invulnerable = true
 		player_hurt_ip = true
 		enemy_attack_cooldown = false
 		$attack_cooldown.start()
+		$player_is_hurt.start()
+		$AnimatedSprite2D.play("hurt")
+		$invulnerability_timer.start(2.0)
+		#reiniciar timer de regeneracion
+		$regen_timer
+		blink_sprite(2)
 		print(health)
+
+func blink_sprite(duration: float):
+	var time = 0.0
+	while time < duration:
+		$AnimatedSprite2D.modulate.a = 0.3
+		await get_tree().create_timer(0.1).timeout
+		$AnimatedSprite2D.modulate.a = 1.0 
+		await get_tree().create_timer(0.1).timeout
+		time += 0.2
+	$AnimatedSprite2D.modulate.a = 1.0
 
 
 func _on_attack_cooldown_timeout() -> void:
@@ -133,3 +150,27 @@ func _on_deal_attack_timer_timeout() -> void:
 func _on_player_is_hurt_timeout() -> void:
 	$player_is_hurt.stop()
 	player_hurt_ip = false
+
+
+func _on_invulnerability_timer_timeout() -> void:
+	$invulnerability_timer.stop()
+	is_invulnerable = false
+
+func update_health():
+	var healthbar = $"health_bar"
+	healthbar.value = health
+	
+	if (health >= 200):
+		healthbar.visible = false
+	else:
+		healthbar.visible = true
+	
+
+
+func _on_regen_timer_timeout() -> void:
+	if (health < 200):
+		health += 20
+		if (health >= 200):
+			health = 200
+	if (health <= 0):
+		health = 0
