@@ -52,7 +52,8 @@ func _physics_process(delta: float) -> void:
 	# Movimiento horizontal sin inercia
 	var direction := Input.get_axis("ui_left", "ui_right")
 	if attack_ip == true:
-		velocity.x = 0.0 # Detener al jugador mientras ataca
+		if is_on_floor():
+			velocity.x = 0.0 # Detener al jugador mientras ataca, solo si esta en el piso, en aire mantener direccion
 	elif player_hurt_ip == true:
 		pass
 	else:
@@ -72,24 +73,33 @@ func _physics_process(delta: float) -> void:
 	update_health()
 
 func _update_animation(direction: float) -> void:
-	if not is_on_floor():
-		# Animación de salto
-		if player_hurt_ip == false:
-			$AnimatedSprite2D.play("jump")
-	elif direction == 0:
-		# Animación de reposo
-		if attack_ip == false and player_hurt_ip == false:
-			$AnimatedSprite2D.play("idle")
-	else:
-		# Animación de correr
-		if attack_ip == false and player_hurt_ip == false:
-			$AnimatedSprite2D.play("run")
-			$AnimatedSprite2D.flip_h = direction < 0
+	
+	if !attack_ip and !player_hurt_ip:
+		#cambiar orientacion de la animacion acorde a la direccion independiente de la animacion
+		if direction !=0:
+			$AnimatedSprite2D.flip_h = direction <0
+		
+		if not is_on_floor():
+			# Animación de salto
+			if velocity.y < 0 and $AnimatedSprite2D.name != "jump":
+				$AnimatedSprite2D.play("jump")
+			# Animacion de caida
+			elif velocity.y > 0 and $AnimatedSprite2D.name != "fall":
+				$AnimatedSprite2D.play("fall")
+		elif direction == 0:
+			# Animación de reposo
+			if attack_ip == false and player_hurt_ip == false:
+				$AnimatedSprite2D.play("idle")
+		else:
+			# Animación de correr
+			if attack_ip == false and player_hurt_ip == false:
+				$AnimatedSprite2D.play("run")
 
-func _update_collision(animation_name: String) -> void:
-		$CollisionShape2D_idle.set_disabled(animation_name != "idle")
-		$CollisionShape2D_run.set_disabled(animation_name != "run")
-		$CollisionShape2D_jump.set_disabled(animation_name != "jump")
+#esto no lo estamos usando ahora, cuando se pula las hitbox si
+#func _update_collision(animation_name: String) -> void:
+#		$CollisionShape2D_idle.set_disabled(animation_name != "idle")
+#		$CollisionShape2D_run.set_disabled(animation_name != "run")
+#		$CollisionShape2D_jump.set_disabled(animation_name != "jump")
 
 func player():
 	pass

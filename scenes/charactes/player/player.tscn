@@ -31,6 +31,18 @@ region = Rect2(256, 0, 64, 64)
 atlas = ExtResource("2_igqbg")
 region = Rect2(320, 0, 64, 64)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_xirfn"]
+atlas = ExtResource("3_kai5h")
+region = Rect2(144, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i2bmt"]
+atlas = ExtResource("3_kai5h")
+region = Rect2(192, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_20kx8"]
+atlas = ExtResource("3_kai5h")
+region = Rect2(240, 0, 48, 48)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_uj01l"]
 atlas = ExtResource("3_3yyo8")
 region = Rect2(0, 0, 48, 48)
@@ -99,18 +111,6 @@ region = Rect2(48, 0, 48, 48)
 atlas = ExtResource("3_kai5h")
 region = Rect2(96, 0, 48, 48)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_g4jq6"]
-atlas = ExtResource("3_kai5h")
-region = Rect2(144, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_yj7se"]
-atlas = ExtResource("3_kai5h")
-region = Rect2(192, 0, 48, 48)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_uyddv"]
-atlas = ExtResource("3_kai5h")
-region = Rect2(240, 0, 48, 48)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_kuq7w"]
 atlas = ExtResource("5_3yyo8")
 region = Rect2(0, 0, 48, 48)
@@ -167,6 +167,20 @@ animations = [{
 "loop": true,
 "name": &"attack",
 "speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xirfn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i2bmt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_20kx8")
+}],
+"loop": false,
+"name": &"fall",
+"speed": 8.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -229,15 +243,6 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_p83wy")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_g4jq6")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_yj7se")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_uyddv")
 }],
 "loop": false,
 "name": &"jump",
@@ -289,7 +294,7 @@ script = ExtResource("1_yj2nq")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(2, -16)
 sprite_frames = SubResource("SpriteFrames_dqix7")
-animation = &"hurt"
+animation = &"jump"
 autoplay = "idle"
 
 [node name="idle" type="CollisionShape2D" parent="."]
