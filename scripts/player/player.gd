@@ -8,10 +8,15 @@ var can_double_jump = true
 var cant_double_jump = 2
 var jump_less = cant_double_jump
 
+#mecanica del oro
+@onready var coin_label = %Label
+var player_gold = 0
+
 #configurarAtaque
 var enemy_node_in_range: Node2D = null
 var enemy_attack_cooldown = true
 var health = 200
+var max_regeneration = health * 0.7
 var player_alive = true
 var attack_ip = false
 var player_hurt_ip = false
@@ -130,7 +135,8 @@ func enemyAttack():
 		$AnimatedSprite2D.play("hurt")
 		$invulnerability_timer.start(2.0)
 		#reiniciar timer de regeneracion
-		$regen_timer
+		$regen_timer.stop()
+		$regen_timer.start()
 		blink_sprite(2)
 		print(health)
 
@@ -188,10 +194,10 @@ func update_health():
 
 
 func _on_regen_timer_timeout() -> void:
-	if (health < 200):
+	if (health < max_regeneration):
 		health += 20
-		if (health >= 200):
-			health = 200
+		if (health >= max_regeneration):
+			health = max_regeneration
 	if (health <= 0):
 		health = 0
 
@@ -210,3 +216,7 @@ func _on_joystick_attack_triggered(direction_attack: Vector2):
 		if (direction < 0):
 			$AnimatedSprite2D.flip_h = true
 		$deal_attack_timer.start()
+	#coins
+func set_coin(new_coin_count: int) -> void:
+	player_gold += new_coin_count
+	coin_label.text = "coin: " + str(player_gold)

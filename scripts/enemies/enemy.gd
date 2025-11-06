@@ -58,6 +58,7 @@ func deal_with_damage():
 			can_take_damage = false
 			print ("slime health = ",health)
 			if health <= 0:
+				player.set_coin(20)
 				self.queue_free()
 
 func _on_take_damage_cooldown_timeout() -> void:
