@@ -1,0 +1,123 @@
+[gd_scene load_steps=8 format=3 uid="uid://f45rq8ydwwoh"]
+
+[ext_resource type="Script" uid="uid://cjkh2q0473qmt" path="res://scenes/ui/pausa_menu.gd" id="1_nggwh"]
+[ext_resource type="Shader" uid="uid://b4knegqfix2f2" path="res://scenes/ui/PausaMenu.gdshader" id="2_6viru"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ls7qe"]
+shader = ExtResource("2_6viru")
+shader_parameter/lod = 3.7110001762725
+
+[sub_resource type="Theme" id="Theme_xuc83"]
+
+[sub_resource type="Animation" id="Animation_7nctc"]
+resource_name = "blur"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:material:shader_parameter/lod")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [3.7110001762725]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PanelContainer:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.06666666, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_4oh3q"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:material:shader_parameter/lod")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [3.7110001762725]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PanelContainer:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_epe3j"]
+_data = {
+&"RESET": SubResource("Animation_4oh3q"),
+&"blur": SubResource("Animation_7nctc")
+}
+
+[node name="PausaMenu" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_nggwh")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_ls7qe")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 0
+offset_left = 382.0
+offset_top = 182.0
+offset_right = 1033.0
+offset_bottom = 283.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
+layout_mode = 2
+
+[node name="jugar" type="Button" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+theme = SubResource("Theme_xuc83")
+text = "jugar"
+
+[node name="reiniciar" type="Button" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "reiniciar"
+
+[node name="salir" type="Button" parent="PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "salir"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_epe3j")
+}
+
+[connection signal="pressed" from="PanelContainer/VBoxContainer/jugar" to="." method="_on_jugar_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/reiniciar" to="." method="_on_opciones_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/salir" to="." method="_on_salir_pressed"]
