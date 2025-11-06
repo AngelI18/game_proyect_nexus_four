@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://ccg021l8va1nb"]
+[gd_scene load_steps=46 format=3 uid="uid://ccg021l8va1nb"]
 
 [ext_resource type="Script" uid="uid://bvfhmbyfrdwry" path="res://scripts/player/player.gd" id="1_yj2nq"]
 [ext_resource type="Texture2D" uid="uid://dpws1jqb86o3k" path="res://assets/characters/enemies/sword attack.png" id="2_igqbg"]
@@ -287,6 +287,8 @@ radius = 3.16228
 [sub_resource type="CircleShape2D" id="CircleShape2D_dolh7"]
 radius = 23.0
 
+[sub_resource type="LabelSettings" id="LabelSettings_6igro"]
+
 [node name="player" type="CharacterBody2D"]
 collision_layer = 3
 script = ExtResource("1_yj2nq")
@@ -327,6 +329,15 @@ limit_smoothed = true
 rotation_smoothing_enabled = true
 drag_horizontal_enabled = true
 drag_vertical_enabled = true
+
+[node name="Label" type="Label" parent="Camera2D"]
+unique_name_in_owner = true
+offset_left = -351.0
+offset_top = -174.0
+offset_right = -300.0
+offset_bottom = -151.0
+text = "coin : 0"
+label_settings = SubResource("LabelSettings_6igro")
 
 [node name="player_is_hurt" type="Timer" parent="."]
 wait_time = 0.5
