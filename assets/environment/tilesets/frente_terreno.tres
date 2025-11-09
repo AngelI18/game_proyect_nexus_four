@@ -1,0 +1,24 @@
+[gd_resource type="TileSet" load_steps=3 format=3 uid="uid://cb8i6hgk5nu6q"]
+
+[ext_resource type="Texture2D" uid="uid://dqrvrndda1ots" path="res://assets/environment/tilesets/terreno_front.png" id="1_b6jpd"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_6xh4u"]
+texture = ExtResource("1_b6jpd")
+18:4/0 = 0
+18:5/0 = 0
+18:6/0 = 0
+22:4/0 = 0
+22:5/0 = 0
+22:6/0 = 0
+16:10/0 = 0
+16:9/0 = 0
+15:9/0 = 0
+14:9/0 = 0
+13:9/0 = 0
+12:9/0 = 0
+11:9/0 = 0
+11:10/0 = 0
+
+[resource]
+tile_size = Vector2i(24, 24)
+sources/0 = SubResource("TileSetAtlasSource_6xh4u")
