@@ -16,10 +16,7 @@ var max_stick_radius := 0.0
 var base_rect: Rect2
 
 func _ready() -> void:
-	custom_minimum_size = base.size
-	size = base.size
-	
-	center_pos = base.size / 2
+	center_pos = size / 2
 	
 	max_stick_radius = (base.size.x / 2) * 0.95
 	

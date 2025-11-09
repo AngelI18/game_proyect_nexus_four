@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dyh5kfftkhqjp"]
+[gd_scene load_steps=17 format=3 uid="uid://dyh5kfftkhqjp"]
 
 [ext_resource type="Texture2D" uid="uid://qlv74o4poatw" path="res://assets/ui/hud/left.png" id="2_8qguk"]
 [ext_resource type="Script" uid="uid://cwru7qcn20st1" path="res://scripts/ui/hud/hud.gd" id="2_h022r"]
@@ -7,6 +7,11 @@
 [ext_resource type="Script" uid="uid://crgd2moncm7s1" path="res://scripts/ui/hud/joystick_attack.gd" id="5_136eg"]
 [ext_resource type="Texture2D" uid="uid://dvbb3bjwc2bll" path="res://assets/ui/hud/base.png" id="6_gss2c"]
 [ext_resource type="Texture2D" uid="uid://wv0cn5aylhiq" path="res://assets/ui/hud/stick.png" id="7_h022r"]
+[ext_resource type="Texture2D" uid="uid://fqmgvrkvdn28" path="res://assets/ui/icons/life_icon.png" id="8_h022r"]
+[ext_resource type="Texture2D" uid="uid://csrjjbgl0mxqr" path="res://assets/ui/icons/coin.png" id="9_4jqwt"]
+[ext_resource type="FontFile" uid="uid://dkl3bob77eb85" path="res://assets/ui/fonts/pixelpurl.medium.ttf" id="10_kicr4"]
+[ext_resource type="Texture2D" uid="uid://3lcaohaecxoc" path="res://assets/ui/hud/pause.png" id="11_0h1do"]
+[ext_resource type="Texture2D" uid="uid://cv7m1kl3fbo5g" path="res://assets/ui/hud/continue.png" id="12_4d46k"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gss2c"]
 size = Vector2(124, 112)
@@ -16,6 +21,9 @@ size = Vector2(124, 112)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4jqwt"]
 size = Vector2(106, 112)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0h1do"]
+size = Vector2(74, 74)
 
 [node name="HUD" type="CanvasLayer"]
 
@@ -29,25 +37,29 @@ grow_vertical = 2
 script = ExtResource("2_h022r")
 
 [node name="left" type="TouchScreenButton" parent="Control"]
-position = Vector2(371, 356)
+position = Vector2(98, 514)
 texture_normal = ExtResource("2_8qguk")
 shape = SubResource("RectangleShape2D_gss2c")
 action = "ui_left"
 
 [node name="right" type="TouchScreenButton" parent="Control"]
-position = Vector2(156, 341)
+position = Vector2(268, 514)
 texture_normal = ExtResource("3_136eg")
 shape = SubResource("RectangleShape2D_h022r")
 action = "ui_right"
 
 [node name="jump" type="TouchScreenButton" parent="Control"]
-position = Vector2(44, 352)
+position = Vector2(1148, 260)
 texture_normal = ExtResource("4_8qguk")
 shape = SubResource("RectangleShape2D_4jqwt")
 action = "ui_up"
 
 [node name="joystick_attack" type="Control" parent="Control" groups=["attack_joystick"]]
 anchors_preset = 0
+offset_left = 1080.0
+offset_top = 420.0
+offset_right = 1320.0
+offset_bottom = 660.0
 size_flags_horizontal = 4
 script = ExtResource("5_136eg")
 
@@ -83,9 +95,53 @@ grow_vertical = 2
 texture = ExtResource("7_h022r")
 stretch_mode = 3
 
+[node name="Margin_stats" type="MarginContainer" parent="Control"]
+layout_mode = 0
+offset_right = 212.0
+offset_bottom = 57.0
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 30
+
+[node name="GridContainer" type="GridContainer" parent="Control/Margin_stats"]
+layout_mode = 2
+columns = 2
+
+[node name="life_icon" type="TextureRect" parent="Control/Margin_stats/GridContainer"]
+layout_mode = 2
+texture = ExtResource("8_h022r")
+stretch_mode = 4
+
+[node name="ProgressBar" type="ProgressBar" parent="Control/Margin_stats/GridContainer"]
+modulate = Color(0.0117647, 1, 0, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+show_percentage = false
+
+[node name="coin_icon" type="TextureRect" parent="Control/Margin_stats/GridContainer"]
+layout_mode = 2
+texture = ExtResource("9_4jqwt")
+stretch_mode = 3
+
+[node name="coins" type="Label" parent="Control/Margin_stats/GridContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.745098, 0.466667, 0.168627, 1)
+theme_override_fonts/font = ExtResource("10_kicr4")
+theme_override_font_sizes/font_size = 50
+text = "0"
+
+[node name="pause_menu" type="TouchScreenButton" parent="Control"]
+visible = false
+position = Vector2(1330, 30)
+texture_normal = ExtResource("11_0h1do")
+texture_pressed = ExtResource("12_4d46k")
+shape = SubResource("RectangleShape2D_0h1do")
+
 [connection signal="pressed" from="Control/left" to="Control" method="_on_left_pressed"]
 [connection signal="released" from="Control/left" to="Control" method="_on_left_released"]
 [connection signal="pressed" from="Control/right" to="Control" method="_on_right_pressed"]
 [connection signal="released" from="Control/right" to="Control" method="_on_right_released"]
 [connection signal="pressed" from="Control/jump" to="Control" method="_on_jump_pressed"]
 [connection signal="released" from="Control/jump" to="Control" method="_on_jump_released"]
+[connection signal="pressed" from="Control/pause_menu" to="Control" method="_on_pause_menu_pressed"]
+[connection signal="released" from="Control/pause_menu" to="Control" method="_on_pause_menu_released"]

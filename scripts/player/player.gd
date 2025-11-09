@@ -1,5 +1,6 @@
 extends CharacterBody2D
-
+signal health_changed(current_health,max_health)
+signal coin_changed(new_coints)
 # Velocidad ajustada para tiles de 24x24 (5 tiles por segundo)
 const SPEED = 170.0
 const JUMP_VELOCITY = -350.0
@@ -9,14 +10,14 @@ var cant_double_jump = 2
 var jump_less = cant_double_jump
 
 #mecanica del oro
-@onready var coin_label = %Label
-var player_gold = 0
+var coint_player = 0
 
 #configurarAtaque
 var enemy_node_in_range: Node2D = null
 var enemy_attack_cooldown = true
-var health = 200
-var max_regeneration = health * 0.7
+var max_life = 200
+var health = max_life
+var max_regeneration = max_life * 0.7
 var player_alive = true
 var attack_ip = false
 var player_hurt_ip = false
@@ -27,13 +28,26 @@ const KNOCKBACK_JUMP = -150.0
 var is_invulnerable = false
 var is_taking_damage = false
 
+#sistema de checkpoint fantasma
+var last_safe_position: Vector2 = Vector2.ZERO
+var ghost_sprite: Sprite2D = null
+var is_on_damage_tile = false
+
 func _ready():
+	# Agregar al grupo "player" para que el HUD lo encuentre
+	add_to_group("player")
+	
 	var joystick = get_tree().get_first_node_in_group("attack_joystick")
 	if joystick:
 		joystick.attack_triggered.connect(_on_joystick_attack_triggered)
 		print("Joystick conectado!")
 	else:
 		print("Joystick no encontrado")
+	
+	# Emitir señal inicial de salud después de que todo esté listo
+	call_deferred("update_health")
+	# Emitir señal inicial de monedas después de que todo este listo
+	call_deferred("set_coin")
 
 func _physics_process(delta: float) -> void:
 	# Gravedad
@@ -54,7 +68,7 @@ func _physics_process(delta: float) -> void:
 		elif jump_less == 0:
 			can_double_jump = false
 
-	# Movimiento horizontal sin inercia
+	#Movimiento horizontal sin inercia
 	var direction := Input.get_axis("ui_left", "ui_right")
 	if attack_ip == true:
 		if is_on_floor():
@@ -75,7 +89,6 @@ func _physics_process(delta: float) -> void:
 	_update_animation(direction)
 	enemyAttack()
 	attack()
-	update_health()
 
 func _update_animation(direction: float) -> void:
 	
@@ -126,6 +139,7 @@ func enemyAttack():
 		velocity.x = knockback_direction.x * KNOCKBACK_STRENGTH
 		velocity.y = KNOCKBACK_JUMP
 		health -= 20
+		update_health()
 		is_invulnerable = true
 		player_hurt_ip = true
 		enemy_attack_cooldown = false
@@ -183,24 +197,23 @@ func _on_invulnerability_timer_timeout() -> void:
 	is_taking_damage = false
 
 func update_health():
-	var healthbar = $"health_bar"
-	healthbar.value = health
-	
-	if (health >= 200):
-		healthbar.visible = false
-	else:
-		healthbar.visible = true
-	
-
+	health_changed.emit(health, 200)
 
 func _on_regen_timer_timeout() -> void:
+	var health_changed_flag = false
+	
 	if (health < max_regeneration):
 		health += 20
 		if (health >= max_regeneration):
 			health = max_regeneration
+		health_changed_flag = true
 	if (health <= 0):
 		health = 0
-
+		health_changed_flag = true
+	if health_changed_flag:
+		health_changed_flag = false
+		update_health()
+	
 func _on_joystick_attack_triggered(direction_attack: Vector2):
 	if is_on_floor() and !attack_ip and !is_taking_damage:
 		# Aplicar flip según dirección del joystick
@@ -208,7 +221,7 @@ func _on_joystick_attack_triggered(direction_attack: Vector2):
 			$AnimatedSprite2D.flip_h = true  # Izquierda
 		elif direction_attack.x > 0.3:
 			$AnimatedSprite2D.flip_h = false  # Derecha
-		#-----------------funcion attack()----------------------
+		#funcion attack()
 		var direction := Input.get_axis("ui_left", "ui_right")
 		Global.player_current_attack = true
 		attack_ip = true
@@ -216,7 +229,7 @@ func _on_joystick_attack_triggered(direction_attack: Vector2):
 		if (direction < 0):
 			$AnimatedSprite2D.flip_h = true
 		$deal_attack_timer.start()
-	#coins
+#coins
 func set_coin(new_coin_count: int) -> void:
-	player_gold += new_coin_count
-	coin_label.text = "coin: " + str(player_gold)
+	coint_player += new_coin_count
+	coin_changed.emit(coint_player)
