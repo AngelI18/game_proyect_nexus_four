@@ -131,11 +131,11 @@ theme_override_font_sizes/font_size = 50
 text = "0"
 
 [node name="pause_menu" type="TouchScreenButton" parent="Control"]
-visible = false
 position = Vector2(1330, 30)
 texture_normal = ExtResource("11_0h1do")
 texture_pressed = ExtResource("12_4d46k")
 shape = SubResource("RectangleShape2D_0h1do")
+action = "ui_cancel"
 
 [connection signal="pressed" from="Control/left" to="Control" method="_on_left_pressed"]
 [connection signal="released" from="Control/left" to="Control" method="_on_left_released"]
