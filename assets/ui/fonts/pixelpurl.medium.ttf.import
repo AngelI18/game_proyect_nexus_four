@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://bl4v5etmmwsm4"
-path="res://.godot/imported/ka1.ttf-22815a2bc4ef467357e9e9ab72cbab14.fontdata"
+uid="uid://dkl3bob77eb85"
+path="res://.godot/imported/pixelpurl.medium.ttf-59c69db10355fc09a8e82fa53302e425.fontdata"
 
 [deps]
 
-source_file="res://assets/ui/fonts/ka1.ttf"
-dest_files=["res://.godot/imported/ka1.ttf-22815a2bc4ef467357e9e9ab72cbab14.fontdata"]
+source_file="res://assets/ui/fonts/pixelpurl.medium.ttf"
+dest_files=["res://.godot/imported/pixelpurl.medium.ttf-59c69db10355fc09a8e82fa53302e425.fontdata"]
 
 [params]
 

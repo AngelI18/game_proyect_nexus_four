@@ -4,7 +4,7 @@ signal attack_triggered(direction: Vector2)
 signal direction_changed(direction: Vector2)
 
 @export var tolerance_zone: float = 50.0 
-@export var dead_zone: float = 0.5
+@export var dead_zone: float = 0.1
 
 @onready var base = $base
 @onready var stick = $stick
@@ -16,10 +16,7 @@ var max_stick_radius := 0.0
 var base_rect: Rect2
 
 func _ready() -> void:
-	custom_minimum_size = base.size
-	size = base.size
-	
-	center_pos = base.size / 2
+	center_pos = size / 2
 	
 	max_stick_radius = (base.size.x / 2) * 0.95
 	

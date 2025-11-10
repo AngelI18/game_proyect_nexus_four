@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bn7ac03qkv1dc"
-path="res://.godot/imported/Player Idle 48x48.png-d2c27b393ea6150f2ececa5a70eeaa85.ctex"
+uid="uid://bfoe1jbwl4lox"
+path="res://.godot/imported/terreno.png-574ed94342a6734f654bc31e17199aa0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/characters/player/Player Idle 48x48.png"
-dest_files=["res://.godot/imported/Player Idle 48x48.png-d2c27b393ea6150f2ececa5a70eeaa85.ctex"]
+source_file="res://assets/environment/tilesets/terreno.png"
+dest_files=["res://.godot/imported/terreno.png-574ed94342a6734f654bc31e17199aa0.ctex"]
 
 [params]
 
