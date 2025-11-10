@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 Global="*res://scripts/global.gd"
+PausaMenu="*res://scenes/ui/PausaMenu.tscn"
 
 [display]
 

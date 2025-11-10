@@ -1,8 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://hrpwgk7o6b1r"]
+[gd_scene load_steps=7 format=3 uid="uid://81lsgobjkd8o"]
 
-[ext_resource type="Texture2D" uid="uid://7qdlucxcqs2l" path="res://assets/ui/hud/Image_fx (2).jpg" id="2_bghl6"]
+[ext_resource type="Texture2D" uid="uid://dcit4ht8le4n7" path="res://assets/ui/Background/Image_fx (2).jpg" id="1_shw8h"]
 [ext_resource type="Script" uid="uid://0s78ywh5mxw2" path="res://scripts/ui/opciones.gd" id="2_inluw"]
-[ext_resource type="FontFile" uid="uid://bl4v5etmmwsm4" path="res://assets/ui/buttons/ka1.ttf" id="2_shw8h"]
+[ext_resource type="FontFile" uid="uid://bl4v5etmmwsm4" path="res://assets/ui/fonts/ka1.ttf" id="2_shw8h"]
 
 [sub_resource type="Theme" id="Theme_yuibf"]
 default_font = ExtResource("2_shw8h")
@@ -31,6 +31,7 @@ offset_right = -226.0
 offset_bottom = 372.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
@@ -39,14 +40,15 @@ anchor_right = 10.748
 anchor_bottom = 17.975
 offset_left = 73.0
 offset_top = 5.0
-offset_right = 0.0040283203
+offset_right = 159.004
+offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_bghl6")
+texture = ExtResource("1_shw8h")
 expand_mode = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
-modulate = Color(0.08875313, 0.08875309, 0.08875309, 1)
+modulate = Color(0.0887531, 0.0887531, 0.0887531, 1)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -55,8 +57,8 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = 481.5
 offset_top = 180.0
-offset_right = 805.5
-offset_bottom = 346.0
+offset_right = 959.5
+offset_bottom = 357.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_yuibf")
