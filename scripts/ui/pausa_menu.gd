@@ -39,9 +39,19 @@ func _on_reiniciar_pressed(): # Cambié el nombre para que coincida con tu escen
 	get_tree().reload_current_scene()
 
 
+
+
+
+# Esta función se conecta al botón "salir"
 func _on_salir_pressed():
-	# IMPORTANTE: No usamos get_tree().quit() en móviles.
-	# En su lugar, volvemos al menú principal.
-	# Asegúrate de que la ruta a tu escena del menú sea correcta.
-	get_tree().paused = false
-	get_tree().change_scene_to_file("res://ui/main_menu.tscn")
+	
+	# 1. Llama a tu función de reanudar.
+	# Esto pondrá 'get_tree().paused = false' Y
+	# activará tu animación de "fade_out" (play_backwards).
+	toggle_pausa()
+	
+	# 2. ESPERA (await) a que la animación de salida termine.
+	await $AnimationPlayer.animation_finished
+	
+	# 3. Solo DESPUÉS de que el menú se haya ocultado, cambia la escena.
+	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")

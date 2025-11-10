@@ -41,6 +41,7 @@ offset_right = -289.0
 offset_bottom = 61.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
@@ -72,10 +73,10 @@ anchor_left = 5.855
 anchor_top = 8.872
 anchor_right = 5.855
 anchor_bottom = 8.872
-offset_left = 126.415
-offset_top = -238.88
-offset_right = 779.415
-offset_bottom = 366.12
+offset_left = 110.415
+offset_top = -201.88
+offset_right = 784.415
+offset_bottom = 347.12
 grow_horizontal = 2
 grow_vertical = 2
 theme = SubResource("Theme_m1kxf")
