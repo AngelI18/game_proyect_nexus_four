@@ -1,27 +1,55 @@
 [gd_scene load_steps=8 format=3 uid="uid://f45rq8ydwwoh"]
 
 [ext_resource type="Script" uid="uid://cjkh2q0473qmt" path="res://scripts/ui/pausa_menu.gd" id="1_nggwh"]
-[ext_resource type="Shader" uid="uid://b4knegqfix2f2" path="res://scenes/ui/PausaMenu.gdshader" id="2_6viru"]
+[ext_resource type="Shader" uid="uid://gje18y5aiaty" path="res://scenes/ui/PausaMenu.gdshader" id="2_nggwh"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_ls7qe"]
-shader = ExtResource("2_6viru")
-shader_parameter/lod = 3.711
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6viru"]
+shader = ExtResource("2_nggwh")
+shader_parameter/lod = 0.0
 
 [sub_resource type="Theme" id="Theme_xuc83"]
 
-[sub_resource type="Animation" id="Animation_4oh3q"]
+[sub_resource type="Animation" id="Animation_ls7qe"]
+resource_name = "blur"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:material:shader")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [ExtResource("2_nggwh"), ExtResource("2_nggwh")]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("PanelContainer:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_7nctc"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("ColorRect:material:shader_parameter/lod")
+tracks/0/path = NodePath("ColorRect:material:shader")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [3.711]
+"update": 1,
+"values": [ExtResource("2_nggwh")]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -36,38 +64,10 @@ tracks/1/keys = {
 "values": [Color(1, 1, 1, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_7nctc"]
-resource_name = "blur"
-length = 0.3
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ColorRect:material:shader_parameter/lod")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [3.711]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("PanelContainer:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0.0666667, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_epe3j"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_4oh3q"]
 _data = {
-&"RESET": SubResource("Animation_4oh3q"),
-&"blur": SubResource("Animation_7nctc")
+&"RESET": SubResource("Animation_7nctc"),
+&"blur": SubResource("Animation_ls7qe")
 }
 
 [node name="PausaMenu" type="CanvasLayer"]
@@ -75,19 +75,20 @@ process_mode = 3
 script = ExtResource("1_nggwh")
 
 [node name="ColorRect" type="ColorRect" parent="."]
-material = SubResource("ShaderMaterial_ls7qe")
+material = SubResource("ShaderMaterial_6viru")
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+color = Color(1, 1, 1, 0.376471)
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 modulate = Color(1, 1, 1, 0)
 offset_left = 382.0
 offset_top = 182.0
-offset_right = 1033.0
-offset_bottom = 283.0
+offset_right = 1037.0
+offset_bottom = 272.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
 layout_mode = 2
@@ -107,7 +108,7 @@ text = "salir"
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
-&"": SubResource("AnimationLibrary_epe3j")
+&"": SubResource("AnimationLibrary_4oh3q")
 }
 
 [connection signal="pressed" from="PanelContainer/VBoxContainer/jugar" to="." method="_on_jugar_pressed"]
