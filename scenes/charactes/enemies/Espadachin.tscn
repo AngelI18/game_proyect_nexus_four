@@ -1,22 +1,10 @@
-[gd_scene load_steps=6 format=3 uid="uid://dpr8vbhmi4noe"]
+[gd_scene load_steps=8 format=3 uid="uid://dpr8vbhmi4noe"]
 
+[ext_resource type="Script" uid="uid://dmhh7r7prfxxh" path="res://scenes/charactes/enemies/espadachin.gd" id="1_6nqxq"]
 [ext_resource type="Texture2D" uid="uid://cxl5fktxrnbvu" path="res://assets/characters/enemies/Espadachin/player katana continuous attack 80x64 (1).png" id="1_q1tdn"]
 
-[sub_resource type="Animation" id="Animation_x1y2s"]
-resource_name = "AtaqueBasico"
-length = 6.0
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.0666667, 0.5, 0.966667, 1.3, 1.83333, 2.3, 2.8, 3.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [0, 1, 2, 4, 5, 6, 8, 7]
-}
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q1tdn"]
+size = Vector2(55, 29)
 
 [sub_resource type="Animation" id="Animation_6nqxq"]
 length = 0.001
@@ -49,24 +37,43 @@ tracks/0/keys = {
 "values": [6, 8, 7]
 }
 
+[sub_resource type="Animation" id="Animation_x1y2s"]
+resource_name = "AtaqueRápido"
+length = 3.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0.0666667, 0.5, 0.966667, 1.3, 1.83333),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 4, 5]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_k0mfp"]
 _data = {
-&"AtaqueBasico": SubResource("Animation_x1y2s"),
+&"AtaqueRápido": SubResource("Animation_x1y2s"),
 &"RESET": SubResource("Animation_6nqxq"),
 &"idle": SubResource("Animation_q1tdn")
 }
 
-[node name="Node2D" type="Node2D"]
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_q1tdn")
-hframes = 9
+[node name="EnemigoEspadachin" type="CharacterBody2D"]
+script = ExtResource("1_6nqxq")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(9.5, 4.5)
+shape = SubResource("RectangleShape2D_q1tdn")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_k0mfp")
 }
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_q1tdn")
+hframes = 9
