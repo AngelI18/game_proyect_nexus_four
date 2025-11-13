@@ -30,8 +30,6 @@ var is_taking_damage = false
 
 #sistema de checkpoint fantasma
 var last_safe_position: Vector2 = Vector2.ZERO
-var ghost_sprite: Sprite2D = null
-var is_on_damage_tile = false
 
 func _ready():
 	# Agregar al grupo "player" para que el HUD lo encuentre
@@ -89,6 +87,8 @@ func _physics_process(delta: float) -> void:
 	_update_animation(direction)
 	enemyAttack()
 	attack()
+	if is_on_floor():
+		last_safe_position = global_position
 
 func _update_animation(direction: float) -> void:
 	
