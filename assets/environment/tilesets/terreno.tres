@@ -148,5 +148,5 @@ physics_layer_0/collision_layer = 1
 physics_layer_1/collision_layer = 2
 physics_layer_1/collision_mask = 2
 sources/1 = SubResource("TileSetAtlasSource_2mu0v")
-sources/3 = SubResource("TileSetAtlasSource_eaa0b")
 sources/6 = SubResource("TileSetAtlasSource_shkxg")
+sources/3 = SubResource("TileSetAtlasSource_eaa0b")
