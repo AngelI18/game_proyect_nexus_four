@@ -1,222 +1,292 @@
 extends CharacterBody2D
 
-# Velocidad ajustada para tiles de 24x24 (5 tiles por segundo)
+#Señales
+signal health_changed(current_health, max_health)
+signal coin_changed(new_coins)
+
+#Constantes de movimiento
 const SPEED = 170.0
 const JUMP_VELOCITY = -350.0
-
-var can_double_jump = true
-var cant_double_jump = 2
-var jump_less = cant_double_jump
-
-#mecanica del oro
-@onready var coin_label = %Label
-var player_gold = 0
-
-#configurarAtaque
-var enemy_node_in_range: Node2D = null
-var enemy_attack_cooldown = true
-var health = 200
-var max_regeneration = health * 0.7
-var player_alive = true
-var attack_ip = false
-var player_hurt_ip = false
-
-#retroceso
 const KNOCKBACK_STRENGTH = 150.0
 const KNOCKBACK_JUMP = -150.0
+
+#Variables de salto
+var can_double_jump = true
+const MAX_JUMPS = 2
+var jumps_remaining = MAX_JUMPS
+
+#Variables de salud
+const MAX_HEALTH = 200
+var health = MAX_HEALTH
+var max_regeneration = MAX_HEALTH * 0.7
+var player_alive = true
+
+#Variables de estado
+var is_attacking = false
+var is_hurt = false
 var is_invulnerable = false
 var is_taking_damage = false
 
+#Variables de combate
+var enemy_in_range: Node2D = null
+var can_take_damage = true
+
+#Variables de colección
+var coins = 0
+
+#Sistema de checkpoint
+var last_safe_position: Vector2 = Vector2.ZERO
+
+
+#Inicialización
 func _ready():
+	add_to_group("player")
+	_connect_joystick()
+	call_deferred("_emit_initial_signals")
+
+func _connect_joystick():
 	var joystick = get_tree().get_first_node_in_group("attack_joystick")
 	if joystick:
 		joystick.attack_triggered.connect(_on_joystick_attack_triggered)
-		print("Joystick conectado!")
-	else:
-		print("Joystick no encontrado")
 
+func _emit_initial_signals():
+	update_health()
+	emit_coin_signal()
+
+
+#Loop principal
 func _physics_process(delta: float) -> void:
-	# Gravedad
+	_apply_gravity(delta)
+	_handle_jump()
+	_handle_movement()
+	_handle_attack()
+	_check_death()
+	
+	move_and_slide()
+	
+	_update_animation()
+	_check_enemy_damage()
+	_check_tile_damage()
+	_update_safe_position()
+
+#Física y movimiento
+func _apply_gravity(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
-	if is_on_floor():
+	else:
 		can_double_jump = true
-		jump_less = cant_double_jump
-	
-	# Salto
+		jumps_remaining = MAX_JUMPS
+
+func _handle_jump() -> void:
 	if Input.is_action_just_pressed("ui_up"):
 		if is_on_floor():
-			velocity.y = JUMP_VELOCITY
-			jump_less -= 1
-		elif can_double_jump && jump_less != 0:
-			velocity.y = JUMP_VELOCITY
-			jump_less -= 1
-		elif jump_less == 0:
+			_jump()
+		elif can_double_jump and jumps_remaining > 0:
+			_jump()
+		elif jumps_remaining == 0:
 			can_double_jump = false
 
-	# Movimiento horizontal sin inercia
+func _jump() -> void:
+	velocity.y = JUMP_VELOCITY
+	jumps_remaining -= 1
+
+func _handle_movement() -> void:
 	var direction := Input.get_axis("ui_left", "ui_right")
-	if attack_ip == true:
-		if is_on_floor():
-			velocity.x = 0.0 # Detener al jugador mientras ataca, solo si esta en el piso, en aire mantener direccion
-	elif player_hurt_ip == true:
+	
+	if is_attacking and is_on_floor():
+		velocity.x = 0.0
+	elif is_hurt:
 		pass
 	else:
-		# Movimiento normal si no estamos ni atacando ni heridos
 		velocity.x = direction * SPEED
-		
-	if health <= 0:
-		player_alive = false
-		health = 0
-		self.queue_free()
-		#display menu de muerte, y voler a inicio
-
-	move_and_slide()
-	_update_animation(direction)
-	enemyAttack()
-	attack()
-	update_health()
-
-func _update_animation(direction: float) -> void:
 	
-	if !attack_ip and !player_hurt_ip:
-		#cambiar orientacion de la animacion acorde a la direccion independiente de la animacion
-		if direction !=0:
-			$AnimatedSprite2D.flip_h = direction <0
-		
-		if not is_on_floor():
-			# Animación de salto
-			if velocity.y < 0 and $AnimatedSprite2D.name != "jump":
-				$AnimatedSprite2D.play("jump")
-			# Animacion de caida
-			elif velocity.y > 0 and $AnimatedSprite2D.name != "fall":
-				$AnimatedSprite2D.play("fall")
-		elif direction == 0:
-			# Animación de reposo
-			if attack_ip == false and player_hurt_ip == false:
-				$AnimatedSprite2D.play("idle")
+	if direction != 0 and not is_attacking and not is_hurt:
+		$AnimatedSprite2D.flip_h = direction < 0
+
+func _update_safe_position() -> void:
+	if is_on_floor():
+		last_safe_position = global_position
+
+#Animaciones
+func _update_animation() -> void:
+	if is_attacking or is_hurt:
+		return
+	
+	if not is_on_floor():
+		if velocity.y < 0:
+			$AnimatedSprite2D.play("jump")
 		else:
-			# Animación de correr
-			if attack_ip == false and player_hurt_ip == false:
-				$AnimatedSprite2D.play("run")
+			$AnimatedSprite2D.play("fall")
+	elif velocity.x == 0:
+		$AnimatedSprite2D.play("idle")
+	else:
+		$AnimatedSprite2D.play("run")
 
-#esto no lo estamos usando ahora, cuando se pula las hitbox si
-#func _update_collision(animation_name: String) -> void:
-#		$CollisionShape2D_idle.set_disabled(animation_name != "idle")
-#		$CollisionShape2D_run.set_disabled(animation_name != "run")
-#		$CollisionShape2D_jump.set_disabled(animation_name != "jump")
-
-func player():
-	pass
-
-func _on_player_hit_box_body_entered(body: Node2D) -> void:
-	if body.has_method("enemy"):
-		enemy_node_in_range = body
-
-
-func _on_player_hit_box_body_exited(body: Node2D) -> void:
-	if body.has_method("enemy"):
-		if body == enemy_node_in_range:
-			enemy_node_in_range = null
-
-func enemyAttack():
-	if enemy_node_in_range != null and enemy_attack_cooldown and !is_invulnerable:
-		var knockback_direction = (global_position - enemy_node_in_range.global_position).normalized()
-		#velocidad del retroceso
-		velocity.x = knockback_direction.x * KNOCKBACK_STRENGTH
-		velocity.y = KNOCKBACK_JUMP
-		health -= 20
-		is_invulnerable = true
-		player_hurt_ip = true
-		enemy_attack_cooldown = false
-		is_taking_damage = true
-		$attack_cooldown.start()
-		$player_is_hurt.start()
-		$AnimatedSprite2D.play("hurt")
-		$invulnerability_timer.start(2.0)
-		#reiniciar timer de regeneracion
-		$regen_timer.stop()
-		$regen_timer.start()
-		blink_sprite(2)
-		print(health)
-
-
-func blink_sprite(duration: float):
+func blink_sprite(duration: float) -> void:
 	var time = 0.0
 	while time < duration:
 		$AnimatedSprite2D.modulate.a = 0.3
 		await get_tree().create_timer(0.1).timeout
-		$AnimatedSprite2D.modulate.a = 1.0 
+		$AnimatedSprite2D.modulate.a = 1.0
 		await get_tree().create_timer(0.1).timeout
 		time += 0.2
 	$AnimatedSprite2D.modulate.a = 1.0
 
 
+#Sistema de combate
+func _handle_attack() -> void:
+	if Input.is_action_just_pressed("attack") and not is_attacking:
+		_perform_attack()
+
+func _perform_attack() -> void:
+	Global.player_current_attack = true
+	is_attacking = true
+	$AnimatedSprite2D.play("attack")
+	$deal_attack_timer.start()
+
+func _on_joystick_attack_triggered(direction_attack: Vector2) -> void:
+	if not is_on_floor() or is_attacking or is_taking_damage:
+		return
+	
+	if abs(direction_attack.x) > 0.3:
+		$AnimatedSprite2D.flip_h = direction_attack.x < 0
+	
+	_perform_attack()
+
+#Sistema de daño
+func take_damage(damage_amount: int, knockback_dir: Vector2 = Vector2.ZERO, invulnerability_time: float = 1.0) -> void:
+	if is_invulnerable or not can_take_damage:
+		return
+	
+	if is_attacking:
+		is_attacking = false
+		Global.player_current_attack = false
+		$deal_attack_timer.stop()
+	
+	health -= damage_amount
+	health = max(0, health)
+	update_health()
+	
+	if knockback_dir != Vector2.ZERO:
+		velocity.x = knockback_dir.x * KNOCKBACK_STRENGTH
+		velocity.y = knockback_dir.y * abs(KNOCKBACK_JUMP)
+	
+	is_invulnerable = true
+	is_hurt = true
+	can_take_damage = false
+	is_taking_damage = true
+	
+	$attack_cooldown.start()
+	$player_is_hurt.start()
+	$invulnerability_timer.start(invulnerability_time)
+	
+	$regen_timer.stop()
+	$regen_timer.start()
+	
+	$AnimatedSprite2D.play("hurt")
+	blink_sprite(invulnerability_time)
+	
+	print("Daño recibido: ", damage_amount, " | Salud actual: ", health)
+
+func _check_enemy_damage() -> void:
+	if enemy_in_range != null:
+		var knockback_direction = (global_position - enemy_in_range.global_position).normalized()
+		take_damage(20, knockback_direction, 2.0)
+
+func _check_tile_damage() -> void:
+	for i in range(get_slide_collision_count()):
+		var collision = get_slide_collision(i)
+		var collider = collision.get_collider()
+		
+		if collider is TileMapLayer:
+			_process_tile_collision(collider, collision)
+
+func _process_tile_collision(tile_map: TileMapLayer, collision: KinematicCollision2D) -> void:
+	var collision_pos = collision.get_position()
+	var collision_normal = collision.get_normal()
+	
+	#Ajustar la posición de búsqueda del tile según la normal
+	var search_offset = collision_normal * -2.0  # Buscar en dirección opuesta a la normal
+	var adjusted_pos = collision_pos + search_offset
+	
+	var tile_coords = tile_map.local_to_map(tile_map.to_local(adjusted_pos))
+	var tile_data = tile_map.get_cell_tile_data(tile_coords)
+	
+	if not tile_data:
+		print("No hay tile_data en coords: ", tile_coords)
+		return
+	
+	#Debug: verificar ambas capas de física
+	var layer_0_count = tile_data.get_collision_polygons_count(0)
+	var layer_1_count = tile_data.get_collision_polygons_count(1)
+	
+	#Verificar si es tile de daño
+	if layer_1_count > 0:
+		var knockback_dir = Vector2.ZERO
+		
+		#Colisión desde arriba (pinchos en el suelo)
+		if abs(collision_normal.y) > 0.5:
+			#Empujar hacia arriba, horizontal basado en velocidad actual
+			var horizontal_dir = -sign(velocity.x) if velocity.x != 0 else 0
+			knockback_dir = Vector2(horizontal_dir, -2)
+		#Colisión lateral
+		else:
+			knockback_dir = Vector2(collision_normal.x * 1.5, -1)
+		
+		print("Knockback aplicado: ", knockback_dir)
+		take_damage(10, knockback_dir, 1.0)
+
+func _check_death() -> void:
+	if health <= 0:
+		player_alive = false
+		health = 0
+		queue_free()
+		#TODO: Mostrar menú de muerte
+
+#Sistema de salud y regeneración
+func update_health() -> void:
+	health_changed.emit(health, MAX_HEALTH)
+
+func _on_regen_timer_timeout() -> void:
+	if health < max_regeneration:
+		health = min(health + 20, max_regeneration)
+		update_health()
+	elif health <= 0:
+		health = 0
+		update_health()
+
+#Sistema de monedas
+func add_coins(amount: int) -> void:
+	coins += amount
+	emit_coin_signal()
+
+func emit_coin_signal() -> void:
+	coin_changed.emit(coins)
+
+#Detección de colisiones
+func _on_player_hit_box_body_entered(body: Node2D) -> void:
+	if body.has_method("enemy"):
+		enemy_in_range = body
+
+func _on_player_hit_box_body_exited(body: Node2D) -> void:
+	if body.has_method("enemy") and body == enemy_in_range:
+		enemy_in_range = null
+
+#Callbacks de timers
 func _on_attack_cooldown_timeout() -> void:
-	enemy_attack_cooldown = true
-
-func attack():
-	var direction := Input.get_axis("ui_left", "ui_right")
-	if Input.is_action_just_pressed("attack"):
-		Global.player_current_attack = true
-		attack_ip = true
-		$AnimatedSprite2D.play("attack")
-		if (direction < 0):
-			$AnimatedSprite2D.flip_h = true
-		$deal_attack_timer.start()
-
+	can_take_damage = true
 
 func _on_deal_attack_timer_timeout() -> void:
-	$deal_attack_timer.stop()
 	Global.player_current_attack = false
-	attack_ip = false
-
+	is_attacking = false
 
 func _on_player_is_hurt_timeout() -> void:
-	$player_is_hurt.stop()
-	player_hurt_ip = false
-
+	is_hurt = false
 
 func _on_invulnerability_timer_timeout() -> void:
-	$invulnerability_timer.stop()
 	is_invulnerable = false
 	is_taking_damage = false
 
-func update_health():
-	var healthbar = $"health_bar"
-	healthbar.value = health
-	
-	if (health >= 200):
-		healthbar.visible = false
-	else:
-		healthbar.visible = true
-	
-
-
-func _on_regen_timer_timeout() -> void:
-	if (health < max_regeneration):
-		health += 20
-		if (health >= max_regeneration):
-			health = max_regeneration
-	if (health <= 0):
-		health = 0
-
-func _on_joystick_attack_triggered(direction_attack: Vector2):
-	if is_on_floor() and !attack_ip and !is_taking_damage:
-		# Aplicar flip según dirección del joystick
-		if direction_attack.x < -0.3:
-			$AnimatedSprite2D.flip_h = true  # Izquierda
-		elif direction_attack.x > 0.3:
-			$AnimatedSprite2D.flip_h = false  # Derecha
-		#-----------------funcion attack()----------------------
-		var direction := Input.get_axis("ui_left", "ui_right")
-		Global.player_current_attack = true
-		attack_ip = true
-		$AnimatedSprite2D.play("attack")
-		if (direction < 0):
-			$AnimatedSprite2D.flip_h = true
-		$deal_attack_timer.start()
-	#coins
-func set_coin(new_coin_count: int) -> void:
-	player_gold += new_coin_count
-	coin_label.text = "coin: " + str(player_gold)
+#Utilidades
+func player() -> void:
+	pass

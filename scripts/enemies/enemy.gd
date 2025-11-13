@@ -1,29 +1,34 @@
 extends CharacterBody2D
 
-var speed = 40
+var speed = 100
 var player_chase = false
 var player = null
 
-#attack
+#Attack
 var health = 100
 var player_in_attack_zone = false
 var can_take_damage = true
 
+#Knockback
+const KNOCKBACK_STRENGTH = 200.0
+var is_taking_knockback = false
+
 func _physics_process(delta: float) -> void:
-	#gravedad
+	#Gravedad
 	if not is_on_floor():
 		velocity += get_gravity() * delta
-	#seguir al jugador
-	if player_chase:
-		position += (player.position - position)/speed
+	
+	if is_taking_knockback:
+		pass
+	elif player_chase and is_on_floor():
+		var direction = sign(player.position.x - position.x)
+		velocity.x = direction * speed
 		$AnimatedSprite2D.play("walk")
-		if(player.position.x - position.x) < 0:
-			$AnimatedSprite2D.flip_h = true
-		else:
-			$AnimatedSprite2D.flip_h = false
+		$AnimatedSprite2D.flip_h = direction < 0
 	else:
+		velocity.x = 0
 		$AnimatedSprite2D.play("idle")
-		
+	
 	move_and_slide()
 	deal_with_damage()
 	update_health()
@@ -57,10 +62,20 @@ func deal_with_damage():
 			health -= 20
 			$take_damage_cooldown.start()
 			can_take_damage = false
+			apply_knockback()
+			
 			print ("slime health = ",health)
 			if health <= 0:
-				player.set_coin(20)
+				player.add_coins(20)
 				self.queue_free()
+
+func apply_knockback():
+	if player:
+		var knockback_direction = (global_position - player.global_position).normalized()
+		velocity.x = knockback_direction.x * KNOCKBACK_STRENGTH
+		is_taking_knockback = true
+		await get_tree().create_timer(0.3).timeout
+		is_taking_knockback = false
 
 func _on_take_damage_cooldown_timeout() -> void:
 	can_take_damage = true

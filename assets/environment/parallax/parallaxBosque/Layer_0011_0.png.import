@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bovpvkaxv4apr"
-path="res://.godot/imported/terreno-tierra-pasto.png-08c946547e0c72c982b5229546358075.ctex"
+uid="uid://73da83h8mf0y"
+path="res://.godot/imported/Layer_0011_0.png-7f45df1f5fe76c5721c40f4d049c69ce.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/environment/tilesets/terreno-tierra-pasto.png"
-dest_files=["res://.godot/imported/terreno-tierra-pasto.png-08c946547e0c72c982b5229546358075.ctex"]
+source_file="res://assets/environment/parallax/parallaxBosque/Layer_0011_0.png"
+dest_files=["res://.godot/imported/Layer_0011_0.png-7f45df1f5fe76c5721c40f4d049c69ce.ctex"]
 
 [params]
 
