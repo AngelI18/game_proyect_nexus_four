@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=4 uid="uid://crpoc8lekajbi"]
+
+[ext_resource type="PackedScene" uid="uid://cxtrnhx07y64i" path="res://scenes/environment/parallax_backgrounds/sea.tscn" id="1_ns4st"]
+[ext_resource type="PackedScene" uid="uid://ccg021l8va1nb" path="res://scenes/charactes/player/player.tscn" id="2_mdmnb"]
+[ext_resource type="TileSet" uid="uid://bwjtj27yicfyi" path="res://assets/environment/tilesets/terreno.tres" id="3_8cpu3"]
+
+[node name="angel_level" type="Node2D"]
+
+[node name="sea" parent="." instance=ExtResource("1_ns4st")]
+
+[node name="player" parent="." instance=ExtResource("2_mdmnb")]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+tile_map_data = PackedByteArray("AAADAAoAAQACAAAAAAACAAoAAQABAAAAAAABAAoAAQAEAAcAAAABAAkAAQADAAMAAAABAAgAAQACAAIAAAABAAcAAQACAAIAAAABAAYAAQACAAIAAAABAAUAAQACAAIAAAADAAsAAQACAAIAAAA=")
+tile_set = ExtResource("3_8cpu3")
