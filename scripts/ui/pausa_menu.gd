@@ -33,9 +33,18 @@ func _on_jugar_pressed():
 
 
 func _on_reiniciar_pressed(): # Cambié el nombre para que coincida con tu escena
-	# Primero, nos aseguramos de quitar la pausa del juego.
-	get_tree().paused = false
-	# Luego, recargamos la escena actual.
+	
+	# 1. Llama a tu función de reanudar.
+	# Esto pondrá 'get_tree().paused = false' Y
+	# activará tu animación de "fade_out" (play_backwards).
+	await toggle_pausa()
+	
+	# 2. ESPERA (await) a que la función toggle_pausa() termine.
+	# Tu función 'toggle_pausa' ya incluye la línea "visible = false"
+	# al final de la animación de salida.
+	
+	# 3. Solo DESPUÉS de que el menú se haya ocultado,
+	# recargamos la escena.
 	get_tree().reload_current_scene()
 
 
