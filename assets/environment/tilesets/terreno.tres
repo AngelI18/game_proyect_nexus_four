@@ -1,8 +1,7 @@
-[gd_resource type="TileSet" load_steps=7 format=3 uid="uid://vifpif72ytcp"]
+[gd_resource type="TileSet" load_steps=5 format=3 uid="uid://bwjtj27yicfyi"]
 
 [ext_resource type="Texture2D" uid="uid://bfoe1jbwl4lox" path="res://assets/environment/tilesets/terreno.png" id="1_6nyte"]
 [ext_resource type="Texture2D" uid="uid://cr037l1q1hici" path="res://assets/environment/tilesets/daño.png" id="2_shkxg"]
-[ext_resource type="Texture2D" uid="uid://dqrvrndda1ots" path="res://assets/environment/tilesets/terreno_front.png" id="3_shkxg"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_2mu0v"]
 texture = ExtResource("1_6nyte")
@@ -70,6 +69,12 @@ texture_region_size = Vector2i(24, 24)
 8:7/0 = 0
 9:7/0 = 0
 10:7/0 = 0
+10:7/0/physics_layer_0/polygon_0/points = PackedVector2Array(-12, -10.0066, -4.97592, -10.0066, -3.96604, -11.0033, 3.00381, -10.9927, 4.09861, -12, 12, -12, 12, -10.009, 9.94271, -8.03451, 1.96298, -6.95716, -5.87067, -6.04414, -12, -5.96563)
+7:6/0 = 0
+8:6/0 = 0
+9:6/0 = 0
+10:6/0 = 0
+11:6/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_eaa0b"]
 texture = ExtResource("2_shkxg")
@@ -78,21 +83,7 @@ texture_region_size = Vector2i(24, 24)
 1:0/0 = 0
 2:0/0 = 0
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_shkxg"]
-texture = ExtResource("3_shkxg")
-texture_region_size = Vector2i(24, 24)
-12:3/0 = 0
-14:3/0 = 0
-12:4/0 = 0
-14:4/0 = 0
-7:6/0 = 0
-8:6/0 = 0
-9:6/0 = 0
-10:6/0 = 0
-11:6/0 = 0
-
 [resource]
 tile_size = Vector2i(24, 24)
 sources/1 = SubResource("TileSetAtlasSource_2mu0v")
-sources/6 = SubResource("TileSetAtlasSource_shkxg")
 sources/3 = SubResource("TileSetAtlasSource_eaa0b")

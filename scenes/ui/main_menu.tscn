@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://djb2h721lq31d"]
+[gd_scene load_steps=15 format=3 uid="uid://djb2h721lq31d"]
 
 [ext_resource type="Script" uid="uid://b4aqhwnq4b348" path="res://scripts/ui/main_menu.gd" id="1_fe2o3"]
 [ext_resource type="Texture2D" uid="uid://dcit4ht8le4n7" path="res://assets/ui/Background/Image_fx (2).jpg" id="2_1g8jr"]
@@ -12,11 +12,19 @@ default_font = ExtResource("3_1g8jr")
 [sub_resource type="Theme" id="Theme_x2yvf"]
 default_font = ExtResource("3_1g8jr")
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_1g8jr"]
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_1g8jr"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_m1kxf"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_m1kxf"]
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_x2yvf"]
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_x2yvf"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_uhagc"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_uhagc"]
 
@@ -88,6 +96,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 theme = SubResource("Theme_x2yvf")
 theme_override_font_sizes/font_size = 50
+theme_override_styles/hover = SubResource("StyleBoxEmpty_1g8jr")
 theme_override_styles/normal = SubResource("StyleBoxTexture_1g8jr")
 text = "Un jugador"
 
@@ -96,6 +105,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_font_sizes/font_size = 50
+theme_override_styles/hover = SubResource("StyleBoxEmpty_m1kxf")
 theme_override_styles/normal = SubResource("StyleBoxTexture_m1kxf")
 text = "Multijugador"
 
@@ -104,6 +114,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_font_sizes/font_size = 50
+theme_override_styles/hover = SubResource("StyleBoxEmpty_x2yvf")
 theme_override_styles/normal = SubResource("StyleBoxTexture_x2yvf")
 text = "opciones"
 
@@ -112,6 +123,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme_override_font_sizes/font_size = 50
+theme_override_styles/hover = SubResource("StyleBoxEmpty_uhagc")
 theme_override_styles/normal = SubResource("StyleBoxTexture_uhagc")
 text = "salir"
 
