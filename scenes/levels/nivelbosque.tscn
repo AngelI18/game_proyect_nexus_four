@@ -1,8 +1,8 @@
-[gd_scene load_steps=4 format=4 uid="uid://dayangaca82wa"]
+[gd_scene load_steps=4 format=4 uid="uid://df6l0kjhtsutx"]
 
 [ext_resource type="PackedScene" uid="uid://34vltm0vwt0r" path="res://scenes/environment/parallax_bosque/nivel_bosque.tscn" id="1_58abi"]
 [ext_resource type="PackedScene" uid="uid://ccg021l8va1nb" path="res://scenes/charactes/player/player.tscn" id="2_nsem4"]
-[ext_resource type="TileSet" uid="uid://bwjtj27yicfyi" path="res://assets/environment/tilesets/terreno.tres" id="3_j02gq"]
+[ext_resource type="TileSet" uid="uid://vifpif72ytcp" path="res://assets/environment/tilesets/terreno.tres" id="3_j02gq"]
 
 [node name="Nivelbosque" type="Node2D"]
 position = Vector2(1, -344)
