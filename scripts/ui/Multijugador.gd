@@ -1,4 +1,5 @@
 extends Control
+
 # === NODOS UI ===
 @onready var label: Label = $Panel/Label
 @onready var lista: VBoxContainer = $Panel/ScrollContainer/VBoxContainer
@@ -9,9 +10,9 @@ extends Control
 @onready var lobby: Panel = $Panel/Lobby
 
 # === CONFIGURACIÓN DEL JUEGO ===
-const MY_PLAYER_NAME := "ene0"      # cambia esto en cada instancia
-const MY_GAME_ID := "E"
-const MY_GAME_KEY := "FIBE9DV0C3"
+const MY_PLAYER_NAME := "pc-ene0"      # cambia esto en cada instancia
+const MY_GAME_ID := "D"
+const MY_GAME_KEY := "B2VAFIF18P"
 const MY_GAME_NAME := "Yggdrasil: The Last Stand"
 
 # === VARIABLES ===
@@ -203,6 +204,11 @@ func _on_mensaje_recibido(msg: String):
 		"game-ended":
 			print("🏁 game-ended recibido — partida terminó.")
 			await _finalizar_partida_por_rival()
+			
+		"send-game-data":
+			# Evento ACK: el servidor solo confirma que tu mensaje fue enviado.
+			print("📨 Servidor ACK → send-game-data OK.")
+
 
 		"receive-game-data":
 			var payload = data.get("data", {}).get("payload", {})
@@ -267,9 +273,9 @@ func _finalizar_partida_por_rival():
 
 # === LOBBY ===
 func _abrir_lobby():
-	print("🪩 Mostrando lobby... (refrescando datos del servidor)")
+	print("🪩 Mostrando lobby... refrescando datos...")
 
-	# ⚠️ Pedir datos al servidor antes de construir el lobby
+	# pedir jugadores actualizados al servidor
 	_enviar({"event": "online-players"})
 	await get_tree().create_timer(0.15).timeout
 
@@ -281,54 +287,68 @@ func _abrir_lobby():
 	box.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	box.add_theme_constant_override("separation", 25)
 
-	# limpiar contenido anterior
+	# limpiar contenido viejo
 	for c in box.get_children():
 		c.queue_free()
 
-	# título del lobby
-	var titulo = _crear_label("🏁 LOBBY DE PARTIDA", 28)
+	# título
+	var titulo := _crear_label("🏁 LOBBY DE PARTIDA", 28)
 	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	box.add_child(titulo)
 
-	# lista final de jugadores (local + rivales)
+	# -------------------------------
+	# LISTA FINAL: SOLO JUGADORES DEL MISMO MATCH
+	# -------------------------------
 	var lista_final: Array = []
+
+	# jugador local (SIEMPRE)
 	lista_final.append({
 		"name": MY_PLAYER_NAME,
-		"id": "local",
-		"game_name": MY_GAME_NAME
+		"game_name": MY_GAME_NAME,
+		"local": true
 	})
 
+	# jugadores remotos SOLO si están en EL MISMO MATCH
 	for id in jugadores.keys():
-		lista_final.append(jugadores[id])
 
-	# construir filas del lobby
+		var j = jugadores[id]
+
+		# incluir solo jugadores que SIGUEN en match
+		if j.get("status") == "IN_MATCH" or j.get("status") == "BUSY":
+			lista_final.append({
+				"name": j.get("name"),
+				"game_name": j.get("game_name"),
+				"local": false
+			})
+
+	print("📌 Jugadores en el lobby del match:", lista_final)
+
+	# construir UI
 	for jugador in lista_final:
-		var jugador_nombre: String = str(jugador.get("name", "???"))
+
+		var jugador_nombre = jugador["name"]
+		var game_name = jugador["game_name"]
 
 		var fila := HBoxContainer.new()
 		fila.alignment = BoxContainer.ALIGNMENT_CENTER
 		fila.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		fila.add_theme_constant_override("separation", 40)
 
-		# === NOMBRE DEL JUEGO DESDE EL DICCIONARIO ===
-		var game_name := str(jugador.get("game_name", "???"))
-
-		# fallback por si algo raro pasa
-		if game_name == "":
-			game_name = "???"
-
-		var texto_fila := "👤 %s  |  🎮 %s" % [jugador_nombre, game_name]
-		var lbl := _crear_label(texto_fila, 24)
+		var texto = "👤 " + str(jugador_nombre) + "   |   🎮 " + str(game_name)
+		var lbl := _crear_label(texto, 24)
 		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		fila.add_child(lbl)
 
-		# === BOTÓN LISTO / NO LISTO ===
+		# botón de listo
 		var btn_estado := _crear_boton("❌ No listo", 18, 160, 45)
 		btn_estado.name = jugador_nombre
 		btn_estado.toggle_mode = true
 
-		if jugador_nombre.to_lower() == MY_PLAYER_NAME.to_lower():
+		if jugador["local"] == true:
+			btn_estado.disabled = false
+
 			btn_estado.pressed.connect(func():
+
 				var nuevo_estado := btn_estado.text == "❌ No listo"
 
 				if nuevo_estado:
@@ -336,28 +356,31 @@ func _abrir_lobby():
 				else:
 					btn_estado.text = "❌ No listo"
 
-				print("🔄 Cambiando estado:", MY_PLAYER_NAME, "→", btn_estado.text)
+				print("🟢", MY_PLAYER_NAME, "-> ready =", nuevo_estado)
 
+				# enviar mensaje sin usar ?
 				_enviar({
 					"event": "send-game-data",
 					"data": {
 						"matchId": match_id,
 						"payload": {
-							"ready": nuevo_estado,
-							"player": MY_PLAYER_NAME
+							"type": "ready",
+							"player": MY_PLAYER_NAME,
+							"ready": nuevo_estado
 						}
 					}
 				})
 
 				_evaluar_listos_y_arrancar()
 			)
+
 		else:
 			btn_estado.disabled = true
 
 		fila.add_child(btn_estado)
 		box.add_child(fila)
 
-	print("🎯 Lobby listo con", lista_final.size(), "jugadores.")
+	print("🎯 Lobby cargado con", lista_final.size(), "jugadores.")
 
 # === ACTUALIZAR READY EN UI ===
 func _actualizar_ready_ui_de(jugador_ready: String, listo: bool):
