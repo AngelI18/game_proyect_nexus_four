@@ -1,0 +1,133 @@
+[gd_scene load_steps=6 format=3 uid="uid://c1jb675isjs8x"]
+
+[ext_resource type="Script" uid="uid://dsl1p3yreo66s" path="res://scripts/ui/Multijugador.gd" id="1_ni7w4"]
+[ext_resource type="FontFile" uid="uid://dkl3bob77eb85" path="res://assets/ui/fonts/pixelpurl.medium.ttf" id="2_h81ph"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n6jst"]
+bg_color = Color(0.25116, 0.0422789, 0.327632, 1)
+corner_radius_top_left = 60
+corner_radius_top_right = 60
+corner_radius_bottom_right = 60
+corner_radius_bottom_left = 60
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_syex5"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ni7w4"]
+bg_color = Color(0.147672, 0.147672, 0.147672, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="Control" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_ni7w4")
+
+[node name="Panel" type="Panel" parent="."]
+custom_minimum_size = Vector2(980, 570)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_n6jst")
+
+[node name="Label" type="Label" parent="Panel"]
+layout_mode = 2
+offset_left = 49.0
+offset_top = 60.0
+offset_right = 965.0
+offset_bottom = 120.0
+theme_override_fonts/font = ExtResource("2_h81ph")
+theme_override_font_sizes/font_size = 60
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel"]
+custom_minimum_size = Vector2(400, 400)
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -300.0
+offset_top = -400.0
+offset_right = 300.0
+grow_horizontal = 2
+grow_vertical = 0
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/ScrollContainer"]
+clip_contents = true
+custom_minimum_size = Vector2(300, 400)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="LobbyBox" type="VBoxContainer" parent="Panel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Enviar" type="Button" parent="Panel"]
+layout_mode = 0
+offset_left = 333.0
+offset_top = 194.0
+offset_right = 662.0
+offset_bottom = 330.0
+theme_override_fonts/font = ExtResource("2_h81ph")
+theme_override_font_sizes/font_size = 30
+text = "Enviar Invitacion"
+
+[node name="Ver" type="Button" parent="Panel"]
+layout_mode = 0
+offset_left = 332.0
+offset_top = 365.0
+offset_right = 661.0
+offset_bottom = 501.0
+theme_override_fonts/font = ExtResource("2_h81ph")
+theme_override_font_sizes/font_size = 30
+text = "Ver Invitaciones"
+
+[node name="Lobby" type="Panel" parent="Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -310.5
+offset_top = -231.0
+offset_right = 310.5
+offset_bottom = 231.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_syex5")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/Lobby"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+alignment = 1
+
+[node name="Volver" type="Button" parent="."]
+layout_mode = 0
+offset_left = 28.0
+offset_top = 23.0
+offset_right = 159.0
+offset_bottom = 102.0
+theme_override_fonts/font = ExtResource("2_h81ph")
+theme_override_font_sizes/font_size = 47
+theme_override_styles/normal = SubResource("StyleBoxFlat_ni7w4")
+text = "Volver"

@@ -10,7 +10,7 @@ func _on_play_pressed() -> void:
 
 
 func _on_multi_player_pressed() -> void:
-	pass # Replace with function body.
+	get_tree().change_scene_to_file("res://scenes/ui/Multijugador.tscn")
 
 
 func _on_options_pressed() -> void:
