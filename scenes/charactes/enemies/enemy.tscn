@@ -143,6 +143,7 @@ radius = 4.0
 radius = 12.0416
 
 [node name="Enemy" type="CharacterBody2D"]
+collision_layer = 8
 script = ExtResource("1_1ksin")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
@@ -153,8 +154,8 @@ frame_progress = 0.670383
 offset = Vector2(0, -6)
 
 [node name="Detection Area" type="Area2D" parent="."]
-collision_layer = 2
-collision_mask = 2
+collision_layer = 0
+collision_mask = 4
 monitorable = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Detection Area"]
@@ -165,6 +166,8 @@ position = Vector2(0, -4)
 shape = SubResource("CircleShape2D_gumeb")
 
 [node name="enemy_hitbox" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="enemy_hitbox"]
 position = Vector2(0, -3)
@@ -184,7 +187,7 @@ show_percentage = false
 
 [connection signal="body_entered" from="Detection Area" to="." method="_on_detection_area_body_entered"]
 [connection signal="body_exited" from="Detection Area" to="." method="_on_detection_area_body_exited"]
-[connection signal="body_entered" from="enemy_hitbox" to="." method="_on_enemy_hitbox_body_entered"]
-[connection signal="body_exited" from="enemy_hitbox" to="." method="_on_enemy_hitbox_body_exited"]
+[connection signal="area_entered" from="enemy_hitbox" to="." method="_on_enemy_hitbox_area_entered"]
+[connection signal="area_exited" from="enemy_hitbox" to="." method="_on_enemy_hitbox_area_exited"]
 [connection signal="timeout" from="take_damage_cooldown" to="." method="_on_take_damage_cooldown_timeout"]
 [connection signal="changed" from="health_bar" to="." method="_on_health_bar_changed"]

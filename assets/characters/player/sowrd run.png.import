@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://du6ellrn8fokb"
-path="res://.godot/imported/sowrd run.png-79bdca74966424afa9af42cd7e63e54d.ctex"
+path="res://.godot/imported/sowrd run.png-4ad69156c1dd0354f169aad3b936f3af.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/characters/enemies/sowrd run.png"
-dest_files=["res://.godot/imported/sowrd run.png-79bdca74966424afa9af42cd7e63e54d.ctex"]
+source_file="res://assets/characters/player/sowrd run.png"
+dest_files=["res://.godot/imported/sowrd run.png-4ad69156c1dd0354f169aad3b936f3af.ctex"]
 
 [params]
 
