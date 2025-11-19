@@ -747,43 +747,565 @@ visible = false  # Se muestra automáticamente al recibir daño
 
 ---
 
-## 🏗️ Cómo Crear un Enemigo Nuevo
+## 🏗️ Cómo Crear un Enemigo Nuevo (Paso a Paso)
 
-### Paso 1: Crear la Escena (.tscn)
+Esta sección te guiará paso a paso para crear un enemigo completamente funcional desde cero.
 
-1. **Nodo raíz:** CharacterBody2D
-   - Nombre: `NombreEnemigo` (ej: `Goblin`, `Zombie`)
-   - `collision_layer = 8`
-   - `collision_mask = 1`
+---
 
-2. **Agregar nodos hijos:**
+### 📋 Paso 1: Crear la Escena Base
 
+#### 1.1 Crear el Nodo Raíz
+
+1. En Godot, ve a **Scene → New Scene**
+2. Haz clic en **Other Node**
+3. Busca y selecciona **CharacterBody2D**
+4. Haz clic en **Create**
+5. Renombra el nodo a un nombre descriptivo (ej: `Goblin`, `Zombie`, `Flying_Eye`)
+
+#### 1.2 Configurar Collision del CharacterBody2D
+
+**CRÍTICO:** Estos valores DEBEN estar exactamente así para que funcione.
+
+1. Selecciona el nodo raíz (CharacterBody2D)
+2. En el **Inspector**, busca la sección **Collision**
+3. Configura:
+   ```
+   Collision Layer: Solo marcar Layer 4
+   Collision Mask:  Solo marcar Layer 1
+   ```
+
+**Visualmente en el Inspector:**
+```
+┌─ Collision ──────────────────────┐
+│ Collision Layer:                 │
+│ [ ] 1  [ ] 2  [ ] 3  [✓] 4      │  ← SOLO Layer 4 marcado
+│ [ ] 5  [ ] 6  [ ] 7  [ ] 8      │
+│                                  │
+│ Collision Mask:                  │
+│ [✓] 1  [ ] 2  [ ] 3  [ ] 4      │  ← SOLO Layer 1 marcado
+│ [ ] 5  [ ] 6  [ ] 7  [ ] 8      │
+└──────────────────────────────────┘
+```
+
+**¿Por qué estos valores?**
+- **Layer 4 (valor 8)**: El enemigo "existe" en esta capa, otros pueden detectarlo
+- **Mask Layer 1 (valor 1)**: El enemigo solo colisiona físicamente con el terreno
+- **NO incluir Layer 4 en mask**: Los enemigos NO chocan entre sí
+
+---
+
+### 📋 Paso 2: Agregar el Sprite Animado
+
+#### 2.1 Crear AnimatedSprite2D
+
+1. Click derecho en el nodo raíz → **Add Child Node**
+2. Busca **AnimatedSprite2D**
+3. Haz clic en **Create**
+4. El nombre DEBE ser exactamente: `AnimatedSprite2D` (sin renombrar)
+
+#### 2.2 Configurar Animaciones
+
+1. Selecciona el nodo **AnimatedSprite2D**
+2. En el Inspector, busca **Animation → Sprite Frames**
+3. Haz clic en **[empty]** → **New SpriteFrames**
+4. Haz clic en el icono de SpriteFrames para abrirlo
+
+**En el panel de SpriteFrames:**
+1. Por defecto hay una animación "default", renómbrala a **"idle"**
+2. Haz clic en **Add Animation** para agregar:
+   - **"walk"** (obligatorio)
+   - **"attack"** (opcional)
+   - **"jump"** (opcional si can_enemy_jump = true)
+   - **"death"** (opcional)
+
+3. Para cada animación, arrastra los sprites correspondientes
+
+**Configuración recomendada:**
+```
+idle:  3-6 frames, loop activado, FPS 5-8
+walk:  4-8 frames, loop activado, FPS 8-12
+attack: 4-6 frames, loop activado, FPS 10-15
+jump:  1-3 frames, loop desactivado, FPS 5
+```
+
+---
+
+### 📋 Paso 3: Agregar Collision Shape del Cuerpo
+
+#### 3.1 Crear CollisionShape2D
+
+1. Click derecho en el nodo raíz → **Add Child Node**
+2. Busca **CollisionShape2D**
+3. Haz clic en **Create**
+4. El nombre DEBE ser: `CollisionShape2D`
+
+#### 3.2 Configurar la Forma
+
+1. Selecciona el **CollisionShape2D**
+2. En el Inspector, busca **Shape**
+3. Haz clic en **[empty]** → Selecciona un tipo:
+   - **CapsuleShape2D** (recomendado para humanoides)
+   - **RectangleShape2D** (para enemigos cuadrados/rectangulares)
+   - **CircleShape2D** (para enemigos redondos)
+
+4. **Ajusta el tamaño** para que coincida con el sprite:
+   - El shape debe cubrir el cuerpo del enemigo
+   - NO debe ser demasiado grande (causaría colisiones raras)
+   - NO debe ser demasiado pequeño (el jugador pasaría a través)
+
+**Ejemplo para un humanoide de 48x48:**
+```
+CapsuleShape2D:
+  Radius: 12
+  Height: 36
+```
+
+---
+
+### 📋 Paso 4: Crear detection_area (Detección del Jugador)
+
+Esta área detecta cuando el jugador está cerca para comenzar a perseguirlo.
+
+#### 4.1 Crear el Nodo Area2D
+
+1. Click derecho en el nodo raíz → **Add Child Node**
+2. Busca **Area2D**
+3. Haz clic en **Create**
+4. Renombra a exactamente: `detection_area` (**importante: en minúsculas**)
+
+#### 4.2 Configurar Collision del detection_area
+
+**CRÍTICO:** Estos valores son diferentes al CharacterBody2D.
+
+1. Selecciona `detection_area`
+2. En el Inspector, busca **Collision**
+3. Configura:
+   ```
+   Collision Layer: Ninguno marcado (todos desmarcados)
+   Collision Mask:  Solo marcar Layer 3
+   ```
+
+**Visualmente:**
+```
+┌─ Collision ──────────────────────┐
+│ Collision Layer:                 │
+│ [ ] 1  [ ] 2  [ ] 3  [ ] 4      │  ← NINGUNO marcado
+│                                  │
+│ Collision Mask:                  │
+│ [ ] 1  [ ] 2  [✓] 3  [ ] 4      │  ← SOLO Layer 3 marcado
+└──────────────────────────────────┘
+```
+
+4. Busca la propiedad **Monitorable** y desmárcala:
+   ```
+   Monitorable: false  ← IMPORTANTE
+   ```
+
+**¿Por qué?**
+- **Layer vacío**: El área no ocupa espacio físico
+- **Mask Layer 3**: Solo detecta al jugador (que está en Layer 3)
+- **Monitorable false**: Otros no pueden detectar esta área
+
+#### 4.3 Agregar CollisionShape2D al detection_area
+
+1. Click derecho en `detection_area` → **Add Child Node**
+2. Busca **CollisionShape2D**
+3. Haz clic en **Create**
+
+4. Selecciona este nuevo CollisionShape2D
+5. En Inspector → **Shape** → **CircleShape2D**
+6. Configura el **Radius**:
+   ```
+   Radius: 200-300 (para enemigos normales)
+   Radius: 400-500 (para enemigos con largo rango)
+   ```
+
+**Tip:** El círculo rojo que aparece en el editor muestra el área de detección.
+
+#### 4.4 Conectar Señales del detection_area
+
+**MUY IMPORTANTE:** Sin estas señales, el enemigo NO detectará al jugador.
+
+1. Selecciona el nodo `detection_area`
+2. Ve a la pestaña **Node** (al lado de Inspector)
+3. Haz doble clic en la señal **body_entered(body: Node2D)**
+4. En la ventana que aparece:
+   - **Receiver Method**: Escribe `_on_detection_area_body_entered`
+   - Haz clic en **Connect**
+
+5. Repite para la señal **body_exited(body: Node2D)**:
+   - **Receiver Method**: `_on_detection_area_body_exited`
+   - Haz clic en **Connect**
+
+---
+
+### 📋 Paso 5: Crear enemy_hitbox (Zona de Daño al Jugador)
+
+Esta área detecta cuando el jugador está en rango para recibir daño.
+
+#### 5.1 Crear el Nodo Area2D
+
+1. Click derecho en el nodo raíz → **Add Child Node**
+2. Busca **Area2D**
+3. Haz clic en **Create**
+4. Renombra a exactamente: `enemy_hitbox` (**importante: en minúsculas**)
+
+#### 5.2 Configurar Collision del enemy_hitbox
+
+1. Selecciona `enemy_hitbox`
+2. En el Inspector, busca **Collision**
+3. Configura:
+   ```
+   Collision Layer: Solo marcar Layer 4
+   Collision Mask:  Solo marcar Layer 3
+   ```
+
+**Visualmente:**
+```
+┌─ Collision ──────────────────────┐
+│ Collision Layer:                 │
+│ [ ] 1  [ ] 2  [ ] 3  [✓] 4      │  ← SOLO Layer 4 marcado
+│                                  │
+│ Collision Mask:                  │
+│ [ ] 1  [ ] 2  [✓] 3  [ ] 4      │  ← SOLO Layer 3 marcado
+└──────────────────────────────────┘
+```
+
+**¿Por qué?**
+- **Layer 4**: Permite que el jugador detecte al enemigo
+- **Mask Layer 3**: Detecta el área de ataque del jugador (player_attack_hit_box)
+
+#### 5.3 Agregar CollisionShape2D al enemy_hitbox
+
+1. Click derecho en `enemy_hitbox` → **Add Child Node**
+2. Busca **CollisionShape2D**
+3. Haz clic en **Create**
+
+4. Selecciona este nuevo CollisionShape2D
+5. En Inspector → **Shape** → Elige el mismo tipo que el cuerpo:
+   - **CapsuleShape2D** (si el cuerpo es cápsula)
+   - **RectangleShape2D** (si el cuerpo es rectángulo)
+
+6. **Ajusta para que sea ligeramente más grande que el CollisionShape2D del cuerpo**:
+   ```
+   Ejemplo si el cuerpo es Capsule(12, 36):
+   enemy_hitbox debería ser Capsule(14, 38)
+   ```
+
+**Tip:** El área de daño debe ser un poco más grande para que el jugador no necesite estar exactamente encima.
+
+#### 5.4 Conectar Señales del enemy_hitbox
+
+**CRÍTICO:** Estas señales son diferentes, usan `area_entered`, NO `body_entered`.
+
+1. Selecciona el nodo `enemy_hitbox`
+2. Ve a la pestaña **Node**
+3. Haz doble clic en **area_entered(area: Area2D)**
+4. En la ventana:
+   - **Receiver Method**: `_on_enemy_hitbox_area_entered`
+   - Haz clic en **Connect**
+
+5. Repite para **area_exited(area: Area2D)**:
+   - **Receiver Method**: `_on_enemy_hitbox_area_exited`
+   - Haz clic en **Connect**
+
+**¿Por qué area_entered y no body_entered?**
+- El sistema de ataque del jugador usa un **Area2D** llamado `player_attack_hit_box`
+- Por eso detectamos áreas, no cuerpos
+
+---
+
+### 📋 Paso 6: Crear take_damage_cooldown (Timer)
+
+Este timer evita que el enemigo reciba daño múltiples veces por frame.
+
+#### 6.1 Crear el Timer
+
+1. Click derecho en el nodo raíz → **Add Child Node**
+2. Busca **Timer**
+3. Haz clic en **Create**
+4. Renombra a exactamente: `take_damage_cooldown` (**importante: en minúsculas**)
+
+#### 6.2 Configurar el Timer
+
+1. Selecciona `take_damage_cooldown`
+2. En el Inspector, configura:
+   ```
+   Wait Time: 0.5
+   One Shot: true (marcado)
+   Autostart: false (desmarcado)
+   ```
+
+**Visualmente:**
+```
+┌─ Timer ──────────────────────────┐
+│ Wait Time: 0.5                   │
+│ [✓] One Shot                     │
+│ [ ] Autostart                    │
+└──────────────────────────────────┘
+```
+
+#### 6.3 Conectar Señal del Timer
+
+1. Selecciona `take_damage_cooldown`
+2. Ve a la pestaña **Node**
+3. Haz doble clic en **timeout()**
+4. En la ventana:
+   - **Receiver Method**: `_on_take_damage_cooldown_timeout`
+   - Haz clic en **Connect**
+
+---
+
+### 📋 Paso 7: Crear health_bar (Barra de Salud) - Opcional
+
+Esta barra muestra la salud del enemigo visualmente.
+
+#### 7.1 Crear el ProgressBar
+
+1. Click derecho en el nodo raíz → **Add Child Node**
+2. Busca **ProgressBar**
+3. Haz clic en **Create**
+4. Renombra a exactamente: `health_bar` (**importante: en minúsculas**)
+
+#### 7.2 Configurar el ProgressBar
+
+1. Selecciona `health_bar`
+2. En el Inspector:
+   ```
+   Min Value: 0
+   Max Value: 100  (debe coincidir con max_health)
+   Value: 100
+   Show Percentage: false
+   Visible: false  (se mostrará automáticamente al recibir daño)
+   ```
+
+3. **Posición y Tamaño:**
+   ```
+   Transform → Position:
+     X: -20  (centrado sobre el enemigo)
+     Y: -40  (encima de la cabeza)
+   
+   Transform → Size:
+     X: 40
+     Y: 6
+   ```
+
+4. **Estilo Visual (opcional):**
+   - En Inspector → **Theme Overrides → Styles**
+   - Puedes personalizar los colores de la barra aquí
+
+---
+
+### 📋 Paso 8: Adjuntar el Script
+
+#### 8.1 Crear el Script
+
+1. Click derecho en el nodo raíz (CharacterBody2D)
+2. Selecciona **Attach Script**
+3. En la ventana de crear script:
+   ```
+   Language: GDScript
+   Inherits: EnemyBase  ← CAMBIAR ESTO (por defecto dice CharacterBody2D)
+   Template: Empty
+   Path: res://scripts/enemies/nombre_enemigo.gd
+   ```
+4. Haz clic en **Create**
+
+#### 8.2 Usar un Template
+
+Ahora edita el script y copia uno de los **Templates de Código** de las secciones siguientes según tu necesidad:
+- **Template 1**: Enemigo básico sin estados
+- **Template 2**: Enemigo con estados (IDLE, WALK, ATTACK)
+- **Template 3**: Enemigo con salto
+- **Template 4**: Enemigo con reducción de daño
+
+---
+
+### 📋 Paso 9: Verificación Final
+
+Antes de probar, verifica esta **checklist**:
+
+#### ✅ Estructura de Nodos
 ```
 NombreEnemigo (CharacterBody2D)
-├── AnimatedSprite2D
-├── CollisionShape2D
-├── detection_area (Area2D)
-│   └── CollisionShape2D (CircleShape2D, radius ~250)
-├── enemy_hitbox (Area2D)
-│   └── CollisionShape2D (RectangleShape2D o CapsuleShape2D)
-├── take_damage_cooldown (Timer)
-└── health_bar (ProgressBar) - Opcional
+├── AnimatedSprite2D ✓
+├── CollisionShape2D ✓
+├── detection_area (Area2D) ✓
+│   └── CollisionShape2D (CircleShape2D) ✓
+├── enemy_hitbox (Area2D) ✓
+│   └── CollisionShape2D ✓
+├── take_damage_cooldown (Timer) ✓
+└── health_bar (ProgressBar) ✓ (opcional)
 ```
 
-3. **Configurar detection_area:**
-   - Inspector: `Collision Layer = 0`, `Collision Mask = 4`
-   - `Monitorable = false`
-   - Conectar señales `body_entered` y `body_exited`
+#### ✅ Collision Layers
+| Nodo | Collision Layer | Collision Mask |
+|------|-----------------|----------------|
+| Raíz (CharacterBody2D) | 4 ✓ | 1 ✓ |
+| detection_area | Ninguno ✓ | 3 ✓ |
+| enemy_hitbox | 4 ✓ | 3 ✓ |
 
-4. **Configurar enemy_hitbox:**
-   - Inspector: `Collision Layer = 8`, `Collision Mask = 4`
-   - Conectar señales `area_entered` y `area_exited`
+#### ✅ Señales Conectadas
+- [ ] `detection_area.body_entered` → `_on_detection_area_body_entered`
+- [ ] `detection_area.body_exited` → `_on_detection_area_body_exited`
+- [ ] `enemy_hitbox.area_entered` → `_on_enemy_hitbox_area_entered`
+- [ ] `enemy_hitbox.area_exited` → `_on_enemy_hitbox_area_exited`
+- [ ] `take_damage_cooldown.timeout` → `_on_take_damage_cooldown_timeout`
 
-5. **Configurar take_damage_cooldown:**
-   - `Wait Time = 0.5`, `One Shot = true`
-   - Conectar señal `timeout`
+#### ✅ Propiedades Especiales
+- [ ] `detection_area.monitorable = false`
+- [ ] `take_damage_cooldown.one_shot = true`
+- [ ] `take_damage_cooldown.wait_time = 0.5`
+- [ ] `health_bar.visible = false` (si existe)
 
-6. **Adjuntar script:** Click derecho en raíz → Adjuntar Script → Seleccionar plantilla
+#### ✅ Script
+- [ ] Hereda de `EnemyBase`
+- [ ] Configura `enemy_type` (1, 2 o 3)
+- [ ] Llama a `super._ready()` al final de `_ready()`
+- [ ] Implementa `_handle_movement(delta)`
+- [ ] Implementa `_handle_animation()`
+
+---
+
+### 📋 Paso 10: Guardar y Probar
+
+1. **Guardar escena:** Ctrl+S
+   - Guárdala en `res://scenes/characters/enemies/nombre_enemigo.tscn`
+
+2. **Probar:**
+   - Agrega la escena del enemigo a un nivel de prueba
+   - Presiona F6 para correr la escena
+   - Verifica:
+     - ✓ El enemigo cae al suelo (gravedad funciona)
+     - ✓ Cuando te acercas, comienza a perseguirte
+     - ✓ Al atacarlo, recibe daño y retrocede
+     - ✓ Al tocarlo, el jugador recibe daño
+     - ✓ Al morir, desaparece y da monedas
+
+3. **Ajustes comunes:**
+   - Si el enemigo va muy lento/rápido: ajusta `speed` en el script
+   - Si el área de detección es muy pequeña/grande: ajusta el radius del CircleShape2D de `detection_area`
+   - Si el daño es muy bajo/alto: ajusta `enemy_type` (1, 2 o 3)
+
+---
+
+## 🖼️ Diagrama Visual de Configuración
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ ENEMIGO (CharacterBody2D)                                   │
+│ collision_layer: 4 (enemigos)                               │
+│ collision_mask: 1 (terreno)                                 │
+│                                                             │
+│ ┌──────────────┐  ┌───────────────────────────────────┐   │
+│ │AnimatedSprite│  │ CollisionShape2D (Cuerpo)         │   │
+│ │  idle, walk, │  │ - CapsuleShape2D / RectangleShape │   │
+│ │  attack, jump│  │ - Tamaño ajustado al sprite       │   │
+│ └──────────────┘  └───────────────────────────────────┘   │
+│                                                             │
+│ ┌────────────────────────────────────────────────────────┐ │
+│ │ detection_area (Area2D)                                │ │
+│ │ collision_layer: 0, collision_mask: 3                  │ │
+│ │ monitorable: false                                     │ │
+│ │                                                        │ │
+│ │  ┌───────────────────────────────┐                    │ │
+│ │  │ CollisionShape2D              │                    │ │
+│ │  │ - CircleShape2D (radius 250)  │                    │ │
+│ │  │ - Área grande de detección    │                    │ │
+│ │  └───────────────────────────────┘                    │ │
+│ │                                                        │ │
+│ │  Señales:                                              │ │
+│ │  • body_entered → _on_detection_area_body_entered      │ │
+│ │  • body_exited → _on_detection_area_body_exited        │ │
+│ └────────────────────────────────────────────────────────┘ │
+│                                                             │
+│ ┌────────────────────────────────────────────────────────┐ │
+│ │ enemy_hitbox (Area2D)                                  │ │
+│ │ collision_layer: 4, collision_mask: 3                  │ │
+│ │                                                        │ │
+│ │  ┌───────────────────────────────┐                    │ │
+│ │  │ CollisionShape2D              │                    │ │
+│ │  │ - Mismo tipo que el cuerpo    │                    │ │
+│ │  │ - Ligeramente más grande      │                    │ │
+│ │  └───────────────────────────────┘                    │ │
+│ │                                                        │ │
+│ │  Señales:                                              │ │
+│ │  • area_entered → _on_enemy_hitbox_area_entered        │ │
+│ │  • area_exited → _on_enemy_hitbox_area_exited          │ │
+│ └────────────────────────────────────────────────────────┘ │
+│                                                             │
+│ ┌────────────────────────────────────────────────────────┐ │
+│ │ take_damage_cooldown (Timer)                           │ │
+│ │ wait_time: 0.5, one_shot: true                         │ │
+│ │                                                        │ │
+│ │  Señal:                                                │ │
+│ │  • timeout → _on_take_damage_cooldown_timeout          │ │
+│ └────────────────────────────────────────────────────────┘ │
+│                                                             │
+│ ┌────────────────────────────────────────────────────────┐ │
+│ │ health_bar (ProgressBar) - Opcional                    │ │
+│ │ max_value: 100, visible: false                         │ │
+│ └────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 💡 Tips y Consejos
+
+### 🎯 Ajustar el Tamaño de Detección
+
+**Problema:** El enemigo te detecta desde muy lejos/cerca
+
+**Solución:**
+1. Selecciona `detection_area → CollisionShape2D`
+2. En Inspector → Shape → Circle → **Radius**
+3. Ajusta el valor:
+   - Radius 150-200: Detección cercana (enemigos pasivos)
+   - Radius 250-350: Detección media (enemigos normales)
+   - Radius 400-500: Detección lejana (enemigos agresivos)
+
+### 🎯 Ajustar el Área de Daño
+
+**Problema:** El jugador recibe daño desde muy lejos/tiene que estar muy cerca
+
+**Solución:**
+1. Selecciona `enemy_hitbox → CollisionShape2D`
+2. Ajusta el tamaño del shape para que sea:
+   - Ligeramente más grande que el sprite = daño generoso
+   - Del mismo tamaño que el sprite = daño preciso
+   - Ligeramente más pequeño = el jugador debe tocar el centro
+
+### 🎯 Enemigos que se Caen del Borde
+
+**Problema:** Los enemigos caminan y caen de las plataformas
+
+**Solución:** Implementar detección de bordes en el script:
+```gdscript
+func _handle_movement(_delta: float) -> void:
+    if not player or not is_on_floor():
+        velocity.x = 0
+        return
+    
+    # Raycast para detectar borde
+    var space_state = get_world_2d().direct_space_state
+    var direction = get_direction_to_player()
+    var check_pos = global_position + Vector2(direction * 20, 10)
+    
+    var query = PhysicsRayQueryParameters2D.create(check_pos, check_pos + Vector2(0, 20))
+    query.collision_mask = 1
+    var result = space_state.intersect_ray(query)
+    
+    # Si no hay suelo adelante, detenerse
+    if result.is_empty():
+        velocity.x = 0
+        return
+    
+    # Continuar normalmente
+    velocity.x = direction * speed
+    update_sprite_direction(direction)
+```
 
 ---
 
