@@ -221,7 +221,7 @@ func _check_enemy_damage() -> void:
 		1:  # Enemigo básico - 8% de la salud máxima
 			damage = int(MAX_HEALTH * 0.08)
 		2:  # Enemigo medio - 12% de la salud máxima
-			damage = int(MAX_HEALTH * 0.12)
+				damage = int(MAX_HEALTH * 0.12)
 		3:  # Enemigo fuerte - 16% de la salud máxima
 			damage = int(MAX_HEALTH * 0.16)
 		_:  # Tipo desconocido - 8% por defecto
@@ -277,8 +277,28 @@ func _check_death() -> void:
 	if health <= 0:
 		player_alive = false
 		health = 0
+		
+		# Instanciar escena de muerte
+		var death_scene = preload("res://scenes/ui/death_scene.tscn").instantiate()
+		
+		# Pasar configuración de cámara
+		if has_node("Camera2D"):
+			var camera = $Camera2D
+			death_scene.setup_camera_data(
+				camera.zoom,
+				camera.limit_left,
+				camera.limit_top,
+				camera.limit_right,
+				camera.limit_bottom,
+				camera.global_position
+			)
+			camera.enabled = false
+		
+		# Añadir escena de muerte
+		get_tree().root.add_child(death_scene)
+		
+		# Destruir jugador
 		queue_free()
-		#TODO: Mostrar menú de muerte
 
 #Sistema de salud y regeneración
 func update_health() -> void:
@@ -289,6 +309,7 @@ func _on_regen_timer_timeout() -> void:
 		health = min(health + 20, max_regeneration)
 		update_health()
 	elif health <= 0:
+		$Camera2D.enabled = false
 		health = 0
 		update_health()
 
