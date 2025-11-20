@@ -1,0 +1,25 @@
+[gd_scene load_steps=2 format=3 uid="uid://pgiklgguheqh"]
+
+[ext_resource type="Script" uid="uid://cbq3nankedc4m" path="res://game_over_screen.gd" id="1_2hi2q"]
+
+[node name="GameOverScreen" type="MenuBar"]
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_2hi2q")
+
+[node name="GAME OVER" type="Label" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+
+[node name="Reintentar" type="Button" parent="."]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[node name="Salir" type="Button" parent="."]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
+[connection signal="pressed" from="Reintentar" to="." method="_on_reintentar_pressed"]
