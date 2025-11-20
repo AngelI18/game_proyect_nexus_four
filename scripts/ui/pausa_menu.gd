@@ -1,27 +1,20 @@
 # pausa_menu.gd.
 extends CanvasLayer
 
-# Esta función se llama automáticamente cuando ocurre una entrada
-# que no fue manejada por otros elementos del juego.
-# Es perfecta para el botón "Atrás" de Android.
+#sirve de pelos pa cuando pones atras en el celu
 func _unhandled_input(event):
 	if event.is_action_pressed("ui_cancel"):
-		# Si se presiona "Atrás" o "Escape", alternamos la pausa.
 		toggle_pausa()
 
-# Una función única para pausar y reanudar. Es más limpio.
 func toggle_pausa():
 	# Invertimos el estado de pausa actual.
 	get_tree().paused = !get_tree().paused
 
 	if get_tree().paused:
-		# Si ahora está en pausa, mostramos el menú.
 		$AnimationPlayer.play("blur")
 		visible = true
 	else:
-		# Si ya no está en pausa, ocultamos el menú.
 		$AnimationPlayer.play_backwards("blur")
-		# Esperamos a que la animación termine antes de ocultarlo.
 		await $AnimationPlayer.animation_finished
 		visible = false
 
