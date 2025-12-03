@@ -28,7 +28,8 @@ var is_invulnerable = false
 var is_taking_damage = false
 
 #Variables de combate
-var enemy_in_range: Node2D = null
+var enemy_in_range: Node2D = null  # Enemigos que pueden hacer daño al jugador
+var enemy_in_attack_range: Node2D = null  # Enemigos en rango de ataque del jugador
 var can_take_damage = true
 
 #Variables de colección
@@ -143,6 +144,22 @@ func _perform_attack() -> void:
 	is_attacking = true
 	$AnimatedSprite2D.play("attack")
 	$deal_attack_timer.start()
+	
+	# Activar el área de ataque
+	_enable_attack_hitbox()
+
+func _enable_attack_hitbox() -> void:
+	var attack_hitbox = $player_attack_hit_box/CollisionShape2D
+	if attack_hitbox:
+		attack_hitbox.disabled = false
+		# Posicionar el hitbox según la dirección del jugador
+		var offset_x = 12 if not $AnimatedSprite2D.flip_h else -12
+		attack_hitbox.position.x = offset_x
+
+func _disable_attack_hitbox() -> void:
+	var attack_hitbox = $player_attack_hit_box/CollisionShape2D
+	if attack_hitbox:
+		attack_hitbox.disabled = true
 
 func _on_joystick_attack_triggered(direction_attack: Vector2) -> void:
 	if not is_on_floor() or is_attacking or is_taking_damage:
@@ -189,9 +206,29 @@ func take_damage(damage_amount: int, knockback_dir: Vector2 = Vector2.ZERO, invu
 	print("Daño recibido: ", damage_amount, " | Salud actual: ", health)
 
 func _check_enemy_damage() -> void:
-	if enemy_in_range != null:
-		var knockback_direction = (global_position - enemy_in_range.global_position).normalized()
-		take_damage(20, knockback_direction, 2.0)
+	if enemy_in_range == null:
+		return
+	
+	var damage = 0
+	var enemy_type = 1  # Tipo por defecto
+	
+	# Obtener el tipo de enemigo si tiene el método
+	if enemy_in_range.has_method("get_enemy_type"):
+		enemy_type = enemy_in_range.get_enemy_type()
+	
+	# Calcular daño basado en el tipo de enemigo (porcentaje de salud máxima)
+	match enemy_type:
+		1:  # Enemigo básico - 8% de la salud máxima
+			damage = int(MAX_HEALTH * 0.08)
+		2:  # Enemigo medio - 12% de la salud máxima
+				damage = int(MAX_HEALTH * 0.12)
+		3:  # Enemigo fuerte - 16% de la salud máxima
+			damage = int(MAX_HEALTH * 0.16)
+		_:  # Tipo desconocido - 8% por defecto
+			damage = int(MAX_HEALTH * 0.08)
+	
+	var knockback_direction = (global_position - enemy_in_range.global_position).normalized()
+	take_damage(damage, knockback_direction, 2.0)
 
 func _check_tile_damage() -> void:
 	for i in range(get_slide_collision_count()):
@@ -217,7 +254,7 @@ func _process_tile_collision(tile_map: TileMapLayer, collision: KinematicCollisi
 		return
 	
 	#Debug: verificar ambas capas de física
-	var layer_0_count = tile_data.get_collision_polygons_count(0)
+	var _layer_0_count = tile_data.get_collision_polygons_count(0)
 	var layer_1_count = tile_data.get_collision_polygons_count(1)
 	
 	#Verificar si es tile de daño
@@ -240,8 +277,28 @@ func _check_death() -> void:
 	if health <= 0:
 		player_alive = false
 		health = 0
+		
+		# Instanciar escena de muerte
+		var death_scene = preload("res://scenes/ui/death_scene.tscn").instantiate()
+		
+		# Pasar configuración de cámara
+		if has_node("Camera2D"):
+			var camera = $Camera2D
+			death_scene.setup_camera_data(
+				camera.zoom,
+				camera.limit_left,
+				camera.limit_top,
+				camera.limit_right,
+				camera.limit_bottom,
+				camera.global_position
+			)
+			camera.enabled = false
+		
+		# Añadir escena de muerte
+		get_tree().root.add_child(death_scene)
+		
+		# Destruir jugador
 		queue_free()
-		#TODO: Mostrar menú de muerte
 
 #Sistema de salud y regeneración
 func update_health() -> void:
@@ -252,6 +309,7 @@ func _on_regen_timer_timeout() -> void:
 		health = min(health + 20, max_regeneration)
 		update_health()
 	elif health <= 0:
+		$Camera2D.enabled = false
 		health = 0
 		update_health()
 
@@ -264,13 +322,25 @@ func emit_coin_signal() -> void:
 	coin_changed.emit(coins)
 
 #Detección de colisiones
-func _on_player_hit_box_body_entered(body: Node2D) -> void:
-	if body.has_method("enemy"):
-		enemy_in_range = body
+func _on_player_hit_box_area_entered(area: Area2D) -> void:
+	# Detectar si el área pertenece a un enemigo (para RECIBIR daño)
+	if area.name == "enemy_hitbox" and area.get_parent().has_method("enemy"):
+		enemy_in_range = area.get_parent()
 
-func _on_player_hit_box_body_exited(body: Node2D) -> void:
-	if body.has_method("enemy") and body == enemy_in_range:
+func _on_player_hit_box_area_exited(area: Area2D) -> void:
+	# Verificar si el área que salió es del enemigo actual en rango
+	if area.name == "enemy_hitbox" and area.get_parent() == enemy_in_range:
 		enemy_in_range = null
+
+func _on_player_attack_hit_box_body_entered(body: Node2D) -> void:
+	# Detectar enemigos en rango de ATAQUE del jugador
+	if body.has_method("enemy"):
+		enemy_in_attack_range = body
+
+func _on_player_attack_hit_box_body_exited(body: Node2D) -> void:
+	# Enemigo salió del rango de ataque
+	if body.has_method("enemy") and body == enemy_in_attack_range:
+		enemy_in_attack_range = null
 
 #Callbacks de timers
 func _on_attack_cooldown_timeout() -> void:
@@ -279,6 +349,7 @@ func _on_attack_cooldown_timeout() -> void:
 func _on_deal_attack_timer_timeout() -> void:
 	Global.player_current_attack = false
 	is_attacking = false
+	_disable_attack_hitbox()
 
 func _on_player_is_hurt_timeout() -> void:
 	is_hurt = false

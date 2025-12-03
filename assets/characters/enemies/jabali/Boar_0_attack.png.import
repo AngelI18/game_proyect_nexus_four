@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://n5kg423v8b7n"
-path="res://.godot/imported/sword Idle.png-8baf19a9f71a4dd1283c3e07dadccbcb.ctex"
+uid="uid://bijw0djch3577"
+path="res://.godot/imported/Boar_0_attack.png-1cad45bc77e2d88d69d8c168dc5b91e3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/characters/enemies/sword Idle.png"
-dest_files=["res://.godot/imported/sword Idle.png-8baf19a9f71a4dd1283c3e07dadccbcb.ctex"]
+source_file="res://assets/characters/enemies/jabali/Boar_0_attack.png"
+dest_files=["res://.godot/imported/Boar_0_attack.png-1cad45bc77e2d88d69d8c168dc5b91e3.ctex"]
 
 [params]
 

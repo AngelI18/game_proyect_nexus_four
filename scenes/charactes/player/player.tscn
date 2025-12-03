@@ -1,11 +1,11 @@
-[gd_scene load_steps=46 format=3 uid="uid://ccg021l8va1nb"]
+[gd_scene load_steps=47 format=3 uid="uid://ccg021l8va1nb"]
 
 [ext_resource type="Script" uid="uid://bvfhmbyfrdwry" path="res://scripts/player/player.gd" id="1_yj2nq"]
-[ext_resource type="Texture2D" uid="uid://dpws1jqb86o3k" path="res://assets/characters/enemies/sword attack.png" id="2_igqbg"]
+[ext_resource type="Texture2D" uid="uid://dpws1jqb86o3k" path="res://assets/characters/player/sword attack.png" id="2_igqbg"]
 [ext_resource type="Texture2D" uid="uid://ukcnydiuw7bq" path="res://assets/characters/player/Player Hurt 48x48.png" id="3_3yyo8"]
-[ext_resource type="Texture2D" uid="uid://n5kg423v8b7n" path="res://assets/characters/enemies/sword Idle.png" id="3_6igro"]
+[ext_resource type="Texture2D" uid="uid://n5kg423v8b7n" path="res://assets/characters/player/sword Idle.png" id="3_6igro"]
 [ext_resource type="Texture2D" uid="uid://dh0rkbth5j2qj" path="res://assets/characters/player/player new jump 48x48.png" id="3_kai5h"]
-[ext_resource type="Texture2D" uid="uid://du6ellrn8fokb" path="res://assets/characters/enemies/sowrd run.png" id="5_3yyo8"]
+[ext_resource type="Texture2D" uid="uid://du6ellrn8fokb" path="res://assets/characters/player/sowrd run.png" id="5_3yyo8"]
 [ext_resource type="PackedScene" uid="uid://dyh5kfftkhqjp" path="res://scenes/ui/hud.tscn" id="7_3yyo8"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_igqbg"]
@@ -167,7 +167,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"attack",
-"speed": 10.0
+"speed": 14.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -286,19 +286,25 @@ height = 24.0
 [sub_resource type="CircleShape2D" id="CircleShape2D_so2s4"]
 radius = 3.16228
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_dolh7"]
-radius = 23.0
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_3yyo8"]
+radius = 11.0
+height = 34.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_attack"]
+radius = 14.0
+height = 28.0
 
 [node name="player" type="CharacterBody2D"]
-collision_layer = 3
-collision_mask = 3
+collision_layer = 7
+collision_mask = 11
 script = ExtResource("1_yj2nq")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(2, -16)
 sprite_frames = SubResource("SpriteFrames_dqix7")
-animation = &"jump"
+animation = &"attack"
 autoplay = "idle"
+frame_progress = 0.436041
 
 [node name="idle" type="CollisionShape2D" parent="."]
 position = Vector2(0.625, -10)
@@ -309,11 +315,21 @@ position = Vector2(2, -15)
 shape = SubResource("CircleShape2D_so2s4")
 
 [node name="player_hit_box" type="Area2D" parent="."]
-visible = false
+collision_layer = 0
+collision_mask = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="player_hit_box"]
-position = Vector2(-1, -14)
-shape = SubResource("CircleShape2D_dolh7")
+position = Vector2(0, -14)
+shape = SubResource("CapsuleShape2D_3yyo8")
+
+[node name="player_attack_hit_box" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="player_attack_hit_box"]
+position = Vector2(12, -14)
+shape = SubResource("CapsuleShape2D_attack")
+disabled = true
 
 [node name="attack_cooldown" type="Timer" parent="."]
 wait_time = 0.5
@@ -343,8 +359,10 @@ autostart = true
 
 [node name="HUD" parent="." instance=ExtResource("7_3yyo8")]
 
-[connection signal="body_entered" from="player_hit_box" to="." method="_on_player_hit_box_body_entered"]
-[connection signal="body_exited" from="player_hit_box" to="." method="_on_player_hit_box_body_exited"]
+[connection signal="area_entered" from="player_hit_box" to="." method="_on_player_hit_box_area_entered"]
+[connection signal="area_exited" from="player_hit_box" to="." method="_on_player_hit_box_area_exited"]
+[connection signal="body_entered" from="player_attack_hit_box" to="." method="_on_player_attack_hit_box_body_entered"]
+[connection signal="body_exited" from="player_attack_hit_box" to="." method="_on_player_attack_hit_box_body_exited"]
 [connection signal="timeout" from="attack_cooldown" to="." method="_on_attack_cooldown_timeout"]
 [connection signal="timeout" from="deal_attack_timer" to="." method="_on_deal_attack_timer_timeout"]
 [connection signal="timeout" from="player_is_hurt" to="." method="_on_player_is_hurt_timeout"]

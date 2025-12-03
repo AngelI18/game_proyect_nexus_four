@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://gwxn0va68y4a"
-path="res://.godot/imported/player run 48x48.png-e08e096f9b69c56b7a489d7667566dc8.ctex"
+uid="uid://bknw2dpf4x7xx"
+path="res://.godot/imported/Werewolf_0_attack.png-e27a3bf7670ac09eda28d9ea83c72897.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/characters/player/player run 48x48.png"
-dest_files=["res://.godot/imported/player run 48x48.png-e08e096f9b69c56b7a489d7667566dc8.ctex"]
+source_file="res://assets/characters/enemies/werewolf/Werewolf_0_attack.png"
+dest_files=["res://.godot/imported/Werewolf_0_attack.png-e27a3bf7670ac09eda28d9ea83c72897.ctex"]
 
 [params]
 

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dpws1jqb86o3k"
-path="res://.godot/imported/sword attack.png-ff91edb6f5565ab70c9b5b451fa1cf14.ctex"
+uid="uid://bxbtl5u8bldcj"
+path="res://.godot/imported/Werewolf_0_walk.png-d38bfc8fe95655f2bd9238786ef14797.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/characters/enemies/sword attack.png"
-dest_files=["res://.godot/imported/sword attack.png-ff91edb6f5565ab70c9b5b451fa1cf14.ctex"]
+source_file="res://assets/characters/enemies/werewolf/Werewolf_0_walk.png"
+dest_files=["res://.godot/imported/Werewolf_0_walk.png-d38bfc8fe95655f2bd9238786ef14797.ctex"]
 
 [params]
 
