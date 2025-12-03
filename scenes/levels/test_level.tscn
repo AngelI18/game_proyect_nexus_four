@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://cxtrnhx07y64i" path="res://scenes/environment/parallax_backgrounds/sea.tscn" id="1_fr1um"]
 [ext_resource type="PackedScene" uid="uid://ccg021l8va1nb" path="res://scenes/charactes/player/player.tscn" id="1_jbqir"]
 [ext_resource type="PackedScene" uid="uid://do6i7mtwk50p1" path="res://scenes/charactes/enemies/enemy.tscn" id="4_v45ci"]
-[ext_resource type="TileSet" uid="uid://vifpif72ytcp" path="res://assets/environment/tilesets/terreno.tres" id="5_6xh4u"]
+[ext_resource type="TileSet" uid="uid://bwjtj27yicfyi" path="res://assets/environment/tilesets/terreno.tres" id="5_6xh4u"]
 
 [node name="test_level" type="Node2D"]
 position = Vector2(-62, 27)
