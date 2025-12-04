@@ -340,3 +340,4 @@ func _on_invulnerability_timer_timeout() -> void:
 #Utilidades
 func player() -> void:
 	pass
+	
