@@ -1,5 +1,9 @@
 extends CharacterBody2D
 
+@onready var sfx_pasos = $AudioPasos
+@onready var sfx_ataque = $AudioAtaque
+@onready var sfx_dano = $AudioDano
+
 #Señales
 signal health_changed(current_health, max_health)
 signal coin_changed(new_coins)
@@ -66,9 +70,30 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	
 	_update_animation()
+	_handle_audio()
 	_check_enemy_damage()
 	_check_tile_damage()
 	_update_safe_position()
+	
+	
+	
+# Audio
+func _handle_audio() -> void:
+	# Si estamos atacando, heridos o en el aire, NO deben sonar pasos
+	if is_attacking or is_hurt or not is_on_floor():
+		sfx_pasos.stop()
+		return
+	
+	# Si nos estamos moviendo (velocidad X no es 0)
+	if velocity.x != 0:
+		if not sfx_pasos.playing:
+			# Opcional: Variación de tono pequeña para mas realismo
+			sfx_pasos.pitch_scale = randf_range(0.9, 1.1)
+			sfx_pasos.play()
+	else:
+		# Si estamos quietos
+		sfx_pasos.stop()
+
 
 #Física y movimiento
 func _apply_gravity(delta: float) -> void:
@@ -142,6 +167,8 @@ func _handle_attack() -> void:
 func _perform_attack() -> void:
 	Global.player_current_attack = true
 	is_attacking = true
+	sfx_ataque.play()
+	
 	$AnimatedSprite2D.play("attack")
 	$deal_attack_timer.start()
 	
@@ -183,6 +210,8 @@ func take_damage(damage_amount: int, knockback_dir: Vector2 = Vector2.ZERO, invu
 	health -= damage_amount
 	health = max(0, health)
 	update_health()
+	
+	sfx_dano.play()
 	
 	if knockback_dir != Vector2.ZERO:
 		velocity.x = knockback_dir.x * KNOCKBACK_STRENGTH
@@ -357,6 +386,8 @@ func _on_player_is_hurt_timeout() -> void:
 func _on_invulnerability_timer_timeout() -> void:
 	is_invulnerable = false
 	is_taking_damage = false
+
+
 
 #Utilidades
 func player() -> void:
