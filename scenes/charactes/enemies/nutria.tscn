@@ -1,0 +1,193 @@
+[gd_scene load_steps=31 format=3 uid="uid://dk5qxgv3542ai"]
+
+[ext_resource type="Script" uid="uid://cj10qvblmcx5v" path="res://scripts/enemies/nutria.gd" id="1_ikj4b"]
+[ext_resource type="Texture2D" uid="uid://d3cm04hu4g573" path="res://assets/characters/enemies/nutria/otter_idle_1.png" id="2_eq3ll"]
+[ext_resource type="Texture2D" uid="uid://bx3xtmut66uho" path="res://assets/characters/enemies/nutria/otter_idle_2.png" id="3_gjpor"]
+[ext_resource type="Texture2D" uid="uid://bxr4oxxjq5vq1" path="res://assets/characters/enemies/nutria/otter_idle_3.png" id="4_3lgif"]
+[ext_resource type="Texture2D" uid="uid://v3cqsm3upoyc" path="res://assets/characters/enemies/nutria/otter_idle_4.png" id="5_wt6rq"]
+[ext_resource type="Texture2D" uid="uid://11pbalx20ram" path="res://assets/characters/enemies/nutria/otter_run_1.png" id="6_06hcx"]
+[ext_resource type="Texture2D" uid="uid://bksm4pj4d1dkd" path="res://assets/characters/enemies/nutria/otter_jump_1.png" id="6_q5qcp"]
+[ext_resource type="Texture2D" uid="uid://bedxhevqwrguc" path="res://assets/characters/enemies/nutria/otter_run_2.png" id="7_eof7r"]
+[ext_resource type="Texture2D" uid="uid://c1cnxpu0brsy6" path="res://assets/characters/enemies/nutria/otter_jump_2.png" id="7_ydy1r"]
+[ext_resource type="Texture2D" uid="uid://bs6a71knk4glk" path="res://assets/characters/enemies/nutria/otter_run_3.png" id="8_7urk4"]
+[ext_resource type="Texture2D" uid="uid://chqd3eevdicf5" path="res://assets/characters/enemies/nutria/otter_jump_3.png" id="8_xf85x"]
+[ext_resource type="Texture2D" uid="uid://bp3ap42mkfjl" path="res://assets/characters/enemies/nutria/otter_jump_4.png" id="9_vdr61"]
+[ext_resource type="Texture2D" uid="uid://ccmdhoar00v2h" path="res://assets/characters/enemies/nutria/otter_land_1.png" id="10_wadpt"]
+[ext_resource type="Texture2D" uid="uid://b8stgqlutdvfh" path="res://assets/characters/enemies/nutria/otter_land_2.png" id="11_a15nh"]
+[ext_resource type="Texture2D" uid="uid://dqjedx1m7hq12" path="res://assets/characters/enemies/nutria/otter_land_3.png" id="12_xff5t"]
+[ext_resource type="Texture2D" uid="uid://d3ov0nlc35edf" path="res://assets/characters/enemies/nutria/otter_sleep_1.png" id="13_vplmb"]
+[ext_resource type="Texture2D" uid="uid://b6uq23ilqjcxm" path="res://assets/characters/enemies/nutria/otter_sleep_2.png" id="14_ulj5e"]
+[ext_resource type="Texture2D" uid="uid://c16rk07hm65hl" path="res://assets/characters/enemies/nutria/otter_sleep_3.png" id="15_ii8cy"]
+[ext_resource type="Texture2D" uid="uid://er7hm2s8dbrh" path="res://assets/characters/enemies/nutria/otter_sleep_4.png" id="16_my85p"]
+[ext_resource type="Texture2D" uid="uid://y3631n81pm41" path="res://assets/characters/enemies/nutria/otter_sleep_5.png" id="17_d6ffh"]
+[ext_resource type="Texture2D" uid="uid://bnrkjouupem0k" path="res://assets/characters/enemies/nutria/otter_sleep_6.png" id="18_wo7qx"]
+[ext_resource type="Texture2D" uid="uid://ces4u3ntgrg1x" path="res://assets/characters/enemies/nutria/otter_spin_1.png" id="19_xtpej"]
+[ext_resource type="Texture2D" uid="uid://yofgm6u4nnjy" path="res://assets/characters/enemies/nutria/otter_spin_2.png" id="20_eck8e"]
+[ext_resource type="Texture2D" uid="uid://cm4t7sl4t51to" path="res://assets/characters/enemies/nutria/otter_spin_3.png" id="21_hts3o"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_c6r4e"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_eq3ll")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_gjpor")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_3lgif")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_wt6rq")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_q5qcp")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_ydy1r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_xf85x")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_vdr61")
+}],
+"loop": true,
+"name": &"jump",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("10_wadpt")
+}, {
+"duration": 1.0,
+"texture": ExtResource("11_a15nh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("12_xff5t")
+}],
+"loop": false,
+"name": &"land",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("13_vplmb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("14_ulj5e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("15_ii8cy")
+}, {
+"duration": 1.0,
+"texture": ExtResource("16_my85p")
+}, {
+"duration": 1.0,
+"texture": ExtResource("17_d6ffh")
+}, {
+"duration": 1.0,
+"texture": ExtResource("18_wo7qx")
+}],
+"loop": true,
+"name": &"sleep",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("19_xtpej")
+}, {
+"duration": 1.0,
+"texture": ExtResource("20_eck8e")
+}, {
+"duration": 1.0,
+"texture": ExtResource("21_hts3o")
+}],
+"loop": true,
+"name": &"spin",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_06hcx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_eof7r")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_7urk4")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q5qcp"]
+size = Vector2(58, 23)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2yys3"]
+size = Vector2(49, 19)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_igrjk"]
+radius = 191.167
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q5qcp"]
+bg_color = Color(0.0110876, 0.0110876, 0.0110876, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ydy1r"]
+bg_color = Color(0.14902, 0.972549, 0.278431, 1)
+
+[node name="Nutria" type="CharacterBody2D"]
+collision_layer = 7
+collision_mask = 11
+script = ExtResource("1_ikj4b")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.3, 0.3)
+sprite_frames = SubResource("SpriteFrames_c6r4e")
+animation = &"idle"
+
+[node name="enemy_hitbox" type="Area2D" parent="."]
+collision_layer = 4
+collision_mask = 255
+monitoring = false
+monitorable = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="enemy_hitbox"]
+position = Vector2(1, 9.5)
+shape = SubResource("RectangleShape2D_q5qcp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.5, 9.5)
+shape = SubResource("RectangleShape2D_2yys3")
+
+[node name="take_damage_cooldown" type="Timer" parent="."]
+one_shot = true
+
+[node name="detection_area" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="detection_area"]
+shape = SubResource("CircleShape2D_igrjk")
+
+[node name="health_bar" type="ProgressBar" parent="."]
+modulate = Color(0.0117647, 1, 0, 1)
+offset_left = -9.0
+offset_top = -14.0
+offset_right = 10.0
+offset_bottom = -12.0
+theme_override_styles/background = SubResource("StyleBoxFlat_q5qcp")
+theme_override_styles/fill = SubResource("StyleBoxFlat_ydy1r")
+max_value = 60.0
+value = 60.0
+show_percentage = false
+
+[connection signal="area_entered" from="enemy_hitbox" to="." method="_on_enemy_hitbox_area_entered"]
+[connection signal="area_exited" from="enemy_hitbox" to="." method="_on_enemy_hitbox_area_exited"]
+[connection signal="timeout" from="take_damage_cooldown" to="." method="_on_take_damage_cooldown_timeout"]
+[connection signal="body_entered" from="detection_area" to="." method="_on_detection_area_body_entered"]
+[connection signal="body_exited" from="detection_area" to="." method="_on_detection_area_body_exited"]
