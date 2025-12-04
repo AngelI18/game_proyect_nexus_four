@@ -253,12 +253,10 @@ func _process_tile_collision(tile_map: TileMapLayer, collision: KinematicCollisi
 		print("No hay tile_data en coords: ", tile_coords)
 		return
 	
-	#Debug: verificar ambas capas de física
-	var _layer_0_count = tile_data.get_collision_polygons_count(0)
-	var layer_1_count = tile_data.get_collision_polygons_count(1)
-	
-	#Verificar si es tile de daño
-	if layer_1_count > 0:
+		# ESTO ES NUEVO: Busca la etiqueta de datos
+	var es_peligroso = tile_data.get_custom_data("is_damage") # Asegúrate que el nombre sea exacto
+
+	if es_peligroso:
 		var knockback_dir = Vector2.ZERO
 		
 		#Colisión desde arriba (pinchos en el suelo)
