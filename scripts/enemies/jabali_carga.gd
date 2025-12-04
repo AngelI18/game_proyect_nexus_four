@@ -14,8 +14,13 @@ extends EnemyBase
 @export var prepare_duration = 1.5
 @export var charge_cooldown_time = 3.0
 @export var run_duration = 2.5
-@export var wall_stun_duration = 1.0        # Duración del stun al chocar
-@export var wall_knockback_force = 100.0    # Fuerza del retroceso              
+@export var wall_stun_duration = 1.0
+@export var wall_knockback_force = 100.0
+@export var edge_detection_distance = 48.0
+@export var jump_boost_speed = 220.0
+@export var min_jump_distance = 72.0  # 3 tiles de 24x24
+@export var aggressive_jump_speed = 250.0  # Velocidad muy alta para persecución aérea
+@export var edge_check_ahead = 24.0  # Distancia para detección temprana de bordes              
 
 #Configuración de animaciones
 @export var walk_fps = 7.0
@@ -99,43 +104,62 @@ func _state_walk(_delta: float) -> void:
 	var height_diff = global_position.y - player.global_position.y
 	var direction = get_direction_to_player()
 	
-	# Si está en zona de ataque, atacar directamente
 	if player_in_attack_zone:
 		current_state = State.ATTACK
 		lock_attack_direction()
 		return
 	
-	# Verificar si el jugador está a MAYOR altura (en otra plataforma)
+	# Si jugador está a MAYOR altura (arriba)
 	if height_diff > jump_height_min:
-		if should_jump_to_higher_platform():
-			perform_jump()
+		# NO CARGAR si está arriba
+		if distance_to_player <= charge_detection_range and cooldown_timer <= 0:
+			# Solo intentar saltar si está a la distancia correcta (3 tiles)
+			if distance_to_player >= min_jump_distance and can_jump:
+				if _try_jump_to_player(direction, height_diff, distance_to_player):
+					current_state = State.JUMP
+					return
+		
+		# Detectar borde cercano y calcular salto con impulso (solo si está en plataforma)
+		if _is_near_edge(direction) and can_jump and _is_on_platform():
+			_perform_calculated_jump_from_edge(direction, height_diff, distance_to_player)
 			current_state = State.JUMP
 			return
-	# Verificar si hay obstáculo al mismo nivel
-	elif should_jump_to_reach_player():
+		
+		# Caminar hacia el jugador si no puede saltar aún
+		velocity.x = direction * walk_speed
+		update_sprite_direction(direction)
+		return
+	
+	# Jugador está al mismo nivel o abajo
+	if should_jump_to_reach_player():
 		perform_jump()
 		current_state = State.JUMP
 		return
 	
-	# Si choca con terreno (no jugador), detenerse
 	if is_colliding_with_terrain():
 		velocity.x = 0
 		return
 	
-	# LÓGICA DE DISTANCIA:
-	# - Si está CERCA (dentro de charge_detection_range) → CARGAR
-	# - Si está LEJOS (dentro de walk_detection_range) → CAMINAR
-	# - Si está MUY LEJOS (fuera de walk_detection_range) → IDLE
+	# Detectar borde peligroso ANTES de moverse
+	if _is_approaching_edge(direction):
+		# Hay un borde adelante, intentar saltar si hay plataforma cercana
+		if can_jump and _has_platform_ahead(direction):
+			perform_jump()
+			velocity.x = direction * walk_speed * 1.5
+			current_state = State.JUMP
+			return
+		else:
+			# No puede saltar o no hay plataforma, detenerse
+			velocity.x = 0
+			update_sprite_direction(-direction)  # Voltear
+			return
 	
 	if distance_to_player <= charge_detection_range and cooldown_timer <= 0:
-		# CERCA: Iniciar carga
 		_start_prepare(direction)
 	elif distance_to_player <= walk_detection_range:
-		# LEJOS: Caminar hacia el jugador
 		velocity.x = direction * walk_speed
 		update_sprite_direction(direction)
 	else:
-		# MUY LEJOS: Detenerse
 		velocity.x = 0
 		current_state = State.IDLE
 
@@ -171,6 +195,15 @@ func _state_run(delta: float) -> void:
 		run_timer = 0.0
 		current_state = State.WALL_STUN
 		# NO desbloquear dirección aún, esperar al stun
+		return
+	
+	# Detectar borde peligroso durante carga
+	if _is_approaching_edge(attack_direction):
+		# Detenerse antes de caer
+		velocity.x = 0
+		run_timer = 0.0
+		current_state = State.IDLE
+		unlock_attack_direction()
 		return
 	
 	# Continuar corriendo en la dirección de carga
@@ -219,7 +252,12 @@ func _state_jump(_delta: float) -> void:
 		return
 	
 	var direction = get_direction_to_player()
-	velocity.x = direction * walk_speed
+	# Mantener velocidad agresiva si ya la tiene, sino usar walk_speed
+	if abs(velocity.x) > walk_speed * 1.5:
+		pass  # Mantener la velocidad actual (agresiva)
+	else:
+		velocity.x = direction * walk_speed
+	
 	update_sprite_direction(direction)
 	
 	if is_on_floor():
@@ -308,6 +346,130 @@ func _handle_animation() -> void:
 		State.WALL_STUN:
 			animated_sprite.play("idle")
 			animated_sprite.speed_scale = 1.0
+
+
+func _is_approaching_edge(direction: float) -> bool:
+	"""Detecta si está cerca de un borde peligroso (detección temprana)"""
+	if not is_on_floor():
+		return false
+	
+	var space_state = get_world_2d().direct_space_state
+	# Revisar un poco adelante del personaje
+	var check_pos = global_position + Vector2(direction * edge_check_ahead, 0)
+	
+	var query = PhysicsRayQueryParameters2D.create(
+		check_pos,
+		check_pos + Vector2(0, 32)  # Revisar 32px hacia abajo
+	)
+	query.collision_mask = 1
+	
+	var result = space_state.intersect_ray(query)
+	return result.is_empty()  # Si no hay piso = hay borde
+
+
+func _is_near_edge(direction: float) -> bool:
+	"""Detecta si hay un borde a 3 tiles de distancia en la dirección de movimiento"""
+	if not is_on_floor():
+		return false
+	
+	var space_state = get_world_2d().direct_space_state
+	var check_pos = global_position + Vector2(direction * edge_detection_distance, 10)
+	
+	var query = PhysicsRayQueryParameters2D.create(
+		check_pos,
+		check_pos + Vector2(0, 20)
+	)
+	query.collision_mask = 1
+	
+	var result = space_state.intersect_ray(query)
+	return result.is_empty()
+
+
+func _is_on_platform() -> bool:
+	if not is_on_floor():
+		return false
+	
+	# Verificar que hay terreno sólido debajo
+	var space_state = get_world_2d().direct_space_state
+	var query = PhysicsRayQueryParameters2D.create(
+		global_position,
+		global_position + Vector2(0, 20)
+	)
+	query.collision_mask = 1
+	
+	var result = space_state.intersect_ray(query)
+	return not result.is_empty()
+
+
+func _has_platform_ahead(direction: float) -> bool:
+	"""Detecta si hay una plataforma alcanzable con un salto hacia adelante"""
+	var space_state = get_world_2d().direct_space_state
+	
+	# Buscar plataforma en rango de salto horizontal
+	for distance in range(48, 120, 24):  # De 2 a 5 tiles
+		var check_pos = global_position + Vector2(direction * distance, -32)  # Revisar arriba también
+		
+		# Raycast hacia abajo buscando plataforma
+		var query = PhysicsRayQueryParameters2D.create(
+			check_pos,
+			check_pos + Vector2(0, 100)  # Buscar hasta 100px abajo
+		)
+		query.collision_mask = 1
+		
+		var result = space_state.intersect_ray(query)
+		if not result.is_empty():
+			# Hay plataforma, verificar que esté a altura alcanzable
+			var platform_height = result.position.y - global_position.y
+			if platform_height < 80 and platform_height > -80:  # Dentro de rango vertical
+				return true
+	
+	return false
+
+
+func _try_jump_to_player(_direction: float, height_diff: float, horizontal_dist: float) -> bool:
+	"""Intenta saltar aleatoriamente hacia el jugador cuando está arriba"""
+	# Solo saltar si está a la distancia adecuada (3 tiles)
+	if horizontal_dist < min_jump_distance:
+		return false
+	
+	if randf() > 0.4:
+		return false
+	
+	if height_diff > jump_height_max or horizontal_dist > jump_horizontal_max:
+		return false
+	
+	# Salto agresivo con velocidad aumentada
+	perform_jump()
+	velocity.x = get_direction_to_player() * aggressive_jump_speed
+	return true
+
+
+func _perform_calculated_jump_from_edge(direction: float, height_diff: float, horizontal_dist: float) -> void:
+	"""Calcula y ejecuta un salto con impulso desde el borde para alcanzar al jugador"""
+	if height_diff > jump_height_max:
+		height_diff = jump_height_max
+	
+	var gravity_strength = ProjectSettings.get_setting("physics/2d/default_gravity")
+	
+	# Calcular tiempo de vuelo basado en altura
+	var time_to_peak = sqrt(2.0 * height_diff / gravity_strength)
+	var total_flight_time = time_to_peak * 2.0
+	
+	# Calcular velocidad horizontal necesaria (con velocidad agresiva)
+	var required_horizontal_speed = horizontal_dist / total_flight_time
+	required_horizontal_speed = clamp(required_horizontal_speed, walk_speed, aggressive_jump_speed)
+	
+	# Aplicar salto con velocidad calculada
+	var jump_force = jump_velocity
+	if height_diff > jump_height_min * 2:
+		jump_force *= 1.15
+	
+	velocity.y = jump_force
+	velocity.x = direction * required_horizontal_speed
+	update_sprite_direction(int(direction))
+	can_jump = false
+	jump_timer = jump_cooldown
+
 
 func _get_damage_reduction() -> float:
 	# Durante el ataque (carga), reduce el daño en un 60%
