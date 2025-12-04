@@ -1,53 +1,58 @@
 extends EnemyBase
 
-# --- CONFIGURACIÓN DE NUTRIA (Ágil y con Giro) ---
-# Comportamiento: Empieza dormida. Al despertar es muy rápida. Ataca girando.
+# --- CONFIGURACIÓN DE NUTRIA ---
+# Comportamiento: Empieza dormida. Persigue rápido. Ataca girando (Spin).
 
+# Velocidades
 @export var walk_speed = 90.0
-@export var run_speed = 180.0  # Nutria corre muy rápido
-@export var spin_speed = 120.0 # Velocidad mientras gira atacando
+@export var run_speed = 180.0   # Nutria corre muy rápido
+@export var spin_speed = 120.0  # Velocidad mientras gira atacando
 
-# Distancias
-@export var attack_range = 40.0   # Distancia para empezar a girar
-@export var chase_range = 400.0   # Distancia para perseguir
+# Distancias para IA
+@export var attack_range = 40.0    # Distancia para empezar a girar
+@export var chase_range = 400.0    # Distancia para perseguir
 
-# Animaciones
+# Configuración de Animaciones
 @export var spin_fps = 12.0
 
-# --- ESTADOS (La lógica del Jabalí adaptada) ---
+# --- MÁQUINA DE ESTADOS ---
 enum State { SLEEP, IDLE, CHASE, JUMP, SPIN_ATTACK, COOLDOWN }
 var current_state = State.SLEEP
 
+# Timers internos
 var cooldown_timer = 0.0
 var spin_duration = 1.5
 var spin_timer = 0.0
 
 func _on_ready() -> void:
-	# Configuración base
+	# 1. Estadísticas (Igual que Slime/Jabalí)
 	speed = walk_speed
-	max_health = 60    # Menos vida que el jabalí
+	max_health = 60
 	damage_from_attack = 15
 	coin_reward = 30
 	
-	# Configuración de salto (Es saltarina)
+	# 2. Configuración de Salto
 	can_enemy_jump = true
 	jump_velocity = -350.0
 	jump_height_min = 10.0
 	jump_height_max = 80.0
 	jump_cooldown = 0.8
 	
-	# Corrección visual inicial
+	# 3. Inicializar vida (Vital para que no muera al primer golpe)
+	health = max_health
+	
+	# 4. Corrección visual inicial (Mira a la derecha por defecto)
 	if animated_sprite: 
 		animated_sprite.flip_h = false
 	
-	# Estado inicial obligatorio
+	# Estado inicial
 	current_state = State.SLEEP
 
 func _handle_movement(delta: float) -> void:
 	if cooldown_timer > 0:
 		cooldown_timer -= delta
 	
-	# MÁQUINA DE ESTADOS (Como el Jabalí)
+	# Lógica según el Estado actual
 	match current_state:
 		State.SLEEP:
 			_state_sleep(delta)
@@ -62,13 +67,11 @@ func _handle_movement(delta: float) -> void:
 		State.COOLDOWN:
 			_state_cooldown(delta)
 
-# --- LÓGICA DE CADA ESTADO ---
+# --- COMPORTAMIENTO DE LOS ESTADOS ---
 
 func _state_sleep(_delta: float) -> void:
 	velocity.x = 0
-	# Si detectamos al jugador (gracias a la señal _on_player_detected), despertamos
-	if player_chase and player:
-		_wake_up()
+	# Despierta si detectamos al jugador (la señal _on_player_detected lo activa)
 
 func _state_idle(_delta: float) -> void:
 	velocity.x = 0
@@ -82,42 +85,40 @@ func _state_chase(_delta: float) -> void:
 	var direction = get_direction_to_player()
 	var distance = abs(player.global_position.x - global_position.x)
 	
-	# 1. Si está muy cerca -> ATACAR (Giro)
+	# A. Si está muy cerca -> ATACAR (Giro)
 	if distance < attack_range and cooldown_timer <= 0:
 		_start_spin_attack()
 		return
 		
-	# 2. Si necesita saltar (Lógica heredada y adaptada)
+	# B. Si necesita saltar
 	if should_jump_to_reach_player():
 		perform_jump()
 		current_state = State.JUMP
 		return
 
-	# 3. Perseguir
+	# C. Perseguir corriendo
 	velocity.x = direction * run_speed
 	update_sprite_direction(direction)
 
 func _state_spin(delta: float) -> void:
-	# Ataque giratorio (Como el RUN del Jabalí pero con daño constante)
+	# Gira y se mueve hacia el jugador
 	spin_timer -= delta
 	
 	if spin_timer <= 0:
 		current_state = State.COOLDOWN
-		cooldown_timer = 1.0 # Descanso después de girar
+		cooldown_timer = 1.0 # Se cansa después de girar
 		unlock_attack_direction()
 		return
 	
-	# Moverse hacia el jugador mientras gira
 	if is_on_floor():
 		velocity.x = attack_direction * spin_speed
 
 func _state_jump(_delta: float) -> void:
-	# Lógica de aire
+	# En el aire
 	if is_on_floor():
-		current_state = State.CHASE # Al tocar suelo, vuelve a perseguir
+		current_state = State.CHASE # Al caer, sigue persiguiendo
 		return
 	
-	# Moverse en el aire
 	if player:
 		var direction = get_direction_to_player()
 		velocity.x = direction * walk_speed
@@ -127,10 +128,10 @@ func _state_cooldown(_delta: float) -> void:
 	if cooldown_timer <= 0:
 		current_state = State.IDLE
 
-# --- TRANSICIONES Y UTILIDADES ---
+# --- UTILIDADES Y TRANSICIONES ---
 
 func _wake_up() -> void:
-	velocity.y = -200 # Saltito de susto al despertar
+	velocity.y = -200 # Saltito al despertar
 	current_state = State.IDLE
 
 func _start_spin_attack() -> void:
@@ -138,7 +139,7 @@ func _start_spin_attack() -> void:
 	spin_timer = spin_duration
 	lock_attack_direction() # Fija la dirección para no girar loco
 
-# --- ANIMACIONES (Mapping limpio) ---
+# --- ANIMACIONES ---
 func _handle_animation() -> void:
 	if not animated_sprite: return
 	
@@ -146,45 +147,46 @@ func _handle_animation() -> void:
 		State.SLEEP:
 			animated_sprite.play("sleep")
 		State.IDLE, State.COOLDOWN:
-			animated_sprite.play("idle") # O usa las fotos de sleep si quieres que parezca cansada
+			animated_sprite.play("idle")
 		State.CHASE:
-			animated_sprite.play("walk") # Usa tus sprites de run
-			animated_sprite.speed_scale = 1.5 # Corre rápido visualmente
+			animated_sprite.play("walk") 
+			animated_sprite.speed_scale = 1.5 
 		State.JUMP:
 			animated_sprite.play("jump")
 		State.SPIN_ATTACK:
 			animated_sprite.play("spin")
 			animated_sprite.speed_scale = 1.0
 
-# --- ARREGLO DE DIRECCIÓN VISUAL ---
+# --- ARREGLO VISUAL (Flip) ---
 func update_sprite_direction(direction: int) -> void:
 	if animated_sprite and direction != 0:
-		# Lógica invertida para tus sprites que miran a la derecha
+		# Lógica invertida para sprites que miran a la DERECHA originalmente
 		if current_state != State.SPIN_ATTACK:
 			animated_sprite.flip_h = direction < 0
 
 # --- SISTEMA DE DAÑO (Blindado) ---
 func _on_enemy_hitbox_area_entered(area: Area2D) -> void:
-	# 1. Ignorar sensores propios o del jugador
+	# 1. Filtro de seguridad: Ignorar sensores
 	if "detection" in area.name or "coin" in area.name: return
 
-	# 2. Imprimir para debug
-	print("Nutria golpeada por: ", area.name)
+	# 2. Diagnóstico en consola (MIRA AQUÍ SI FALLA)
+	print("¡GOLPE! La Nutria fue tocada por: ", area.name)
 	
-	# 3. Recibir daño (Sin cambiar de estado a lo loco)
+	# 3. Aplicar Daño
+	# Llamamos a la función del padre. True = es un ataque.
 	take_damage(20, true)
-	_show_damage_feedback()
 	
-	# NOTA: No forzamos cambio de estado aquí. 
-	# Si le pegas mientras duerme, se despertará solo porque entra en _state_sleep -> wake_up
+	# 4. Si estaba durmiendo, despertar por el golpe
+	if current_state == State.SLEEP:
+		_wake_up()
 
-# Reducción de daño al girar (Spin)
+# Reducción de daño al girar
 func _get_damage_reduction() -> float:
 	if current_state == State.SPIN_ATTACK:
-		return 0.5 # Resistente mientras gira
+		return 0.5 
 	return 0.0
 
-# Detección (Necesaria para despertar)
+# Detectar jugador (Visual)
 func _on_player_detected(body: Node2D) -> void:
 	if current_state == State.SLEEP:
 		_wake_up()
