@@ -11,8 +11,8 @@ extends Control
 
 # === CONFIGURACIÓN DEL JUEGO ===
 const MY_PLAYER_NAME := "Player1"     # cambia esto en cada instancia
-const MY_GAME_ID := "D"
-const MY_GAME_KEY := "B2VAFIF18P"
+const MY_GAME_ID := "A"
+const MY_GAME_KEY := "5NLQK3EMIZ"
 const MY_GAME_NAME := "Nexus Four"  # Nombre de tu juego
 
 # === VARIABLES ===
