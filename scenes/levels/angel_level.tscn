@@ -7,7 +7,7 @@
 [node name="angel_level" type="Node2D"]
 
 [node name="player" parent="." instance=ExtResource("2_mdmnb")]
-position = Vector2(144, -734)
+position = Vector2(365, -179)
 
 [node name="nivelBosque" parent="." instance=ExtResource("3_lfudv")]
 

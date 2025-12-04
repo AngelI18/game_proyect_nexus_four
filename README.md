@@ -57,3 +57,175 @@ La modalidad en línea se enfoca en la competencia indirecta entre jugadores.
 | Detalle | Información |
 | :--- | :--- |
 | **Docente** | Bastian Ruiz |
+
+---
+
+## 📚 Documentación Técnica
+
+### Sistema de Persistencia
+
+#### Autoload Global (`scripts/global.gd`)
+El singleton `Global` gestiona el estado del jugador y estadísticas permanentes.
+
+**Variables de Sesión:**
+- `player_health`: Salud actual del jugador
+- `player_coins`: Monedas recolectadas en la sesión
+- `player_last_position`: Última posición segura
+
+**Récords Permanentes:**
+- `best_coins_record`: Mejor puntuación de monedas
+- `total_enemies_killed`: Máximo de enemigos eliminados
+
+**Funciones Principales:**
+- `save_player_data()`: Guarda progreso actual
+- `reset_player_data()`: Resetea sesión al iniciar nueva partida
+- `update_stats_on_death()`: Actualiza récords al morir
+- `get_stats()`: Retorna estadísticas para UI
+
+**Persistencia:** Los récords se guardan en `user://player_stats.cfg` usando `ConfigFile`.
+
+---
+
+### Sistema del Jugador
+
+#### Script Principal (`scripts/player/player.gd`)
+
+**Constantes:**
+- `MAX_HEALTH = 200`
+- `SPEED = 170.0`
+- `JUMP_VELOCITY = -350.0`
+- `MAX_JUMPS = 2` (doble salto)
+
+**Variables Clave:**
+- `health`: Salud actual
+- `coins`: Monedas recolectadas
+- `enemies_killed_this_run`: Contador de enemigos eliminados
+
+**Señales:**
+- `health_changed(current, max)`: Actualiza HUD de vida
+- `coin_changed(new_coins)`: Actualiza HUD de monedas
+
+**Mecánicas:**
+- Sistema de doble salto
+- Detección de daño por colisión con enemigos (8-16% de vida según tipo)
+- Detección de tiles dañinos (capa de física 2)
+- Sistema de invulnerabilidad temporal
+- Auto-guardado cada 2 segundos
+
+---
+
+### Sistema de Enemigos
+
+#### Clase Base (`scripts/enemies/enemy_father.gd`)
+
+**Exports Configurables:**
+```gdscript
+@export var speed = 100
+@export var max_health = 100
+@export_enum("Básico:1", "Medio:2", "Fuerte:3") var enemy_type = 1
+@export var damage_from_attack = 25
+@export var coin_reward = 20
+```
+
+**Señales:**
+- `enemy_died(coin_reward)`: Emitida al morir, conectada por el jugador
+- `enemy_damaged(damage, remaining_health)`: Emitida al recibir daño
+
+**Sistema de Detección:**
+- `detection_area` (Area2D): Detecta jugador en radio amplio
+- `enemy_hitbox` (Area2D): Zona de daño al jugador
+
+**Funciones Heredables:**
+- `_custom_behavior()`: Lógica específica del enemigo
+- `_on_take_damage()`: Reacción personalizada al daño
+- `_get_damage_reduction()`: Reducción de daño en estados especiales
+
+---
+
+### Estructura de Nodos
+
+#### Jugador (`scenes/charactes/player/player.tscn`)
+```
+Player (CharacterBody2D)
+├── AnimatedSprite2D
+├── CollisionShape2D
+├── Camera2D
+├── player_hit_box (Area2D) - Recibe daño de enemigos
+│   └── CollisionShape2D
+├── player_attack_hit_box (Area2D) - Detecta enemigos para atacar
+│   └── CollisionShape2D
+└── Timers
+    ├── attack_cooldown
+    ├── deal_attack_timer
+    ├── player_is_hurt
+    ├── invulnerability_timer
+    └── regen_timer
+```
+
+#### Enemigo Base
+```
+Enemy (CharacterBody2D)
+├── AnimatedSprite2D
+├── CollisionShape2D
+├── detection_area (Area2D)
+│   └── CollisionShape2D
+├── enemy_hitbox (Area2D)
+│   └── CollisionShape2D
+└── take_damage_cooldown (Timer)
+```
+
+---
+
+### Capas de Física
+
+| Layer | Nombre | Valor | Uso |
+|-------|--------|-------|-----|
+| 1 | Terreno | `1` | Plataformas, paredes |
+| 2 | Terreno Dañino | `2` | Espinas, trampas |
+| 3 | Jugador | `4` | CharacterBody2D del jugador |
+| 4 | Enemigos | `8` | CharacterBody2D de enemigos |
+
+**Configuración:**
+- Jugador: `collision_layer = 4`, `collision_mask = 3` (terreno + dañino)
+- Enemigos: `collision_layer = 8`, `collision_mask = 1` (solo terreno)
+
+---
+
+### UI y Menús
+
+#### Menú Principal (`scenes/ui/main_menu.tscn`)
+**Estructura requerida para estadísticas:**
+```
+MainMenu (Control)
+└── StatsPanel (Panel)
+    └── StatsVBox (VBoxContainer)
+        ├── BestCoinsValue (Label)
+        └── EnemiesValue (Label)
+```
+
+#### Menú de Pausa (`scenes/ui/PausaMenu.tscn`)
+- Pausa el juego con `get_tree().paused`
+- Botón "Salir" resetea estadísticas del jugador
+- Botón "Reiniciar" recarga la escena actual
+
+---
+
+### Flujo de Datos por Run
+
+**Al Iniciar Nivel:**
+1. Jugador carga salud/monedas desde `Global`
+2. Contador de enemigos inicia en 0
+
+**Durante Partida:**
+1. Auto-guardado cada 2 segundos
+2. Guardado inmediato al recoger monedas
+3. Guardado al recibir daño
+4. Incremento de contador al matar enemigos
+
+**Al Morir:**
+1. Guardar récords si superan los mejores
+2. Mostrar pantalla de muerte
+
+**Al Salir al Menú:**
+1. Resetear salud/monedas/contador
+2. Mantener récords permanentes
