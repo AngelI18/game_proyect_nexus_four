@@ -25,7 +25,7 @@ func _update_stats_display() -> void:
 
 
 func _on_play_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/levels/angel_level.tscn")
+	get_tree().change_scene_to_file("res://scenes/levels/nicooo_level2.tscn")
 
 
 func _on_multi_player_pressed() -> void:
