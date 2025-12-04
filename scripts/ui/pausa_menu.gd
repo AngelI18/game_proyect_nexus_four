@@ -1,66 +1,37 @@
-# pausa_menu.gd.
 extends CanvasLayer
+@onready var bg = $ColorRect
 
-# Esta función se llama automáticamente cuando ocurre una entrada
-# que no fue manejada por otros elementos del juego.
-# Es perfecta para el botón "Atrás" de Android.
 func _unhandled_input(event):
 	if event.is_action_pressed("ui_cancel"):
-		# Si se presiona "Atrás" o "Escape", alternamos la pausa.
+		bg.visible = true
 		toggle_pausa()
 
-# Una función única para pausar y reanudar. Es más limpio.
 func toggle_pausa():
-	# Invertimos el estado de pausa actual.
 	get_tree().paused = !get_tree().paused
 
 	if get_tree().paused:
-		# Si ahora está en pausa, mostramos el menú.
 		$AnimationPlayer.play("blur")
 		visible = true
 	else:
-		# Si ya no está en pausa, ocultamos el menú.
 		$AnimationPlayer.play_backwards("blur")
-		# Esperamos a que la animación termine antes de ocultarlo.
 		await $AnimationPlayer.animation_finished
 		visible = false
 
-## --- SEÑALES DE LOS BOTONES ---
 
 func _on_jugar_pressed():
-	# El botón de jugar/reanudar simplemente llama a nuestra función principal.
+	bg.visible = false
 	toggle_pausa()
 
 
-func _on_reiniciar_pressed(): # Cambié el nombre para que coincida con tu escena
-	
-	# 1. Llama a tu función de reanudar.
-	# Esto pondrá 'get_tree().paused = false' Y
-	# activará tu animación de "fade_out" (play_backwards).
+func _on_reiniciar_pressed():
 	await toggle_pausa()
-	
-	# 2. ESPERA (await) a que la función toggle_pausa() termine.
-	# Tu función 'toggle_pausa' ya incluye la línea "visible = false"
-	# al final de la animación de salida.
-	
-	# 3. Solo DESPUÉS de que el menú se haya ocultado,
-	# recargamos la escena.
+	bg.visible = false
 	get_tree().reload_current_scene()
 
 
-
-
-
-# Esta función se conecta al botón "salir"
 func _on_salir_pressed():
-	
-	# 1. Llama a tu función de reanudar.
-	# Esto pondrá 'get_tree().paused = false' Y
-	# activará tu animación de "fade_out" (play_backwards).
+	Global.reset_player_data()
 	toggle_pausa()
-	
-	# 2. ESPERA (await) a que la animación de salida termine.
+	bg.visible = false
 	await $AnimationPlayer.animation_finished
-	
-	# 3. Solo DESPUÉS de que el menú se haya ocultado, cambia la escena.
 	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
