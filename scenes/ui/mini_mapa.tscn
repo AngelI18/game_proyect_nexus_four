@@ -1,0 +1,47 @@
+[gd_scene load_steps=2 format=3 uid="uid://dw85cw0r2x755"]
+
+[ext_resource type="Script" uid="uid://b3mcr53lhcsd" path="res://scripts/ui/hud/mini_mapa.gd" id="1_bgawm"]
+
+[node name="mini_mapa" type="CanvasLayer"]
+script = ExtResource("1_bgawm")
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -367.0
+offset_top = 1.0
+offset_right = -119.0
+offset_bottom = 170.0
+grow_horizontal = 0
+
+[node name="ColorRect" type="ColorRect" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="UI"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="UI"]
+offset_left = -1192.0
+offset_right = -680.0
+offset_bottom = 512.0
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="UI/SubViewportContainer"]
+handle_input_locally = false
+render_target_update_mode = 4
+
+[node name="minimap" type="Camera2D" parent="UI/SubViewportContainer/SubViewport"]
+zoom = Vector2(0.2, 0.2)
+
+[node name="PlayerMarker" type="ColorRect" parent="UI/SubViewportContainer/SubViewport"]
+offset_right = 40.0
+offset_bottom = 40.0

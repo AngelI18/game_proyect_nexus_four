@@ -478,6 +478,7 @@ func _evaluar_listos_y_arrancar():
 	if todos_listos:
 		# TODO: Implementar sistema de niveles multijugador
 		# Por ahora, simplemente imprime que la partida está lista
+		Network.match_id = match_id
 		print("🎮 ¡Todos los jugadores están listos!")
 		print("⚠️ Sistema de niveles multijugador no implementado aún")
 		
