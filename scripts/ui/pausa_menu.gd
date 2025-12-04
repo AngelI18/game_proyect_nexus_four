@@ -24,6 +24,8 @@ func _on_jugar_pressed():
 
 
 func _on_reiniciar_pressed():
+	# Reiniciar datos del jugador ANTES de recargar
+	Global.reset_player_data()
 	await toggle_pausa()
 	bg.visible = false
 	get_tree().reload_current_scene()

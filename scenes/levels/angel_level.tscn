@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=4 uid="uid://cdhvpyptcu07"]
 
-[ext_resource type="Script" uid="uid://dovyxxe5qn35l" path="res://scenes/levels/angel_level.gd" id="1_6jp0g"]
+[ext_resource type="Script" path="res://scenes/levels/angel_level.gd" id="1_6jp0g"]
 [ext_resource type="PackedScene" uid="uid://ccg021l8va1nb" path="res://scenes/charactes/player/player.tscn" id="2_mdmnb"]
 [ext_resource type="TileSet" uid="uid://bwjtj27yicfyi" path="res://assets/environment/tilesets/terreno.tres" id="3_8cpu3"]
 [ext_resource type="PackedScene" uid="uid://34vltm0vwt0r" path="res://scenes/environment/parallax_bosque/nivel_bosque.tscn" id="3_lfudv"]

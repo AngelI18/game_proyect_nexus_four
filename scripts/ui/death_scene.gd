@@ -98,6 +98,8 @@ func off_camera() -> void:
 
 
 func _on_reiniciar_pressed() -> void:
+	# Reiniciar datos del jugador ANTES de recargar
+	Global.reset_player_data()
 	# Ocultar la escena con animación
 	await _hide_death_scene()
 	off_camera()
@@ -105,6 +107,8 @@ func _on_reiniciar_pressed() -> void:
 	get_tree().reload_current_scene()
 
 func _on_menu_principal_pressed() -> void:
+	# Reiniciar datos del jugador ANTES de cambiar escena
+	Global.reset_player_data()
 	# Ocultar la escena con animación
 	await _hide_death_scene()
 	off_camera()
