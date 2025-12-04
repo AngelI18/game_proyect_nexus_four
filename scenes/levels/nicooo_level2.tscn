@@ -1,9 +1,16 @@
+<<<<<<< HEAD
 [gd_scene load_steps=5 format=4 uid="uid://cyx585oj314dk"]
 
 [ext_resource type="TileSet" uid="uid://bwjtj27yicfyi" path="res://assets/environment/tilesets/terreno.tres" id="1_8juui"]
 [ext_resource type="Script" uid="uid://houk0hp84u0s" path="res://scenes/levels/nicooo_level_2.gd" id="1_fek4i"]
 [ext_resource type="PackedScene" uid="uid://ccg021l8va1nb" path="res://scenes/charactes/player/player.tscn" id="2_512yb"]
 [ext_resource type="PackedScene" uid="uid://c5weef6j10qbi" path="res://scenes/environment/parallax_backgrounds/Mountain.tscn" id="4_v1vg8"]
+=======
+[gd_scene load_steps=3 format=4 uid="uid://cyx585oj314dk"]
+
+[ext_resource type="TileSet" uid="uid://bwjtj27yicfyi" path="res://assets/environment/tilesets/terreno.tres" id="1_8juui"]
+[ext_resource type="PackedScene" uid="uid://ccg021l8va1nb" path="res://scenes/charactes/player/player.tscn" id="2_512yb"]
+>>>>>>> 75a5fec2fb68874b0c1ba7114ded7af591335709
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_fek4i")
@@ -14,6 +21,10 @@ tile_map_data = PackedByteArray("AAAJAA4AAQACAAIAAAAJAA8AAQACAAIAAAAJABAAAQACAAI
 tile_set = ExtResource("1_8juui")
 
 [node name="player" parent="." instance=ExtResource("2_512yb")]
+<<<<<<< HEAD
 position = Vector2(622, 135)
 
 [node name="Mountain" parent="." instance=ExtResource("4_v1vg8")]
+=======
+position = Vector2(1506, 43)
+>>>>>>> 75a5fec2fb68874b0c1ba7114ded7af591335709

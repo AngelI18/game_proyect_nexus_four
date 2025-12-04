@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 Global="*res://scripts/global.gd"
 PausaMenu="*res://scenes/ui/PausaMenu.tscn"
+Network="*res://scripts/managers/Network.gd"
 
 [display]
 

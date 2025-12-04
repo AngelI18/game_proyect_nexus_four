@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dqrvrndda1ots"
-path="res://.godot/imported/terreno_front.png-8dab604af4a2a4c67ca4561b074208f6.ctex"
+uid="uid://yofgm6u4nnjy"
+path="res://.godot/imported/otter_spin_2.png-e646051d08339eb2346bfcffd041d78a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/environment/tilesets/terreno_front.png"
-dest_files=["res://.godot/imported/terreno_front.png-8dab604af4a2a4c67ca4561b074208f6.ctex"]
+source_file="res://assets/characters/enemies/nutria/otter_spin_2.png"
+dest_files=["res://.godot/imported/otter_spin_2.png-e646051d08339eb2346bfcffd041d78a.ctex"]
 
 [params]
 
