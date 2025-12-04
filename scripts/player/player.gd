@@ -258,9 +258,10 @@ func _process_tile_collision(tile_map: TileMapLayer, collision: KinematicCollisi
 	if not tile_data:
 		return
 	
-	var layer_1_count = tile_data.get_collision_polygons_count(1)
-	
-	if layer_1_count > 0:
+		# ESTO ES NUEVO: Busca la etiqueta de datos
+	var es_peligroso = tile_data.get_custom_data("is_damage") # Asegúrate que el nombre sea exacto
+
+	if es_peligroso:
 		var knockback_dir = Vector2.ZERO
 		
 		if abs(collision_normal.y) > 0.5:

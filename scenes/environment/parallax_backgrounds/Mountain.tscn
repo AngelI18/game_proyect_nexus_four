@@ -1,0 +1,103 @@
+[gd_scene load_steps=6 format=3 uid="uid://c5weef6j10qbi"]
+
+[ext_resource type="Texture2D" uid="uid://5xm6tpm2inc1" path="res://assets/environment/parallax/parallaxMountain/far-mountains.png" id="1_42lrt"]
+[ext_resource type="Texture2D" uid="uid://beeq2dcmgp1xw" path="res://assets/environment/parallax/parallaxMountain/sky.png" id="1_l1mfs"]
+[ext_resource type="Texture2D" uid="uid://c2un5d67ak7wx" path="res://assets/environment/parallax/parallaxMountain/clouds.png" id="2_l1mfs"]
+[ext_resource type="Texture2D" uid="uid://dwm4t411u6xav" path="res://assets/environment/parallax/parallaxMountain/canyon.png" id="3_w7r1g"]
+[ext_resource type="Texture2D" uid="uid://u2ukd2kk7ibt" path="res://assets/environment/parallax/parallaxMountain/Cave/0.png" id="5_4bbl7"]
+
+[node name="Mountain" type="ParallaxBackground"]
+
+[node name="Skye" type="ParallaxLayer" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="Skye"]
+position = Vector2(2297.63, -401)
+scale = Vector2(142.898, 7.05)
+texture = ExtResource("1_l1mfs")
+
+[node name="FarMountain" type="ParallaxLayer" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="FarMountain"]
+position = Vector2(811.533, 22.8281)
+scale = Vector2(7.71603, 3.55977)
+texture = ExtResource("1_42lrt")
+
+[node name="Sprite2D2" type="Sprite2D" parent="FarMountain"]
+position = Vector2(2333, 11)
+scale = Vector2(7.13942, 3.1875)
+texture = ExtResource("1_42lrt")
+
+[node name="Sprite2D3" type="Sprite2D" parent="FarMountain"]
+position = Vector2(3825, 31)
+scale = Vector2(7.40865, 3.50208)
+texture = ExtResource("1_42lrt")
+
+[node name="Clouds" type="ParallaxLayer" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="Clouds"]
+position = Vector2(586, -243)
+scale = Vector2(2.85937, 2.525)
+texture = ExtResource("2_l1mfs")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Clouds"]
+position = Vector2(1420, -131)
+scale = Vector2(1.94687, 2.05417)
+texture = ExtResource("2_l1mfs")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Clouds"]
+position = Vector2(1677, -209)
+scale = Vector2(1.25937, 1.2875)
+texture = ExtResource("2_l1mfs")
+
+[node name="Sprite2D4" type="Sprite2D" parent="Clouds"]
+position = Vector2(2230, -128)
+scale = Vector2(0.828125, 0.854167)
+texture = ExtResource("2_l1mfs")
+
+[node name="Sprite2D5" type="Sprite2D" parent="Clouds"]
+position = Vector2(2863, -353)
+scale = Vector2(2.56562, 2.12083)
+texture = ExtResource("2_l1mfs")
+
+[node name="Mountains" type="ParallaxLayer" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="Mountains"]
+light_mask = 2
+visibility_layer = 2
+position = Vector2(525.683, 66.4917)
+scale = Vector2(3.30198, 3.2209)
+texture = ExtResource("3_w7r1g")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Mountains"]
+position = Vector2(1656, 72)
+scale = Vector2(3.87852, 3.16979)
+texture = ExtResource("3_w7r1g")
+
+[node name="Sprite2D3" type="Sprite2D" parent="Mountains"]
+position = Vector2(2927.38, 65.875)
+scale = Vector2(4.07266, 3.22604)
+texture = ExtResource("3_w7r1g")
+
+[node name="Sprite2D4" type="Sprite2D" parent="Mountains"]
+position = Vector2(4221.06, 68.2188)
+scale = Vector2(4.06211, 3.22318)
+texture = ExtResource("3_w7r1g")
+
+[node name="Cave" type="ParallaxLayer" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="Cave"]
+position = Vector2(3726, 832)
+scale = Vector2(2.88021, 2.40278)
+texture = ExtResource("5_4bbl7")
+
+[node name="Sprite2D2" type="Sprite2D" parent="Cave"]
+position = Vector2(4810.88, 832.125)
+scale = Vector2(2.77148, 2.40625)
+texture = ExtResource("5_4bbl7")
+
+[node name="bajadaCave" type="ParallaxLayer" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="bajadaCave"]
+position = Vector2(2778.25, 724)
+scale = Vector2(2.05859, 2.5)
+texture = ExtResource("5_4bbl7")
