@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://dk5qxgv3542ai"]
+[gd_scene load_steps=31 format=3 uid="uid://bikv58734gngk"]
 
 [ext_resource type="Script" uid="uid://cj10qvblmcx5v" path="res://scripts/enemies/nutria.gd" id="1_ikj4b"]
 [ext_resource type="Texture2D" uid="uid://d3cm04hu4g573" path="res://assets/characters/enemies/nutria/otter_idle_1.png" id="2_eq3ll"]
@@ -134,7 +134,7 @@ size = Vector2(49, 19)
 size = Vector2(58, 23)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_igrjk"]
-radius = 191.167
+radius = 248.129
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_q5qcp"]
 bg_color = Color(0.0110876, 0.0110876, 0.0110876, 1)
@@ -143,8 +143,8 @@ bg_color = Color(0.0110876, 0.0110876, 0.0110876, 1)
 bg_color = Color(0.14902, 0.972549, 0.278431, 1)
 
 [node name="Nutria" type="CharacterBody2D"]
-collision_layer = 7
-collision_mask = 11
+collision_layer = 8
+collision_mask = 3
 script = ExtResource("1_ikj4b")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]

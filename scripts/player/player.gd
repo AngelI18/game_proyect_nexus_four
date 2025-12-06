@@ -9,44 +9,44 @@ extends CharacterBody2D
 signal health_changed(current_health, max_health)
 signal coin_changed(new_coins)
 
-#Constantes de movimiento
+# Movimiento
 const SPEED = 170.0
 const JUMP_VELOCITY = -350.0
 const KNOCKBACK_STRENGTH = 150.0
 const KNOCKBACK_JUMP = -150.0
 
-#Variables de salto
 var can_double_jump = true
 const MAX_JUMPS = 2
 var jumps_remaining = MAX_JUMPS
 
-#Variables de salud
+# Salud
 const MAX_HEALTH = 200
 var health = MAX_HEALTH
 var max_regeneration = MAX_HEALTH * 0.7
 var player_alive = true
 
-#Variables de estado
+# Estado
 var is_attacking = false
 var is_hurt = false
 var is_invulnerable = false
 var is_taking_damage = false
 
-#Variables de combate
-var enemy_in_range: Node2D = null  # Enemigos que pueden hacer daño al jugador
-var enemy_in_attack_range: Node2D = null  # Enemigos en rango de ataque del jugador
+# Combate
+var enemy_in_range: Node2D = null
+var enemy_in_attack_range: Node2D = null
 var can_take_damage = true
 
-#Variables de colección
+# Colecciones
 var coins = 0
+var enemies_killed_this_run: int = 0
 
-#Sistema de checkpoint
+# Checkpoint
 var last_safe_position: Vector2 = Vector2.ZERO
 
 
-#Inicialización
 func _ready():
 	add_to_group("player")
+	_load_saved_data()
 	_connect_joystick()
 	call_deferred("_emit_initial_signals")
 
@@ -55,12 +55,15 @@ func _connect_joystick():
 	if joystick:
 		joystick.attack_triggered.connect(_on_joystick_attack_triggered)
 
+func _load_saved_data() -> void:
+	health = Global.player_health
+	coins = Global.player_coins
+
 func _emit_initial_signals():
 	update_health()
 	emit_coin_signal()
 
 
-#Loop principal
 func _physics_process(delta: float) -> void:
 	_apply_gravity(delta)
 	_handle_jump()
@@ -94,9 +97,9 @@ func _handle_audio() -> void:
 	else:
 		# Si estamos quietos
 		sfx_pasos.stop()
+	_auto_save_data()
 
 
-#Física y movimiento
 func _apply_gravity(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
@@ -137,6 +140,15 @@ func _update_safe_position() -> void:
 	if is_on_floor():
 		last_safe_position = global_position
 
+var _save_timer: float = 0.0
+const SAVE_INTERVAL: float = 2.0  # Guardar cada 2 segundos
+
+func _auto_save_data() -> void:
+	_save_timer += get_physics_process_delta_time()
+	if _save_timer >= SAVE_INTERVAL:
+		_save_timer = 0.0
+		Global.save_player_data(health, coins, global_position)
+
 #Animaciones
 func _update_animation() -> void:
 	if is_attacking or is_hurt:
@@ -163,7 +175,6 @@ func blink_sprite(duration: float) -> void:
 	$AnimatedSprite2D.modulate.a = 1.0
 
 
-#Sistema de combate
 func _handle_attack() -> void:
 	if Input.is_action_just_pressed("attack") and not is_attacking:
 		_perform_attack()
@@ -175,15 +186,12 @@ func _perform_attack() -> void:
 	
 	$AnimatedSprite2D.play("attack")
 	$deal_attack_timer.start()
-	
-	# Activar el área de ataque
 	_enable_attack_hitbox()
 
 func _enable_attack_hitbox() -> void:
 	var attack_hitbox = $player_attack_hit_box/CollisionShape2D
 	if attack_hitbox:
 		attack_hitbox.disabled = false
-		# Posicionar el hitbox según la dirección del jugador
 		var offset_x = 12 if not $AnimatedSprite2D.flip_h else -12
 		attack_hitbox.position.x = offset_x
 
@@ -201,7 +209,7 @@ func _on_joystick_attack_triggered(direction_attack: Vector2) -> void:
 	
 	_perform_attack()
 
-#Sistema de daño
+
 func take_damage(damage_amount: int, knockback_dir: Vector2 = Vector2.ZERO, invulnerability_time: float = 1.0) -> void:
 	if is_invulnerable or not can_take_damage:
 		return
@@ -236,6 +244,7 @@ func take_damage(damage_amount: int, knockback_dir: Vector2 = Vector2.ZERO, invu
 	$AnimatedSprite2D.play("hurt")
 	blink_sprite(invulnerability_time)
 	
+	Global.save_player_data(health, coins, global_position)  # Guardar al recibir daño
 	print("Daño recibido: ", damage_amount, " | Salud actual: ", health)
 
 func _check_enemy_damage() -> void:
@@ -243,21 +252,19 @@ func _check_enemy_damage() -> void:
 		return
 	
 	var damage = 0
-	var enemy_type = 1  # Tipo por defecto
+	var enemy_type = 1
 	
-	# Obtener el tipo de enemigo si tiene el método
 	if enemy_in_range.has_method("get_enemy_type"):
 		enemy_type = enemy_in_range.get_enemy_type()
 	
-	# Calcular daño basado en el tipo de enemigo (porcentaje de salud máxima)
 	match enemy_type:
-		1:  # Enemigo básico - 8% de la salud máxima
+		1:
 			damage = int(MAX_HEALTH * 0.08)
-		2:  # Enemigo medio - 12% de la salud máxima
-				damage = int(MAX_HEALTH * 0.12)
-		3:  # Enemigo fuerte - 16% de la salud máxima
+		2:
+			damage = int(MAX_HEALTH * 0.12)
+		3:
 			damage = int(MAX_HEALTH * 0.16)
-		_:  # Tipo desconocido - 8% por defecto
+		_:
 			damage = int(MAX_HEALTH * 0.08)
 	
 	var knockback_direction = (global_position - enemy_in_range.global_position).normalized()
@@ -275,35 +282,27 @@ func _process_tile_collision(tile_map: TileMapLayer, collision: KinematicCollisi
 	var collision_pos = collision.get_position()
 	var collision_normal = collision.get_normal()
 	
-	#Ajustar la posición de búsqueda del tile según la normal
-	var search_offset = collision_normal * -2.0  # Buscar en dirección opuesta a la normal
+	var search_offset = collision_normal * -2.0
 	var adjusted_pos = collision_pos + search_offset
 	
 	var tile_coords = tile_map.local_to_map(tile_map.to_local(adjusted_pos))
 	var tile_data = tile_map.get_cell_tile_data(tile_coords)
 	
 	if not tile_data:
-		print("No hay tile_data en coords: ", tile_coords)
 		return
 	
-	#Debug: verificar ambas capas de física
-	var _layer_0_count = tile_data.get_collision_polygons_count(0)
-	var layer_1_count = tile_data.get_collision_polygons_count(1)
-	
-	#Verificar si es tile de daño
-	if layer_1_count > 0:
+		# ESTO ES NUEVO: Busca la etiqueta de datos
+	var es_peligroso = tile_data.get_custom_data("is_damage") # Asegúrate que el nombre sea exacto
+
+	if es_peligroso:
 		var knockback_dir = Vector2.ZERO
 		
-		#Colisión desde arriba (pinchos en el suelo)
 		if abs(collision_normal.y) > 0.5:
-			#Empujar hacia arriba, horizontal basado en velocidad actual
 			var horizontal_dir = -sign(velocity.x) if velocity.x != 0 else 0
 			knockback_dir = Vector2(horizontal_dir, -2)
-		#Colisión lateral
 		else:
 			knockback_dir = Vector2(collision_normal.x * 1.5, -1)
 		
-		print("Knockback aplicado: ", knockback_dir)
 		take_damage(10, knockback_dir, 1.0)
 
 func _check_death() -> void:
@@ -311,7 +310,8 @@ func _check_death() -> void:
 		player_alive = false
 		health = 0
 		
-		# Instanciar escena de muerte
+		Global.update_stats_on_death(coins, enemies_killed_this_run)
+		
 		var death_scene = preload("res://scenes/ui/death_scene.tscn").instantiate()
 		
 		# Pasar configuración de cámara
@@ -327,13 +327,11 @@ func _check_death() -> void:
 			)
 			camera.enabled = false
 		
-		# Añadir escena de muerte
 		get_tree().root.add_child(death_scene)
 		
-		# Destruir jugador
 		queue_free()
 
-#Sistema de salud y regeneración
+
 func update_health() -> void:
 	health_changed.emit(health, MAX_HEALTH)
 
@@ -350,6 +348,7 @@ func _on_regen_timer_timeout() -> void:
 func add_coins(amount: int) -> void:
 	coins += amount
 	emit_coin_signal()
+	Global.save_player_data(health, coins, global_position)  # Guardar inmediatamente
 
 func emit_coin_signal() -> void:
 	coin_changed.emit(coins)
@@ -369,13 +368,20 @@ func _on_player_attack_hit_box_body_entered(body: Node2D) -> void:
 	# Detectar enemigos en rango de ATAQUE del jugador
 	if body.has_method("enemy"):
 		enemy_in_attack_range = body
+		# Conectar señal de muerte si el enemigo la tiene
+		if body.has_signal("enemy_died") and not body.is_connected("enemy_died", _on_enemy_killed):
+			body.enemy_died.connect(_on_enemy_killed)
 
 func _on_player_attack_hit_box_body_exited(body: Node2D) -> void:
 	# Enemigo salió del rango de ataque
 	if body.has_method("enemy") and body == enemy_in_attack_range:
 		enemy_in_attack_range = null
 
-#Callbacks de timers
+func _on_enemy_killed(_coin_reward: int) -> void:
+	"""Incrementa el contador cuando el jugador mata un enemigo"""
+	enemies_killed_this_run += 1
+
+
 func _on_attack_cooldown_timeout() -> void:
 	can_take_damage = true
 

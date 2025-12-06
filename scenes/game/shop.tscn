@@ -1,0 +1,80 @@
+[gd_scene load_steps=11 format=3 uid="uid://sd71cnst7d3j"]
+
+[ext_resource type="Texture2D" uid="uid://dpo5aacqo30a2" path="res://assets/environment/nico try/oak_woods_v1.0/decorations/shop_anim.png" id="1_4xm6x"]
+[ext_resource type="Script" uid="uid://djr3b3vmvdxjd" path="res://scenes/game/shop.gd" id="1_7xpr6"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7xpr6"]
+atlas = ExtResource("1_4xm6x")
+region = Rect2(0, 0, 118, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5dhir"]
+atlas = ExtResource("1_4xm6x")
+region = Rect2(118, 0, 118, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0kdc8"]
+atlas = ExtResource("1_4xm6x")
+region = Rect2(236, 0, 118, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gps3y"]
+atlas = ExtResource("1_4xm6x")
+region = Rect2(354, 0, 118, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xy8ah"]
+atlas = ExtResource("1_4xm6x")
+region = Rect2(472, 0, 118, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_regtu"]
+atlas = ExtResource("1_4xm6x")
+region = Rect2(590, 0, 118, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cd5ye"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7xpr6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5dhir")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0kdc8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gps3y")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xy8ah")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_regtu")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 8.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4xm6x"]
+size = Vector2(93, 76)
+
+[node name="Shop" type="Area2D"]
+script = ExtResource("1_7xpr6")
+
+[node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_cd5ye")
+animation = &"idle"
+autoplay = "idle"
+frame_progress = 0.126432
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(1.5, 24)
+shape = SubResource("RectangleShape2D_4xm6x")
+
+[node name="Label" type="Label" parent="."]
+visible = false
+offset_left = 68.0
+offset_top = -24.0
+offset_right = 249.0
+offset_bottom = 25.0
+scale = Vector2(0.5, 0.5)
+text = "Comprar Aleatorio $20
+Comprar Especifico $50"
