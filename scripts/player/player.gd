@@ -3,6 +3,7 @@ extends CharacterBody2D
 @onready var sfx_pasos = $AudioPasos
 @onready var sfx_ataque = $AudioAtaque
 @onready var sfx_dano = $AudioDano
+@onready var sfx_salto = $AudioSalto
 
 #Señales
 signal health_changed(current_health, max_health)
@@ -115,6 +116,9 @@ func _handle_jump() -> void:
 func _jump() -> void:
 	velocity.y = JUMP_VELOCITY
 	jumps_remaining -= 1
+	# Reproducir sonido de salto con un poco de variación para que no canse
+	sfx_salto.pitch_scale = randf_range(0.9, 1.1)
+	sfx_salto.play()
 
 func _handle_movement() -> void:
 	var direction := Input.get_axis("ui_left", "ui_right")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=50 format=3 uid="uid://ccg021l8va1nb"]
+[gd_scene load_steps=51 format=3 uid="uid://ccg021l8va1nb"]
 
 [ext_resource type="Script" uid="uid://bvfhmbyfrdwry" path="res://scripts/player/player.gd" id="1_yj2nq"]
 [ext_resource type="Texture2D" uid="uid://dpws1jqb86o3k" path="res://assets/characters/player/sword attack.png" id="2_igqbg"]
@@ -10,6 +10,7 @@
 [ext_resource type="AudioStream" uid="uid://gxjjhpkxdr3c" path="res://assets/audio/pisada/variedadPasos.tres" id="8_tnwcq"]
 [ext_resource type="AudioStream" uid="uid://c8srxgqu4rlfo" path="res://assets/audio/golpear/knifeSlice.ogg" id="9_uj01l"]
 [ext_resource type="AudioStream" uid="uid://desc8pt0ews2w" path="res://assets/audio/recibirDaño/clothBelt.ogg" id="10_dqix7"]
+[ext_resource type="AudioStream" uid="uid://deel88w70ttog" path="res://assets/audio/salto/cloth3.ogg" id="11_uj01l"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_igqbg"]
 atlas = ExtResource("2_igqbg")
@@ -364,15 +365,19 @@ autostart = true
 
 [node name="AudioPasos" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("8_tnwcq")
+volume_db = -30.0
 
 [node name="AudioAtaque" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("9_uj01l")
+volume_db = -20.0
 
 [node name="AudioDano" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("10_dqix7")
+volume_db = -20.222
 
 [node name="AudioSalto" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("10_dqix7")
+stream = ExtResource("11_uj01l")
+volume_db = -19.259
 
 [connection signal="area_entered" from="player_hit_box" to="." method="_on_player_hit_box_area_entered"]
 [connection signal="area_exited" from="player_hit_box" to="." method="_on_player_hit_box_area_exited"]
