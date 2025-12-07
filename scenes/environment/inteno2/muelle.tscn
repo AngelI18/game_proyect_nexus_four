@@ -1,0 +1,3 @@
+[gd_scene format=3 uid="uid://ch670cfa1mvar"]
+
+[node name="Muelle" type="Node2D"]
