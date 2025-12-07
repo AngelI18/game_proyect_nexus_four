@@ -40,7 +40,7 @@ position = Vector2(2265, 1993.34)
 scale = Vector2(3.91924, 1.09997)
 texture = ExtResource("4_aggwo")
 
-[node name="Parallax2D" type="Parallax2D" parent="ParallaxPryeba"]
+[node name="Parallax2D" type="ParallaxLayer" parent="ParallaxPryeba"]
 
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxPryeba/Parallax2D"]
 position = Vector2(2741, 2007)
