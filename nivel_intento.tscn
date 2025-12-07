@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://dvqjo60ke5n5v"]
+
+[node name="nivelIntento" type="ParallaxBackground"]
+
+[node name="ParallaxPryeba" type="ParallaxBackground" parent="."]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="ParallaxPryeba"]
+
+[node name="Sprite2D" type="Sprite2D" parent="ParallaxPryeba/ParallaxLayer"]
