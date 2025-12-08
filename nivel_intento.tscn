@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dvqjo60ke5n5v"]
+[gd_scene load_steps=8 format=3 uid="uid://b510onmt4pvfp"]
 
 [ext_resource type="Texture2D" uid="uid://dfsol40jt6t85" path="res://assets/environment/ParallaxVal/cielosinballenacopia.png" id="1_5ngnq"]
 [ext_resource type="Texture2D" uid="uid://dru2bfmckeosw" path="res://assets/environment/ParallaxVal/cielosinballena.png" id="2_v4acr"]
