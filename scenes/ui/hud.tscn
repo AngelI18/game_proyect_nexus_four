@@ -37,29 +37,29 @@ grow_vertical = 2
 script = ExtResource("2_h022r")
 
 [node name="left" type="TouchScreenButton" parent="Control"]
-position = Vector2(98, 514)
+position = Vector2(38, 553)
 texture_normal = ExtResource("2_8qguk")
 shape = SubResource("RectangleShape2D_gss2c")
 action = "ui_left"
 
 [node name="right" type="TouchScreenButton" parent="Control"]
-position = Vector2(268, 514)
+position = Vector2(234, 553)
 texture_normal = ExtResource("3_136eg")
 shape = SubResource("RectangleShape2D_h022r")
 action = "ui_right"
 
 [node name="jump" type="TouchScreenButton" parent="Control"]
-position = Vector2(1148, 260)
+position = Vector2(1206, 263)
 texture_normal = ExtResource("4_8qguk")
 shape = SubResource("RectangleShape2D_4jqwt")
 action = "ui_up"
 
 [node name="joystick_attack" type="Control" parent="Control" groups=["attack_joystick"]]
 anchors_preset = 0
-offset_left = 1080.0
-offset_top = 420.0
-offset_right = 1320.0
-offset_bottom = 660.0
+offset_left = 1136.0
+offset_top = 432.0
+offset_right = 1376.0
+offset_bottom = 672.0
 size_flags_horizontal = 4
 script = ExtResource("5_136eg")
 

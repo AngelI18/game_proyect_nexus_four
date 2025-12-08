@@ -1,0 +1,132 @@
+class_name LobbyManager
+extends RefCounted
+
+signal player_list_updated(players: Dictionary)
+signal invitation_received(invitation: Dictionary)
+signal invitation_accepted(match_id: String, rival_name: String)
+signal match_request_sent(match_id: String)
+
+var players: Dictionary = {}
+var invitations: Array = []
+var _network: Node # NetworkClient
+var _my_player_name: String
+
+func _init(network: Node, my_player_name: String):
+	_network = network
+	_my_player_name = my_player_name
+	_network.message_received.connect(_on_message_received)
+
+func refresh_players():
+	_network.send("online-players")
+
+func send_invitation(player_id: String):
+	_network.send("send-match-request", {"playerId": player_id})
+
+func accept_invitation(match_id: String):
+	_network.send("accept-match", {"matchId": match_id}) # Server expects matchId? Or just event?
+	# Original script: _enviar({"event": "accept-match"}) -> Wait, original script didn't send matchId in accept-match?
+	# Let's check original script:
+	# func _aceptar_invitacion(info: Dictionary): ... _enviar({"event": "accept-match"})
+	# It seems it relies on the server knowing the pending invitation? 
+	# But wait, the server docs say:
+	# "accept-match" is not in the summary table?
+	# Ah, the docs provided are for "GameMatch". There might be "Lobby" docs.
+	# Let's assume the original script was correct: `_enviar({"event": "accept-match"})`
+	# However, if there are multiple invitations, how does it know?
+	# The original script: `_enviar({"event": "accept-match"})` inside `_aceptar_invitacion`.
+	# It seems the server might only support one pending invitation or tracks the last one?
+	# Actually, looking at `_aceptar_invitacion` in original script:
+	# `_enviar({"event": "accept-match"})`
+	# It doesn't send data.
+	_network.send("accept-match")
+
+func reject_invitation(match_id: String):
+	_network.send("reject-match")
+
+func set_player_available():
+	# Notificar al servidor que el jugador está disponible nuevamente
+	_network.send("player-status", {"status": "AVAILABLE"})
+
+func _on_message_received(event: String, payload: Dictionary):
+	var data = payload.get("data", {})
+	
+	match event:
+		"online-players":
+			if payload.get("status") == "OK":
+				_update_players(data)
+		
+		"player-connected":
+			_add_player(data)
+			
+		"player-disconnected":
+			_remove_player(data)
+			
+		"player-status-changed":
+			_update_player_status(data)
+			
+		"match-request-received":
+			_handle_invitation(data)
+			
+		"send-match-request":
+			if payload.get("status") == "OK":
+				match_request_sent.emit(data.get("matchId", ""))
+				
+		"accept-match":
+			if payload.get("status") == "OK":
+				var match_id = data.get("matchId", "")
+				var rival_name = data.get("playerName", "")
+				# Fallback logic from original script
+				if rival_name == "" and data.has("playerId"):
+					var pid = str(data["playerId"])
+					if players.has(pid):
+						rival_name = players[pid].get("name", "")
+				
+				invitation_accepted.emit(match_id, rival_name)
+
+func _update_players(server_list: Array):
+	players.clear()
+	var my_name_lower = _my_player_name.to_lower()
+	
+	for j in server_list:
+		var p_name = str(j.get("name", ""))
+		if p_name.to_lower() == my_name_lower:
+			continue
+			
+		var id = str(j.get("id", ""))
+		if id == "": continue
+		
+		players[id] = {
+			"name": p_name,
+			"status": j.get("status", "UNKNOWN"),
+			"game_name": j.get("game", {}).get("name", "Unknown")
+		}
+	player_list_updated.emit(players)
+
+func _add_player(info: Dictionary):
+	if info.has("id"):
+		players[info["id"]] = {
+			"name": info.get("name", "Desconocido"),
+			"status": info.get("status", "UNKNOWN")
+		}
+		player_list_updated.emit(players)
+
+func _remove_player(info: Dictionary):
+	if info.has("id"):
+		players.erase(info["id"])
+		player_list_updated.emit(players)
+
+func _update_player_status(info: Dictionary):
+	var pid = info.get("playerId")
+	if pid and players.has(pid):
+		players[pid]["status"] = info.get("playerStatus", "UNKNOWN")
+		player_list_updated.emit(players)
+
+func _handle_invitation(payload: Dictionary):
+	var info = payload.get("data", {})
+	var pid = info.get("playerId", "")
+	var mid = info.get("matchId", "")
+	var p_name = players.get(pid, {}).get("name", "Desconocido")
+	
+	var inv = {"playerId": pid, "matchId": mid, "name": p_name}
+	invitations.append(inv)
+	invitation_received.emit(inv)

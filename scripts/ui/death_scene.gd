@@ -24,6 +24,9 @@ func _ready():
 	# Ocultar botones hasta que termine la animación
 	vbox_container.visible = false
 	
+	# Si estamos en online, notificar muerte
+	if Network.match_id != "":
+		Network.notify_player_died()
 	
 	_animate_death()
 
@@ -64,12 +67,34 @@ func _animate_death():
 	
 	# Esperar a que termine la animación
 	await tween.finished
-	
+
 	# Mostrar botones después de la animación
 	_show_buttons()
 
+	# Solo mostrar el botón salir tras la animación de muerte
+	# Si estamos en multijugador, el botón salir llevará al lobby, en solitario al menú principal
+	# El cambio de escena solo ocurre si el jugador pulsa salir
+	# Ocultar todos los botones menos salir
+	for child in vbox_container.get_children():
+		if child is Button:
+			child.visible = (child.name == "Salir" or child.text.to_lower().contains("salir"))
+
 func _show_buttons():
 	"""Muestra los botones con una animación de fade in"""
+	
+	# En modo online, ocultar botón de reiniciar
+	if Network.match_id != "":
+		# Intentar buscar el botón por nombre común o iterar
+		var btn_reiniciar = vbox_container.get_node_or_null("Reiniciar")
+		if btn_reiniciar:
+			btn_reiniciar.visible = false
+		else:
+			# Si no se encuentra por nombre, buscar por texto o asumir índice
+			for child in vbox_container.get_children():
+				if child is Button and (child.name == "Reiniciar" or "reiniciar" in child.name.to_lower() or child.text.to_lower().contains("reiniciar")):
+					child.visible = false
+					break
+	
 	vbox_container.modulate.a = 0
 	vbox_container.visible = true
 	
@@ -109,8 +134,14 @@ func _on_reiniciar_pressed() -> void:
 func _on_menu_principal_pressed() -> void:
 	# Reiniciar datos del jugador ANTES de cambiar escena
 	Global.reset_player_data()
-	# Ocultar la escena con animación
-	await _hide_death_scene()
-	off_camera()
-	# Ir al menú principal
-	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
+
+	# Si estamos en online, salir del match y volver al lobby
+	if Network.match_id != "":
+		Network.leave_match()
+		await _hide_death_scene()
+		off_camera()
+		get_tree().change_scene_to_file("res://scenes/ui/Multijugador.tscn")
+	else:
+		await _hide_death_scene()
+		off_camera()
+		get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")

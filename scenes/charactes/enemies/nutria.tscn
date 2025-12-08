@@ -127,11 +127,12 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_2yys3"]
-size = Vector2(49, 19)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_q5qcp"]
+height = 47.0
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_q5qcp"]
-size = Vector2(58, 23)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ydy1r"]
+radius = 12.0
+height = 56.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_igrjk"]
 radius = 248.129
@@ -154,7 +155,8 @@ animation = &"idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0.5, 9.5)
-shape = SubResource("RectangleShape2D_2yys3")
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_q5qcp")
 
 [node name="enemy_hitbox" type="Area2D" parent="."]
 collision_layer = 8
@@ -162,9 +164,11 @@ collision_mask = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="enemy_hitbox"]
 position = Vector2(1, 9.5)
-shape = SubResource("RectangleShape2D_q5qcp")
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_ydy1r")
 
 [node name="detection_area" type="Area2D" parent="."]
+visible = false
 collision_layer = 0
 collision_mask = 4
 
