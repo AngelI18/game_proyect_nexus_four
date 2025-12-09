@@ -1,0 +1,104 @@
+[gd_scene load_steps=15 format=3 uid="uid://bdx2knyy6lhm4"]
+
+[ext_resource type="Script" uid="uid://dui2gw52h6whn" path="res://scripts/enemies/buitre.gd" id="1_4g15c"]
+[ext_resource type="Texture2D" uid="uid://c6l1xnhamf86g" path="res://assets/characters/enemies/Buitre/vulture1.png" id="2_i1wgb"]
+[ext_resource type="Texture2D" uid="uid://h2qx7rlq6imi" path="res://assets/characters/enemies/Buitre/vulture2.png" id="3_e7427"]
+[ext_resource type="Texture2D" uid="uid://gha8kaxko5m4" path="res://assets/characters/enemies/Buitre/vulture3.png" id="4_erilc"]
+[ext_resource type="Texture2D" uid="uid://ds72lsxstsmfo" path="res://assets/characters/enemies/Buitre/vulture4.png" id="5_lkld7"]
+[ext_resource type="Texture2D" uid="uid://deq800h5nejww" path="res://assets/characters/enemies/Buitre/vulture-idle1.png" id="6_32j78"]
+[ext_resource type="Texture2D" uid="uid://57xmw0c4requ" path="res://assets/characters/enemies/Buitre/vulture-idle2.png" id="7_mbk7w"]
+[ext_resource type="Texture2D" uid="uid://cxvxu3eugnrwl" path="res://assets/characters/enemies/Buitre/vulture-idle3.png" id="8_6gk56"]
+[ext_resource type="Texture2D" uid="uid://b6o4pnerscakr" path="res://assets/characters/enemies/Buitre/vulture-idle4.png" id="9_p0bij"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_tin5j"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("2_i1wgb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_e7427")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_erilc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_lkld7")
+}],
+"loop": true,
+"name": &"fly",
+"speed": 9.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("6_32j78")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_mbk7w")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_6gk56")
+}, {
+"duration": 1.0,
+"texture": ExtResource("9_p0bij")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 7.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_4g15c"]
+radius = 436.555
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_i1wgb"]
+radius = 12.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4g15c"]
+bg_color = Color(0.000324617, 0.0123592, 0.000862001, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i1wgb"]
+bg_color = Color(0.0156863, 0.611765, 0.0313726, 1)
+
+[node name="Buitre" type="CharacterBody2D"]
+script = ExtResource("1_4g15c")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_tin5j")
+animation = &"idle"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="detection_area" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="detection_area"]
+shape = SubResource("CircleShape2D_4g15c")
+
+[node name="enemy_hitbox" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="enemy_hitbox"]
+position = Vector2(0, 10)
+shape = SubResource("CircleShape2D_i1wgb")
+
+[node name="take_damage_cooldown" type="Timer" parent="."]
+one_shot = true
+
+[node name="health_bar" type="ProgressBar" parent="."]
+offset_left = -8.0
+offset_top = -6.0
+offset_right = 11.0
+offset_bottom = -4.0
+theme_override_styles/background = SubResource("StyleBoxFlat_4g15c")
+theme_override_styles/fill = SubResource("StyleBoxFlat_i1wgb")
+max_value = 40.0
+step = 1.0
+value = 40.0
+show_percentage = false
+
+[connection signal="body_entered" from="detection_area" to="." method="_on_detection_area_body_entered"]
+[connection signal="body_exited" from="detection_area" to="." method="_on_detection_area_body_exited"]
+[connection signal="area_entered" from="enemy_hitbox" to="." method="_on_enemy_hitbox_area_entered"]
+[connection signal="timeout" from="take_damage_cooldown" to="." method="_on_take_damage_cooldown_timeout"]

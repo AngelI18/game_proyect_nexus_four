@@ -1,0 +1,101 @@
+[gd_scene load_steps=16 format=3 uid="uid://beciacngul30n"]
+
+[ext_resource type="Script" uid="uid://ddo4r2ysf3741" path="res://scenes/charactes/enemies/buoh.gd" id="1_8tqjc"]
+[ext_resource type="Texture2D" uid="uid://c3rwnx6afj300" path="res://assets/characters/enemies/Buoh/owl-1.png" id="1_vpv6n"]
+[ext_resource type="Texture2D" uid="uid://bk203vyntlnmv" path="res://assets/characters/enemies/Buoh/owl-2.png" id="2_8tqjc"]
+[ext_resource type="Texture2D" uid="uid://qp1n66etp0hp" path="res://assets/characters/enemies/Buoh/owl-3.png" id="3_m65tv"]
+[ext_resource type="Texture2D" uid="uid://c6c0t4aukhumb" path="res://assets/characters/enemies/Buoh/owl-4.png" id="4_g3llx"]
+[ext_resource type="Texture2D" uid="uid://ww3xju6o5ckw" path="res://assets/characters/enemies/Buoh/owl-5.png" id="5_6yhu1"]
+[ext_resource type="Texture2D" uid="uid://bnwfcut8ofi54" path="res://assets/characters/enemies/Buoh/owl-6.png" id="6_phfi6"]
+[ext_resource type="Texture2D" uid="uid://veesuc8rupth" path="res://assets/characters/enemies/Buoh/owl-7.png" id="7_w4jhb"]
+[ext_resource type="Texture2D" uid="uid://jchvq6tcxd0l" path="res://assets/characters/enemies/Buoh/owl-8.png" id="8_tc3q2"]
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_w0y4m"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("1_vpv6n")
+}, {
+"duration": 1.0,
+"texture": ExtResource("2_8tqjc")
+}, {
+"duration": 1.0,
+"texture": ExtResource("3_m65tv")
+}, {
+"duration": 1.0,
+"texture": ExtResource("4_g3llx")
+}, {
+"duration": 1.0,
+"texture": ExtResource("5_6yhu1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("6_phfi6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("7_w4jhb")
+}, {
+"duration": 1.0,
+"texture": ExtResource("8_tc3q2")
+}],
+"loop": true,
+"name": &"fly",
+"speed": 5.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vpv6n"]
+radius = 28.2843
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_8tqjc"]
+radius = 307.956
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_m65tv"]
+radius = 29.0689
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g3llx"]
+bg_color = Color(0.051971, 0.051971, 0.0519709, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6yhu1"]
+bg_color = Color(0.140637, 0.722611, 0.118669, 1)
+
+[node name="Buoh" type="CharacterBody2D"]
+script = ExtResource("1_8tqjc")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_w0y4m")
+animation = &"fly"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_vpv6n")
+
+[node name="detection_area" type="Area2D" parent="."]
+collision_mask = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="detection_area"]
+shape = SubResource("CircleShape2D_8tqjc")
+
+[node name="enemy_hitbox" type="Area2D" parent="."]
+collision_layer = 8
+collision_mask = 4
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="enemy_hitbox"]
+shape = SubResource("CircleShape2D_m65tv")
+
+[node name="take_damage_cooldown" type="Timer" parent="."]
+one_shot = true
+
+[node name="health_bar" type="ProgressBar" parent="."]
+offset_left = -22.0
+offset_top = -30.0
+offset_right = 22.0
+offset_bottom = -23.0
+theme_override_styles/background = SubResource("StyleBoxFlat_g3llx")
+theme_override_styles/fill = SubResource("StyleBoxFlat_6yhu1")
+max_value = 50.0
+step = 1.0
+value = 50.0
+show_percentage = false
+
+[connection signal="body_entered" from="detection_area" to="." method="_on_detection_area_body_entered"]
+[connection signal="body_exited" from="detection_area" to="." method="_on_detection_area_body_exited"]
+[connection signal="area_entered" from="enemy_hitbox" to="." method="_on_enemy_hitbox_area_entered"]
+[connection signal="timeout" from="take_damage_cooldown" to="." method="_on_take_damage_cooldown_timeout"]
