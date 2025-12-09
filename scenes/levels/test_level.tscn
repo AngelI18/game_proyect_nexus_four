@@ -29,3 +29,15 @@ position = Vector2(300, 44)
 
 [node name="Nutria" parent="." instance=ExtResource("6_6xh4u")]
 position = Vector2(-35, -18)
+
+[node name="Nutria2" parent="." instance=ExtResource("6_6xh4u")]
+position = Vector2(361, -53)
+
+[node name="Nutria3" parent="." instance=ExtResource("6_6xh4u")]
+position = Vector2(203, -36)
+
+[node name="Nutria4" parent="." instance=ExtResource("6_6xh4u")]
+position = Vector2(189, -39)
+
+[node name="Nutria5" parent="." instance=ExtResource("6_6xh4u")]
+position = Vector2(284, -31)
