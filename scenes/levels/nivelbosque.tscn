@@ -1,9 +1,12 @@
-[gd_scene load_steps=5 format=4 uid="uid://dayangaca82wa"]
+[gd_scene load_steps=8 format=4 uid="uid://dayangaca82wa"]
 
 [ext_resource type="PackedScene" uid="uid://34vltm0vwt0r" path="res://scenes/environment/parallax_bosque/nivel_bosque.tscn" id="1_58abi"]
 [ext_resource type="PackedScene" uid="uid://ccg021l8va1nb" path="res://scenes/charactes/player/player.tscn" id="2_nsem4"]
 [ext_resource type="TileSet" uid="uid://bwjtj27yicfyi" path="res://assets/environment/tilesets/terreno.tres" id="3_j02gq"]
 [ext_resource type="PackedScene" uid="uid://bikv58734gngk" path="res://scenes/charactes/enemies/nutria.tscn" id="4_nsem4"]
+[ext_resource type="PackedScene" uid="uid://bcy11d1akfql8" path="res://scenes/charactes/enemies/enemy_spawner.tscn" id="5_j02gq"]
+[ext_resource type="PackedScene" uid="uid://bdx2knyy6lhm4" path="res://scenes/charactes/enemies/buitre.tscn" id="6_vy7n6"]
+[ext_resource type="PackedScene" uid="uid://beciacngul30n" path="res://scenes/charactes/enemies/buoh.tscn" id="7_x5mvo"]
 
 [node name="Nivelbosque" type="Node2D"]
 position = Vector2(1, -344)
@@ -12,6 +15,7 @@ position = Vector2(1, -344)
 
 [node name="player" parent="." instance=ExtResource("2_nsem4")]
 position = Vector2(3, 608)
+scale = Vector2(1.046, 1)
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 position = Vector2(-5, 16)
@@ -20,3 +24,12 @@ tile_set = ExtResource("3_j02gq")
 
 [node name="Nutria" parent="." instance=ExtResource("4_nsem4")]
 position = Vector2(976, 608)
+
+[node name="EnemySpawner2" parent="." instance=ExtResource("5_j02gq")]
+position = Vector2(609, 327)
+
+[node name="Buitre" parent="." instance=ExtResource("6_vy7n6")]
+position = Vector2(390, 519)
+
+[node name="Buoh" parent="." instance=ExtResource("7_x5mvo")]
+position = Vector2(-324, 479)
