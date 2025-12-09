@@ -14,39 +14,39 @@
 position = Vector2(32, -1570)
 
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxLayer"]
-position = Vector2(1855, 220.5)
-scale = Vector2(0.77368, 0.898946)
+position = Vector2(1519.5, 1382)
+scale = Vector2(0.641869, 0.123157)
 texture = ExtResource("1_0c0jn")
 
 [node name="ParallaxLayer2" type="ParallaxLayer" parent="."]
 position = Vector2(32, -1570)
 
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxLayer2"]
-position = Vector2(1852.75, 526.875)
-scale = Vector2(0.686849, 0.249444)
+position = Vector2(1523.94, 1435)
+scale = Vector2(0.566244, 0.0301199)
 texture = ExtResource("2_j3v0r")
 
 [node name="ParallaxLayer3" type="ParallaxLayer" parent="."]
 position = Vector2(32, -1570)
 
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxLayer3"]
-position = Vector2(1856.88, 1026.25)
-scale = Vector2(0.80014, 0.819612)
+position = Vector2(1524.48, 1494)
+scale = Vector2(0.662707, 0.113399)
 texture = ExtResource("3_prekw")
 
 [node name="ParallaxLayer4" type="ParallaxLayer" parent="."]
 position = Vector2(32, -1570)
 
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxLayer4"]
-position = Vector2(1840.5, 1257.5)
-scale = Vector2(3.2526, 0.459272)
+position = Vector2(1515.25, 1568.75)
+scale = Vector2(2.6888, 0.127383)
 texture = ExtResource("4_sjuj2")
 
 [node name="Parallax2D" type="ParallaxLayer" parent="."]
 position = Vector2(32, -1570)
 
 [node name="Sprite2D" type="Sprite2D" parent="Parallax2D"]
-position = Vector2(2141, 2192)
+position = Vector2(2257, 3786)
 scale = Vector2(0.677455, 0.415585)
 texture = ExtResource("5_wi8uq")
 
@@ -54,7 +54,7 @@ texture = ExtResource("5_wi8uq")
 position = Vector2(32, -1570)
 
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxLayer5"]
-position = Vector2(832, 2056)
+position = Vector2(1369, 3122)
 scale = Vector2(0.817228, 0.309277)
 texture = ExtResource("6_tpn0g")
 
@@ -62,6 +62,6 @@ texture = ExtResource("6_tpn0g")
 position = Vector2(2770, 508)
 
 [node name="Sprite2D" type="Sprite2D" parent="ParallaxLayer6"]
-position = Vector2(-898.5, -724.75)
-scale = Vector2(0.69029, 0.0168901)
+position = Vector2(-1219.94, -501)
+scale = Vector2(0.573637, 0.0184316)
 texture = ExtResource("7_8iyvy")

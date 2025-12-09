@@ -1,13 +1,13 @@
 [gd_scene load_steps=3 format=3 uid="uid://qy66t8s00i3l"]
 
-[ext_resource type="PackedScene" uid="uid://ch670cfa1mvar" path="res://scenes/environment/inteno2/muelle.tscn" id="1_naos6"]
+[ext_resource type="PackedScene" uid="uid://ci46aa56s0dum" path="res://scenes/environment/inteno2/muelleuno.tscn" id="2_naos6"]
 [ext_resource type="PackedScene" uid="uid://ccg021l8va1nb" path="res://scenes/charactes/player/player.tscn" id="2_yyl0k"]
 
 [node name="ValeLevel" type="Node2D"]
 
 [node name="player" parent="." instance=ExtResource("2_yyl0k")]
-position = Vector2(220, -218)
+position = Vector2(224, -211)
 
 [node name="TileMapLayer" type="TileMapLayer" parent="."]
 
-[node name="ParallaxPryeba" parent="." instance=ExtResource("1_naos6")]
+[node name="Muelleuno" parent="." instance=ExtResource("2_naos6")]

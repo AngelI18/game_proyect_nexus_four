@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3 uid="uid://ci46aa56s0dum"]
+
+[ext_resource type="Texture2D" uid="uid://ccji6mpp516k4" path="res://assets/environment/ParallaxVal/18157076.jpg" id="1_wdj8i"]
+
+[node name="Muelleuno" type="ParallaxBackground"]
+
+[node name="Parallax2D" type="Parallax2D" parent="."]
+
+[node name="18157076" type="Sprite2D" parent="Parallax2D"]
+position = Vector2(727.5, 355)
+scale = Vector2(0.269159, 0.144654)
+texture = ExtResource("1_wdj8i")
