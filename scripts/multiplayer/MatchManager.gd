@@ -6,6 +6,7 @@ signal match_ready
 signal match_started
 signal match_ended(result: String, reason: String) # result: "VICTORY", "DEFEAT", "DRAW"
 signal game_data_received(data: Dictionary)
+signal attack_received(data: Dictionary)
 signal opponent_left
 
 var match_id: String = ""
@@ -61,6 +62,10 @@ func _on_message_received(event: String, payload: Dictionary):
 		"receive-game-data":
 			var content = data.get("payload", {})
 			game_data_received.emit(content)
+			
+			# Check for attack
+			if content.get("type") == "attack":
+				attack_received.emit(content)
 			
 			# Check for custom defeat signal from opponent
 			if content.get("type") == "defeat":

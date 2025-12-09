@@ -89,7 +89,6 @@ color = Color(0.597176, 0.597176, 0.597176, 0.376471)
 
 [node name="PanelContainer" type="PanelContainer" parent="."]
 process_mode = 3
-visible = false
 modulate = Color(0.93845, 0.93845, 0.93845, 0)
 offset_left = 382.0
 offset_top = 182.0

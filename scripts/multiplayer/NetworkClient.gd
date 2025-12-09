@@ -14,6 +14,18 @@ const PING_INTERVAL: float = 10.0
 
 func connect_to_url(url: String) -> void:
 	_url = url
+	
+	# Cerrar conexión anterior si existe
+	var current_state = _ws.get_ready_state()
+	if current_state == WebSocketPeer.STATE_OPEN or current_state == WebSocketPeer.STATE_CONNECTING:
+		print("⚠️ [NetworkClient] Cerrando conexión anterior antes de reconectar")
+		_ws.close()
+		await get_tree().create_timer(0.5).timeout
+	
+	# Crear nuevo WebSocketPeer si es necesario
+	if current_state != WebSocketPeer.STATE_CLOSED:
+		_ws = WebSocketPeer.new()
+	
 	var err = _ws.connect_to_url(_url)
 	if err != OK:
 		error_occurred.emit("No se pudo conectar a " + url)
