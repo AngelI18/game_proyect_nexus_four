@@ -1,0 +1,19 @@
+[gd_scene load_steps=5 format=3 uid="uid://bcy11d1akfql8"]
+
+[ext_resource type="Script" uid="uid://cd3ct4mjxxvv7" path="res://scripts/enemies/enemy_spawner.gd" id="1_4hdre"]
+[ext_resource type="PackedScene" uid="uid://do6i7mtwk50p1" path="res://scenes/charactes/enemies/enemy.tscn" id="2_xi03g"]
+[ext_resource type="PackedScene" uid="uid://r8q27fq3slfd" path="res://scenes/charactes/enemies/jabali_carga.tscn" id="3_b7vav"]
+[ext_resource type="PackedScene" uid="uid://bikv58734gngk" path="res://scenes/charactes/enemies/nutria.tscn" id="4_3tpdo"]
+
+[node name="EnemySpawner" type="Node2D"]
+script = ExtResource("1_4hdre")
+enemy_scene = ExtResource("2_xi03g")
+enemy_types = Array[PackedScene]([ExtResource("3_b7vav"), ExtResource("4_3tpdo")])
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 3.0
+autostart = true
+
+[node name="ZonaAparicion" type="ReferenceRect" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0

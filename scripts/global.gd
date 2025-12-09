@@ -13,12 +13,71 @@ var player_last_position: Vector2 = Vector2.ZERO
 var best_coins_record: int = 0
 var total_enemies_killed: int = 0
 
+# === GESTIÓN DE NIVELES ===
+var levels: Array = [
+	"res://scenes/levels/angel_level.tscn",
+	"res://scenes/levels/nicooo_level2.tscn",
+	"res://scenes/levels/nivelbosque.tscn",
+	"res://scenes/levels/test_level.tscn"
+]
+
+var boss_rooms: Array = [
+	# Agrega aquí tus escenas de jefes cuando las tengas
+	# "res://scenes/levels/boss_room_1.tscn"
+]
+
+var _recent_levels: Array = []
+var _recent_boss_rooms: Array = []
+const MAX_RECENT_HISTORY := 3
+
 const STATS_SAVE_PATH := "user://player_stats.cfg"
 var _config: ConfigFile = ConfigFile.new()
 
 
 func _ready() -> void:
 	load_stats()
+	randomize() # Asegurar aleatoriedad
+
+
+func get_random_level() -> String:
+	return _get_unique_random_scene(levels, _recent_levels)
+
+
+func get_random_boss_room() -> String:
+	if boss_rooms.is_empty():
+		push_warning("No hay salas de jefe definidas en Global.boss_rooms")
+		return ""
+	return _get_unique_random_scene(boss_rooms, _recent_boss_rooms)
+
+
+func _get_unique_random_scene(source_list: Array, history_list: Array) -> String:
+	if source_list.is_empty():
+		return ""
+	
+	# Si hay menos opciones que el historial + 1, no podemos evitar repeticiones estrictas
+	# así que simplemente limpiamos el historial para evitar bucles infinitos
+	if source_list.size() <= MAX_RECENT_HISTORY:
+		history_list.clear()
+	
+	var available_scenes = []
+	for scene in source_list:
+		if not scene in history_list:
+			available_scenes.append(scene)
+	
+	# Si por alguna razón nos quedamos sin opciones (caso borde), reseteamos historial
+	if available_scenes.is_empty():
+		history_list.clear()
+		available_scenes = source_list.duplicate()
+	
+	var selected = available_scenes.pick_random()
+	
+	# Actualizar historial
+	history_list.append(selected)
+	if history_list.size() > MAX_RECENT_HISTORY:
+		history_list.pop_front() # Eliminar el más antiguo
+		
+	return selected
+
 
 
 func save_player_data(health: int, coins: int, position: Vector2) -> void:

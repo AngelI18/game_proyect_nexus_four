@@ -87,8 +87,8 @@ func _handle_movement(_delta: float) -> void:
 func _handle_animation() -> void:
 	if not animated_sprite:
 		return
-	
 	if abs(velocity.x) > 0:
+		
 		animated_sprite.play("walk")
 	else:
 		animated_sprite.play("idle")

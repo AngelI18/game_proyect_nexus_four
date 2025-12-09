@@ -3,9 +3,12 @@
 [ext_resource type="Texture2D" uid="uid://dcit4ht8le4n7" path="res://assets/ui/Background/Image_fx (2).jpg" id="1_shw8h"]
 [ext_resource type="Script" uid="uid://0s78ywh5mxw2" path="res://scripts/ui/opciones.gd" id="2_inluw"]
 [ext_resource type="FontFile" uid="uid://bl4v5etmmwsm4" path="res://assets/ui/fonts/ka1.ttf" id="2_shw8h"]
+[ext_resource type="Script" path="res://scripts/ui/BlinkingButton.gd" id="3_blink"]
 
 [sub_resource type="Theme" id="Theme_yuibf"]
 default_font = ExtResource("2_shw8h")
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_blink"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_shw8h"]
 
@@ -68,16 +71,31 @@ theme_override_constants/separation = 12
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+theme_override_colors/font_hover_color = Color(0.647059, 0.647059, 0.647059, 1)
+theme_override_colors/font_pressed_color = Color(0.439216, 0.439216, 0.439216, 1)
+theme_override_colors/font_focus_color = Color(0.647059, 0.647059, 0.647059, 1)
 theme_override_font_sizes/font_size = 50
+theme_override_styles/focus = SubResource("StyleBoxEmpty_blink")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_blink")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_blink")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_blink")
 theme_override_styles/normal = SubResource("StyleBoxTexture_shw8h")
 text = "volumen
 "
+script = ExtResource("3_blink")
 
 [node name="Back" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+theme_override_colors/font_hover_color = Color(0.647059, 0.647059, 0.647059, 1)
+theme_override_colors/font_pressed_color = Color(0.439216, 0.439216, 0.439216, 1)
+theme_override_colors/font_focus_color = Color(0.647059, 0.647059, 0.647059, 1)
 theme_override_font_sizes/font_size = 50
+theme_override_styles/focus = SubResource("StyleBoxEmpty_blink")
+theme_override_styles/disabled = SubResource("StyleBoxEmpty_blink")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_blink")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_blink")
 theme_override_styles/normal = SubResource("StyleBoxTexture_yuibf")
 text = "atras"
 script = ExtResource("2_inluw")

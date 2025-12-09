@@ -1,4 +1,4 @@
-extends Button
+extends BlinkingButton
 
 
 func _on_pressed() -> void:

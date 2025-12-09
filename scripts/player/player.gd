@@ -1,5 +1,11 @@
 extends CharacterBody2D
 
+@onready var sfx_pasos = $AudioPasos
+@onready var sfx_ataque = $AudioAtaque
+@onready var sfx_dano = $AudioDano
+@onready var sfx_salto = $AudioSalto
+
+#Señales
 signal health_changed(current_health, max_health)
 signal coin_changed(new_coins)
 
@@ -68,9 +74,29 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	
 	_update_animation()
+	_handle_audio()
 	_check_enemy_damage()
 	_check_tile_damage()
 	_update_safe_position()
+	
+	
+	
+# Audio
+func _handle_audio() -> void:
+	# Si estamos atacando, heridos o en el aire, NO deben sonar pasos
+	if is_attacking or is_hurt or not is_on_floor():
+		sfx_pasos.stop()
+		return
+	
+	# Si nos estamos moviendo (velocidad X no es 0)
+	if velocity.x != 0:
+		if not sfx_pasos.playing:
+			# Opcional: Variación de tono pequeña para mas realismo
+			sfx_pasos.pitch_scale = randf_range(0.9, 1.1)
+			sfx_pasos.play()
+	else:
+		# Si estamos quietos
+		sfx_pasos.stop()
 	_auto_save_data()
 
 
@@ -93,6 +119,9 @@ func _handle_jump() -> void:
 func _jump() -> void:
 	velocity.y = JUMP_VELOCITY
 	jumps_remaining -= 1
+	# Reproducir sonido de salto con un poco de variación para que no canse
+	sfx_salto.pitch_scale = randf_range(0.9, 1.1)
+	sfx_salto.play()
 
 func _handle_movement() -> void:
 	var direction := Input.get_axis("ui_left", "ui_right")
@@ -153,6 +182,8 @@ func _handle_attack() -> void:
 func _perform_attack() -> void:
 	Global.player_current_attack = true
 	is_attacking = true
+	sfx_ataque.play()
+	
 	$AnimatedSprite2D.play("attack")
 	$deal_attack_timer.start()
 	_enable_attack_hitbox()
@@ -191,6 +222,8 @@ func take_damage(damage_amount: int, knockback_dir: Vector2 = Vector2.ZERO, invu
 	health -= damage_amount
 	health = max(0, health)
 	update_health()
+	
+	sfx_dano.play()
 	
 	if knockback_dir != Vector2.ZERO:
 		velocity.x = knockback_dir.x * KNOCKBACK_STRENGTH
@@ -365,6 +398,8 @@ func _on_invulnerability_timer_timeout() -> void:
 	is_taking_damage = false
 
 
+
+#Utilidades
 func player() -> void:
 	pass
 	

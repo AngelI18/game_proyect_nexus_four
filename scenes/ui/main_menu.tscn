@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://djb2h721lq31d"]
+[gd_scene load_steps=19 format=3 uid="uid://djb2h721lq31d"]
 
 [ext_resource type="Script" uid="uid://b4aqhwnq4b348" path="res://scripts/ui/main_menu.gd" id="1_fe2o3"]
 [ext_resource type="Texture2D" uid="uid://dcit4ht8le4n7" path="res://assets/ui/Background/Image_fx (2).jpg" id="2_1g8jr"]
@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://csrjjbgl0mxqr" path="res://assets/ui/icons/coin.png" id="4_m1kxf"]
 [ext_resource type="FontFile" uid="uid://dkl3bob77eb85" path="res://assets/ui/fonts/pixelpurl.medium.ttf" id="5_uhagc"]
 [ext_resource type="Texture2D" uid="uid://dynwjs175jmyq" path="res://assets/ui/icons/death.png" id="6_btxxm"]
+[ext_resource type="Script" uid="uid://dq5yo2bdn7m5y" path="res://scripts/ui/BlinkingButton.gd" id="7_blink"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_1g8jr"]
 
@@ -97,37 +98,61 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 theme = SubResource("Theme_x2yvf")
+theme_override_colors/font_hover_color = Color(0.646029, 0.646029, 0.646029, 1)
+theme_override_colors/font_focus_color = Color(0.647059, 0.647059, 0.647059, 1)
+theme_override_colors/font_pressed_color = Color(0.439049, 0.439049, 0.439049, 1)
 theme_override_font_sizes/font_size = 50
+theme_override_styles/focus = SubResource("StyleBoxEmpty_1g8jr")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_1g8jr")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_1g8jr")
 theme_override_styles/normal = SubResource("StyleBoxTexture_1g8jr")
 text = "Un jugador"
+script = ExtResource("7_blink")
 
 [node name="MultiPlayer" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+theme_override_colors/font_hover_color = Color(0.647059, 0.647059, 0.647059, 1)
+theme_override_colors/font_focus_color = Color(0.647059, 0.647059, 0.647059, 1)
+theme_override_colors/font_pressed_color = Color(0.439216, 0.439216, 0.439216, 1)
 theme_override_font_sizes/font_size = 50
+theme_override_styles/focus = SubResource("StyleBoxEmpty_m1kxf")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_m1kxf")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_m1kxf")
 theme_override_styles/normal = SubResource("StyleBoxTexture_m1kxf")
 text = "Multijugador"
+script = ExtResource("7_blink")
 
 [node name="Options" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+theme_override_colors/font_hover_color = Color(0.647059, 0.647059, 0.647059, 1)
+theme_override_colors/font_focus_color = Color(0.647059, 0.647059, 0.647059, 1)
+theme_override_colors/font_pressed_color = Color(0.439216, 0.439216, 0.439216, 1)
 theme_override_font_sizes/font_size = 50
+theme_override_styles/focus = SubResource("StyleBoxEmpty_x2yvf")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_x2yvf")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_x2yvf")
 theme_override_styles/normal = SubResource("StyleBoxTexture_x2yvf")
 text = "opciones"
+script = ExtResource("7_blink")
 
 [node name="Quit" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+theme_override_colors/font_hover_color = Color(0.647059, 0.647059, 0.647059, 1)
+theme_override_colors/font_focus_color = Color(0.647059, 0.647059, 0.647059, 1)
+theme_override_colors/font_pressed_color = Color(0.439216, 0.439216, 0.439216, 1)
 theme_override_font_sizes/font_size = 50
+theme_override_styles/focus = SubResource("StyleBoxEmpty_uhagc")
 theme_override_styles/hover = SubResource("StyleBoxEmpty_uhagc")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_uhagc")
 theme_override_styles/normal = SubResource("StyleBoxTexture_uhagc")
 text = "salir"
+script = ExtResource("7_blink")
 
 [node name="TextureButton" type="TextureButton" parent="."]
 layout_mode = 1
