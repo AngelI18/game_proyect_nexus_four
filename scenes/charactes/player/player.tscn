@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bvfhmbyfrdwry" path="res://scripts/player/player.gd" id="1_yj2nq"]
 [ext_resource type="Texture2D" uid="uid://dpws1jqb86o3k" path="res://assets/characters/player/sword attack.png" id="2_igqbg"]
-[ext_resource type="Texture2D" uid="uid://ukcnydiuw7bq" path="res://assets/characters/player/Player Hurt 48x48.png" id="3_3yyo8"]
+[ext_resource type="Texture2D" uid="uid://d22q88lm2gri4" path="res://assets/characters/player/Player Hurt 48x48.png" id="3_3yyo8"]
 [ext_resource type="Texture2D" uid="uid://n5kg423v8b7n" path="res://assets/characters/player/sword Idle.png" id="3_6igro"]
 [ext_resource type="Texture2D" uid="uid://gtd82smlqhp0" path="res://assets/characters/player/dash.png" id="3_dqix7"]
 [ext_resource type="Texture2D" uid="uid://c6iiu3u4iwm5c" path="res://assets/characters/player/player new jump 48x48.png" id="3_kai5h"]
@@ -375,7 +375,7 @@ script = ExtResource("1_yj2nq")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(2, -16)
 sprite_frames = SubResource("SpriteFrames_dqix7")
-animation = &"fall"
+animation = &"hurt"
 autoplay = "idle"
 
 [node name="idle" type="CollisionShape2D" parent="."]
