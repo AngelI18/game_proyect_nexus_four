@@ -218,22 +218,7 @@ func update_sprite_direction(direction: int) -> void:
 
 #Sistema de combate
 func _handle_combat() -> void:
-	if not player_in_attack_zone or not can_take_damage:
-		return
-	
-	if not Global.player_current_attack:
-		return
-	
-	# --- MODIFICACIÓN: OBTENER DAÑO DEL JUGADOR ---
-	var current_damage = damage_from_attack # Valor de respaldo por si falla
-	# Verificamos si tenemos una referencia al jugador
-	if player:
-		# Opción 1: Si tu variable en el player se llama "damage"
-		if "damage" in player:
-			current_damage = player.damage
-			
-	# Aplicamos el daño obtenido del jugador
-	take_damage(current_damage, true)
+	pass
 
 func _get_damage_reduction() -> float:
 	# Override en clases hijas para reducción de daño en estados especiales
@@ -333,12 +318,38 @@ func _on_player_detected(_body: Node2D) -> void:
 func _on_player_lost(_body: Node2D) -> void:
 	pass
 
-#Zona de ataque
 func _on_enemy_hitbox_area_entered(area: Area2D) -> void:
-	# Detectar el área de ataque del jugador (player_attack_hit_box)
-	if area.name == "player_attack_hit_box" and area.get_parent().has_method("player"):
-		player_in_attack_zone = true
-		_on_attack_zone_entered(area.get_parent())
+	# Detectar el área de ataque del jugador
+	if area.name == "player_attack_hit_box":
+		# Seguridad extra: Verificar si el jugador está atacando realmente
+		# (Aunque si la hitbox está desactivada no debería colisionar, esto blinda el código)
+		if Global.player_current_attack: 
+			var player_node = area.get_parent()
+			
+			# 1. Aplicamos el daño INSTANTÁNEAMENTE al entrar
+			_aplicar_daño_impacto(player_node)
+			
+			# 2. Mantenemos esto solo por si tu IA necesita saberlo para perseguir
+			player_in_attack_zone = true
+			if player_node.has_method("player"):
+				_on_attack_zone_entered(player_node)
+
+# --- Nueva función auxiliar para calcular el daño ---
+func _aplicar_daño_impacto(player_node: Node2D) -> void:
+	if not can_take_damage:
+		return
+
+	# Daño base por defecto del enemigo
+	var damage_to_take = damage_from_attack 
+	
+	# Intentar obtener el daño real del jugador (Tienda)
+	if player_node:
+		if "damage" in player_node:
+			damage_to_take = player_node.damage
+		elif "attack_damage" in player_node:
+			damage_to_take = player_node.attack_damage
+			
+	take_damage(damage_to_take, true)
 
 func _on_enemy_hitbox_area_exited(area: Area2D) -> void:
 	# El área de ataque del jugador salió
