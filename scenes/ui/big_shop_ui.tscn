@@ -1,0 +1,51 @@
+[gd_scene load_steps=2 format=3 uid="uid://d1vfbcqydcjff"]
+
+[ext_resource type="Script" uid="uid://c4l70desbqxkl" path="res://big_shop_ui.gd" id="1_a15gw"]
+
+[node name="BigShopUI" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_a15gw")
+
+[node name="Fondo" type="ColorRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.509286, 0.509286, 0.509286, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="Ventana" type="PanelContainer" parent="."]
+process_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -9.0
+offset_top = -15.5
+offset_right = 9.0
+offset_bottom = 15.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Ventana"]
+process_mode = 3
+layout_mode = 2
+
+[node name="BtnCerrar" type="Button" parent="Ventana/VBoxContainer"]
+process_mode = 3
+layout_mode = 2
+text = "X"
+alignment = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Ventana/VBoxContainer"]
+process_mode = 3
+custom_minimum_size = Vector2(410, 200)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ItemGrid" type="GridContainer" parent="Ventana/VBoxContainer/ScrollContainer"]
+process_mode = 3
+layout_mode = 2
+columns = 4

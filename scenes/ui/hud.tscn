@@ -34,6 +34,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 script = ExtResource("2_h022r")
 
 [node name="left" type="TouchScreenButton" parent="Control"]
@@ -61,6 +62,7 @@ offset_top = 432.0
 offset_right = 1376.0
 offset_bottom = 672.0
 size_flags_horizontal = 4
+mouse_filter = 2
 script = ExtResource("5_136eg")
 
 [node name="base" type="TextureRect" parent="Control/joystick_attack"]
@@ -99,11 +101,13 @@ stretch_mode = 3
 layout_mode = 0
 offset_right = 212.0
 offset_bottom = 57.0
+mouse_filter = 2
 theme_override_constants/margin_left = 40
 theme_override_constants/margin_top = 30
 
 [node name="GridContainer" type="GridContainer" parent="Control/Margin_stats"]
 layout_mode = 2
+mouse_filter = 2
 columns = 2
 
 [node name="life_icon" type="TextureRect" parent="Control/Margin_stats/GridContainer"]

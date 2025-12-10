@@ -165,20 +165,19 @@ func update_sprite_direction(direction: int) -> void:
 			animated_sprite.flip_h = direction < 0
 
 # --- SISTEMA DE DAÑO (Blindado) ---
+# --- SISTEMA DE DAÑO (CORREGIDO) ---
 func _on_enemy_hitbox_area_entered(area: Area2D) -> void:
-	# 1. Filtro de seguridad: Ignorar sensores
-	if "detection" in area.name or "coin" in area.name: return
-
-	# 2. Diagnóstico en consola (MIRA AQUÍ SI FALLA)
-	print("¡GOLPE! La Nutria fue tocada por: ", area.name)
+	# 1. Llamamos a la lógica base del padre (EnemyBase)
+	# Esto es VITAL: configura 'player_in_attack_zone = true' para que _handle_combat funcione
+	super._on_enemy_hitbox_area_entered(area)
 	
-	# 3. Aplicar Daño
-	# Llamamos a la función del padre. True = es un ataque.
-	take_damage(20, true)
-	
-	# 4. Si estaba durmiendo, despertar por el golpe
+	# 2. Lógica específica de la Nutria: Despertar si duerme
+	# Solo necesitamos esto, el daño ya lo calculará EnemyBase automáticamente
 	if current_state == State.SLEEP:
 		_wake_up()
+		
+	# NOTA: He borrado la línea "take_damage(20, true)".
+	# Ahora el daño se gestiona en _handle_combat usando las estadísticas reales de tu jugador.
 
 # Reducción de daño al girar
 func _get_damage_reduction() -> float:
