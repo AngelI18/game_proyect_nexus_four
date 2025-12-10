@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://dyh5kfftkhqjp"]
+[gd_scene load_steps=19 format=3 uid="uid://dyh5kfftkhqjp"]
 
 [ext_resource type="Texture2D" uid="uid://qlv74o4poatw" path="res://assets/ui/hud/left.png" id="2_8qguk"]
 [ext_resource type="Script" uid="uid://cwru7qcn20st1" path="res://scripts/ui/hud/hud.gd" id="2_h022r"]
@@ -12,6 +12,7 @@
 [ext_resource type="FontFile" uid="uid://dkl3bob77eb85" path="res://assets/ui/fonts/pixelpurl.medium.ttf" id="10_kicr4"]
 [ext_resource type="Texture2D" uid="uid://3lcaohaecxoc" path="res://assets/ui/hud/pause.png" id="11_0h1do"]
 [ext_resource type="Texture2D" uid="uid://cv7m1kl3fbo5g" path="res://assets/ui/hud/continue.png" id="12_4d46k"]
+[ext_resource type="Texture2D" uid="uid://dfstucqcmuhy5" path="res://assets/ui/hud/dash.png" id="13_4d46k"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_gss2c"]
 size = Vector2(124, 112)
@@ -24,6 +25,9 @@ size = Vector2(106, 112)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_0h1do"]
 size = Vector2(74, 74)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_erw67"]
+size = Vector2(118, 114)
 
 [node name="HUD" type="CanvasLayer"]
 
@@ -141,6 +145,12 @@ texture_pressed = ExtResource("12_4d46k")
 shape = SubResource("RectangleShape2D_0h1do")
 action = "ui_cancel"
 
+[node name="dash button" type="TouchScreenButton" parent="Control"]
+position = Vector2(966, 553)
+texture_normal = ExtResource("13_4d46k")
+shape = SubResource("RectangleShape2D_erw67")
+action = "dash"
+
 [connection signal="pressed" from="Control/left" to="Control" method="_on_left_pressed"]
 [connection signal="released" from="Control/left" to="Control" method="_on_left_released"]
 [connection signal="pressed" from="Control/right" to="Control" method="_on_right_pressed"]
@@ -149,3 +159,5 @@ action = "ui_cancel"
 [connection signal="released" from="Control/jump" to="Control" method="_on_jump_released"]
 [connection signal="pressed" from="Control/pause_menu" to="Control" method="_on_pause_menu_pressed"]
 [connection signal="released" from="Control/pause_menu" to="Control" method="_on_pause_menu_released"]
+[connection signal="pressed" from="Control/dash button" to="Control" method="_on_touch_screen_button_pressed"]
+[connection signal="released" from="Control/dash button" to="Control" method="_on_touch_screen_button_released"]

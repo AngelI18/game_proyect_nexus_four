@@ -4,6 +4,7 @@ extends Control
 @onready var right_button = $right
 @onready var jump_button = $jump
 @onready var menu_button = $pause_menu
+@onready var dash_button = $"dash button"
 @onready var joystick = $joystick_attack
 @onready var health_bar = $Margin_stats/GridContainer/ProgressBar
 @onready var coins = $Margin_stats/GridContainer/coins
@@ -16,6 +17,7 @@ func _ready():
 	right_button.modulate = Color(1,1,1,0.5)
 	jump_button.modulate = Color(1,1,1,0.5)
 	menu_button.modulate = Color(1,1,1,0.5)
+	dash_button.modulate = Color(1,1,1,0.5)
 	# Esperar un frame para que el jugador se agregue al grupo
 	call_deferred("connect_to_player")
 
@@ -60,3 +62,9 @@ func _on_pause_menu_pressed() -> void:
 	menu_button.modulate = Color(1,1,1,1)
 func _on_pause_menu_released() -> void:
 	menu_button.modulate = Color(1,1,1,0.5)
+
+func _on_touch_screen_button_pressed() -> void:
+	dash_button.modulate = Color(1,1,1,1)
+
+func _on_touch_screen_button_released() -> void:
+	dash_button.modulate = Color(1,1,1,0.5)

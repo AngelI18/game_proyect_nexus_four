@@ -43,6 +43,8 @@ var is_taking_damage = false
 var enemy_in_range: Node2D = null
 var enemy_in_attack_range: Node2D = null
 var can_take_damage = true
+var joystick_is_active = false
+var joystick_direction = Vector2.ZERO
 
 # Colecciones
 var coins = 0
@@ -62,6 +64,7 @@ func _connect_joystick():
 	var joystick = get_tree().get_first_node_in_group("attack_joystick")
 	if joystick:
 		joystick.attack_triggered.connect(_on_joystick_attack_triggered)
+		joystick.direction_changed.connect(_on_joystick_direction_changed)
 
 func _load_saved_data() -> void:
 	health = Global.player_health
@@ -190,13 +193,22 @@ func blink_sprite(duration: float) -> void:
 
 
 func _handle_attack() -> void:
+	# Ataque con teclado
 	if Input.is_action_just_pressed("attack") and not is_attacking:
 		_perform_attack()
+	
+	# Ataque continuo con joystick
+	if joystick_is_active and not is_attacking and is_on_floor() and not is_taking_damage:
+		_perform_attack(joystick_direction)
 
-func _perform_attack() -> void:
+func _perform_attack(attack_direction: Vector2 = Vector2.ZERO) -> void:
 	Global.player_current_attack = true
 	is_attacking = true
 	sfx_ataque.play()
+	
+	# Aplicar dirección del joystick si se proporciona
+	if attack_direction != Vector2.ZERO and abs(attack_direction.x) > 0.3:
+		$AnimatedSprite2D.flip_h = attack_direction.x < 0
 	
 	$AnimatedSprite2D.play("attack")
 	$deal_attack_timer.start()
@@ -214,14 +226,24 @@ func _disable_attack_hitbox() -> void:
 	if attack_hitbox:
 		attack_hitbox.disabled = true
 
-func _on_joystick_attack_triggered(direction_attack: Vector2) -> void:
-	if not is_on_floor() or is_attacking or is_taking_damage:
-		return
+func _on_joystick_attack_triggered(_direction_attack: Vector2) -> void:
+	# Esta señal se emite cuando se SUELTA el joystick
+	# Solo la usamos para marcar que el joystick ya no está activo
+	joystick_is_active = false
+	joystick_direction = Vector2.ZERO
+
+func _on_joystick_direction_changed(direction: Vector2) -> void:
+	# Esta señal se emite mientras se mueve el joystick
+	joystick_direction = direction
 	
-	if abs(direction_attack.x) > 0.3:
-		$AnimatedSprite2D.flip_h = direction_attack.x < 0
-	
-	_perform_attack()
+	# Solo activar si la dirección supera el área muerta (dead zone)
+	if direction.length() > 0.1:  # Respeta el dead_zone del joystick
+		joystick_is_active = true
+		# Primer ataque inmediato si no estamos atacando
+		if not is_attacking and is_on_floor() and not is_taking_damage:
+			_perform_attack(direction)
+	else:
+		joystick_is_active = false
 
 
 func take_damage(damage_amount: int, knockback_dir: Vector2 = Vector2.ZERO, invulnerability_time: float = 1.0) -> void:
@@ -265,7 +287,7 @@ func _check_enemy_damage() -> void:
 	if enemy_in_range == null:
 		return
 	
-	var damage = 0
+	var damage_amount = 0
 	var enemy_type = 1
 	
 	if enemy_in_range.has_method("get_enemy_type"):
@@ -273,16 +295,16 @@ func _check_enemy_damage() -> void:
 	
 	match enemy_type:
 		1:
-			damage = int(MAX_HEALTH * 0.08)
+			damage_amount = int(MAX_HEALTH * 0.08)
 		2:
-			damage = int(MAX_HEALTH * 0.12)
+			damage_amount = int(MAX_HEALTH * 0.12)
 		3:
-			damage = int(MAX_HEALTH * 0.16)
+			damage_amount = int(MAX_HEALTH * 0.16)
 		_:
-			damage = int(MAX_HEALTH * 0.08)
+			damage_amount = int(MAX_HEALTH * 0.08)
 	
 	var knockback_direction = (global_position - enemy_in_range.global_position).normalized()
-	take_damage(damage, knockback_direction, 2.0)
+	take_damage(damage_amount, knockback_direction, 2.0)
 
 func _check_tile_damage() -> void:
 	for i in range(get_slide_collision_count()):
