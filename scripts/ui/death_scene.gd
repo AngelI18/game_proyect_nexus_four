@@ -135,9 +135,12 @@ func _on_menu_principal_pressed() -> void:
 	# Reiniciar datos del jugador ANTES de cambiar escena
 	Global.reset_player_data()
 
-	# Si estamos en online, salir del match y volver al lobby
+	# Si estamos en online, salir del match y marcar disponible antes de volver al lobby
 	if Network.match_id != "":
 		Network.leave_match()
+		await get_tree().create_timer(0.3).timeout
+		Network.set_player_available()  # Marcar disponible al volver al lobby
+		print("✅ [DEATH] Jugador marcado como disponible")
 		await _hide_death_scene()
 		off_camera()
 		get_tree().change_scene_to_file("res://scenes/ui/Multijugador.tscn")

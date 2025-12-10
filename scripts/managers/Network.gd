@@ -135,12 +135,11 @@ func send_game_data(data: Dictionary):
 	if match_manager: match_manager.send_game_data(data)
 
 func notify_player_died():
+	"""Envía señal de derrota al oponente (NO abandona la match ni desmarca disponibilidad)"""
 	if match_manager:
+		print("💀 [NETWORK] Enviando señal de derrota al oponente...")
 		match_manager.send_game_data({"type": "defeat"})
-		match_manager.forfeit_match()
-
-func notify_player_won():
-	if match_manager: match_manager.claim_victory()
+		print("✅ [NETWORK] Señal de derrota enviada")
 
 func leave_match():
 	if match_manager: match_manager.leave_match()
@@ -222,12 +221,12 @@ func _on_attack_received(attack_data: Dictionary):
 	ataque_recibido.emit(attack_data)
 
 func _on_match_ended(result: String, reason: String):
+	print("🏁 [NETWORK] Partida terminada: ", result, " - ", reason)
 	_show_match_result_popup(result)
 	game_over.emit(result, reason)
 	
-	# Liberar al jugador y marcarlo como disponible
+	# Solo salir de la match (NO marcar disponible automáticamente)
 	leave_match()
-	set_player_available()
 
 func _show_match_result_popup(result: String):
 	if not MatchResultScene:
