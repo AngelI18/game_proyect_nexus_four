@@ -9,6 +9,13 @@ extends CharacterBody2D
 signal health_changed(health, max_health)
 signal coin_changed(new_coins)
 
+# --- DASH CONFIG ---
+var DASH_SPEED = 450.0    # Velocidad del impulso (más rápido que SPEED normal)
+var DASH_DURATION = 0.2   # Cuánto dura el impulso (en segundos)
+var DASH_COOLDOWN = 1.0   # Tiempo de espera para volver a usarlo
+var is_dashing = false    # Estado actual
+var can_dash = true       # Control del cooldown
+
 # Movimiento
 var SPEED = 170.0
 const JUMP_VELOCITY = -350.0
@@ -66,6 +73,7 @@ func _emit_initial_signals():
 
 
 func _physics_process(delta: float) -> void:
+	_handle_dash_input()
 	_apply_gravity(delta)
 	_handle_jump()
 	_handle_movement()
@@ -79,7 +87,6 @@ func _physics_process(delta: float) -> void:
 	_check_enemy_damage()
 	_check_tile_damage()
 	_update_safe_position()
-	
 	
 	
 # Audio
@@ -102,6 +109,8 @@ func _handle_audio() -> void:
 
 
 func _apply_gravity(delta: float) -> void:
+	if is_dashing: return
+	
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	else:
@@ -125,6 +134,8 @@ func _jump() -> void:
 	sfx_salto.play()
 
 func _handle_movement() -> void:
+	if is_dashing: return
+	
 	var direction := Input.get_axis("ui_left", "ui_right")
 	
 	if is_attacking and is_on_floor():
@@ -152,6 +163,8 @@ func _auto_save_data() -> void:
 
 #Animaciones
 func _update_animation() -> void:
+	if is_dashing: return
+	
 	if is_attacking or is_hurt:
 		return
 	
@@ -416,4 +429,55 @@ func _on_invulnerability_timer_timeout() -> void:
 #Utilidades
 func player() -> void:
 	pass
+
+
+func _handle_dash_input() -> void:
+	# Verificamos tecla, cooldown, y que no estemos heridos
+	if Input.is_action_just_pressed("dash") and can_dash and not is_hurt and not is_dashing:
+		start_dash()
+
+func start_dash() -> void:
+	is_dashing = true
+	can_dash = false
 	
+	# Cancelar ataque si estabas atacando
+	if is_attacking:
+		is_attacking = false
+		Global.player_current_attack = false
+		$deal_attack_timer.stop()
+		_disable_attack_hitbox()
+	
+	# Determinar dirección:
+	# 1. Si el jugador presiona una flecha, dash hacia allá.
+	# 2. Si no presiona nada, dash hacia donde mira el sprite.
+	var input_dir = Input.get_axis("ui_left", "ui_right")
+	var dash_dir = 0
+	
+	if input_dir != 0:
+		dash_dir = input_dir
+	else:
+		dash_dir = -1 if $AnimatedSprite2D.flip_h else 1
+		
+	# Actualizar hacia donde mira el sprite
+	$AnimatedSprite2D.flip_h = dash_dir < 0
+	
+	# Aplicar velocidad y quitar verticalidad
+	velocity.x = dash_dir * DASH_SPEED
+	velocity.y = 0 
+	
+	# Animación y Sonido
+	$AnimatedSprite2D.play("dash")
+	# sfx_pasos.play() # Opcional: Un sonido de viento o dash quedaría bien aquí
+	
+	# --- TEMPORIZADOR DE DURACIÓN ---
+	# Usamos un timer temporal del árbol para no llenar la escena de nodos
+	await get_tree().create_timer(DASH_DURATION).timeout
+	end_dash()
+
+func end_dash() -> void:
+	is_dashing = false
+	velocity.x = 0 # Frenar al terminar (opcional, quítalo si quieres conservar inercia)
+	
+	# --- TEMPORIZADOR DE COOLDOWN ---
+	await get_tree().create_timer(DASH_COOLDOWN).timeout
+	can_dash = true
