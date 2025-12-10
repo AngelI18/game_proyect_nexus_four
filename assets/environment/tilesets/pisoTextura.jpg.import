@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dti40rqrq2kja"
-path="res://.godot/imported/pisoTextura.jpg-2c66286c8e8a6c8e8cafaacecc34d4a3.ctex"
+uid="uid://dlapo7vn5q4y2"
+path="res://.godot/imported/pisoTextura.jpg-79bbe4a6e486c28bbfe2d0fc02f1c01a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://scenes/levels/pisoTextura.jpg"
-dest_files=["res://.godot/imported/pisoTextura.jpg-2c66286c8e8a6c8e8cafaacecc34d4a3.ctex"]
+source_file="res://assets/environment/tilesets/pisoTextura.jpg"
+dest_files=["res://.godot/imported/pisoTextura.jpg-79bbe4a6e486c28bbfe2d0fc02f1c01a.ctex"]
 
 [params]
 

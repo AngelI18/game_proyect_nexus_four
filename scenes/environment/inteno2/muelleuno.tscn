@@ -7,6 +7,6 @@
 [node name="Parallax2D" type="Parallax2D" parent="."]
 
 [node name="18157076" type="Sprite2D" parent="Parallax2D"]
-position = Vector2(727.5, 355)
-scale = Vector2(0.269159, 0.144654)
+position = Vector2(693, 128)
+scale = Vector2(0.281994, 0.197146)
 texture = ExtResource("1_wdj8i")

@@ -1,4 +1,4 @@
-[gd_scene load_steps=46 format=3 uid="uid://ccg021l8va1nb"]
+[gd_scene load_steps=45 format=3 uid="uid://ccg021l8va1nb"]
 
 [ext_resource type="Script" uid="uid://bvfhmbyfrdwry" path="res://scripts/player/player.gd" id="1_yj2nq"]
 [ext_resource type="Texture2D" uid="uid://dpws1jqb86o3k" path="res://assets/characters/enemies/sword attack.png" id="2_igqbg"]
@@ -281,10 +281,7 @@ animations = [{
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_6igro"]
 radius = 7.375
-height = 24.0
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_so2s4"]
-radius = 3.16228
+height = 54.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_dolh7"]
 radius = 23.0
@@ -301,12 +298,8 @@ animation = &"jump"
 autoplay = "idle"
 
 [node name="idle" type="CollisionShape2D" parent="."]
-position = Vector2(0.625, -10)
+position = Vector2(-3, -9)
 shape = SubResource("CapsuleShape2D_6igro")
-
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="idle"]
-position = Vector2(2, -15)
-shape = SubResource("CircleShape2D_so2s4")
 
 [node name="player_hit_box" type="Area2D" parent="."]
 visible = false

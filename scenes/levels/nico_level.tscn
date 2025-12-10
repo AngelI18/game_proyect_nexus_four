@@ -1,10 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://wr042bo5fx6f"]
+[gd_scene load_steps=5 format=3 uid="uid://wr042bo5fx6f"]
 
-[ext_resource type="Texture2D" uid="uid://bovpvkaxv4apr" path="res://assets/environment/tilesets/terreno-tierra-pasto.png" id="1_drsdr"]
 [ext_resource type="Texture2D" uid="uid://dqkm0o7optegk" path="res://assets/environment/tilesets/tilesWood.jpg" id="2_tfacy"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tfacy"]
-texture = ExtResource("1_drsdr")
 texture_region_size = Vector2i(24, 24)
 0:0/0 = 0
 1:0/0 = 0
