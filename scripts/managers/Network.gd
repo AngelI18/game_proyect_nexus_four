@@ -43,8 +43,8 @@ var _player_name: String = "Player"
 var _is_initialized: bool = false
 
 # Sistema de ataques
-var enemies_killed_count: int = 0
-const ENEMIES_FOR_ATTACK: int = 5
+var enemy_points: float = 0.0  # Puntos acumulados (pueden ser decimales)
+const POINTS_FOR_ATTACK: int = 5  # Puntos necesarios para enviar ataque
 
 func _ready():
 	client = NetworkClientScript.new()
@@ -94,8 +94,8 @@ func _conectar():
 func apagar():
 	print("🔌 [Network] Apagando conexión...")
 	
-	# Resetear contador de enemigos
-	enemies_killed_count = 0
+	# Resetear puntos de enemigos
+	enemy_points = 0.0
 	
 	# Desconectar del servidor
 	if client:
@@ -160,15 +160,19 @@ func send_attack(damage: int = 10):
 	print("⚔️ [ATTACK] Enviando ataque:", payload)
 	send_game_data(payload)
 
-func enemy_killed():
-	"""Incrementa el contador de enemigos muertos y envía ataque si llega a 5"""
-	enemies_killed_count += 1
-	print("💀 [NETWORK] Enemigos muertos: ", enemies_killed_count, "/", ENEMIES_FOR_ATTACK)
+func add_enemy_points(points: int):
+	"""Agrega puntos por enemigo muerto y envía ataque si llega al límite"""
+	enemy_points += points
+	print("💠 [NETWORK] Puntos de enemigos: ", enemy_points, "/", POINTS_FOR_ATTACK)
 	
-	if enemies_killed_count >= ENEMIES_FOR_ATTACK:
-		print("⚔️ [NETWORK] ¡5 ENEMIGOS MUERTOS! Enviando ataque...")
+	if enemy_points >= POINTS_FOR_ATTACK:
+		print("⚔️ [NETWORK] ¡5 PUNTOS ALCANZADOS! Enviando ataque...")
 		send_attack()
-		enemies_killed_count = 0  # Resetear contador
+		enemy_points = 0.0  # Resetear puntos
+
+func enemy_killed():
+	"""Método legacy - usar add_enemy_points() en su lugar"""
+	add_enemy_points(1)
 
 # === Internal Handlers ===
 func _on_connected():

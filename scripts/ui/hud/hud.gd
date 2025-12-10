@@ -60,16 +60,3 @@ func _on_pause_menu_pressed() -> void:
 	menu_button.modulate = Color(1,1,1,1)
 func _on_pause_menu_released() -> void:
 	menu_button.modulate = Color(1,1,1,0.5)
-
-
-func _on_fuck_you_pressed() -> void:
-	# Enviar ataque cuando se presiona el botón
-	if has_node("/root/Network"):
-		var network = get_node("/root/Network")
-		if network.match_id != "":
-			network.send_attack(10)
-			print("⚔️ [HUD] Ataque enviado manualmente")
-		else:
-			print("⚠️ [HUD] No estás en una partida multijugador")
-	else:
-		print("⚠️ [HUD] Network no encontrado")

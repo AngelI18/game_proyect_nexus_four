@@ -3,7 +3,7 @@ extends CharacterBody2D
 class_name EnemyBase
 
 #Señales
-signal enemy_died(coin_reward: int)
+signal enemy_died(coin_reward: int, hits_received: int)
 signal enemy_damaged(damage_amount: int, remaining_health: int)
 
 #Estadísticas configurables
@@ -34,6 +34,7 @@ var player_chase = false
 var player_in_attack_zone = false
 var can_take_damage = true
 var is_taking_knockback = false
+var hits_received = 0  # Contador de golpes recibidos
 
 #Variables de combate y dirección
 var attack_direction = 0  # Dirección guardada para ataques
@@ -233,6 +234,10 @@ func take_damage(damage_amount: int, is_attack: bool = false) -> void:
 	# Llamar primero a _get_damage_reduction para permitir estados especiales
 	var damage_reduction = _get_damage_reduction()
 	var final_damage = max(1, int(damage_amount * (1.0 - damage_reduction)))
+	
+	# Incrementar contador de golpes si es un ataque del jugador
+	if is_attack:
+		hits_received += 1
 	
 	health -= final_damage
 	can_take_damage = false

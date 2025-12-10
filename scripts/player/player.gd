@@ -357,7 +357,11 @@ func emit_coin_signal() -> void:
 func _on_player_hit_box_area_entered(area: Area2D) -> void:
 	# Detectar si el área pertenece a un enemigo (para RECIBIR daño)
 	if area.name == "enemy_hitbox" and area.get_parent().has_method("enemy"):
-		enemy_in_range = area.get_parent()
+		var enemy = area.get_parent()
+		enemy_in_range = enemy
+		# Conectar señal de muerte para contar enemigos
+		if enemy.has_signal("enemy_died") and not enemy.is_connected("enemy_died", _on_enemy_killed):
+			enemy.enemy_died.connect(_on_enemy_killed)
 
 func _on_player_hit_box_area_exited(area: Area2D) -> void:
 	# Verificar si el área que salió es del enemigo actual en rango
@@ -377,9 +381,22 @@ func _on_player_attack_hit_box_body_exited(body: Node2D) -> void:
 	if body.has_method("enemy") and body == enemy_in_attack_range:
 		enemy_in_attack_range = null
 
-func _on_enemy_killed(_coin_reward: int) -> void:
+func _on_enemy_killed(_coin_reward: int, hits_received: int = 1) -> void:
 	"""Incrementa el contador cuando el jugador mata un enemigo"""
 	enemies_killed_this_run += 1
+	
+	# Calcular puntos según la dificultad (golpes necesarios)
+	var points = 1  # Por defecto 1 punto
+	if hits_received >= 4:
+		points = 2  # Si necesitó 4 o más golpes, cuenta como 2
+	
+	print("💥 Enemigo eliminado con ", hits_received, " golpes = ", points, " punto(s)")
+	
+	# Notificar al Network para el sistema de ataques
+	if has_node("/root/Network"):
+		var network = get_node("/root/Network")
+		if network.has_method("add_enemy_points"):
+			network.add_enemy_points(points)
 
 
 func _on_attack_cooldown_timeout() -> void:
