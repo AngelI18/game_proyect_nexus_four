@@ -11,7 +11,7 @@ signal enemy_damaged(damage_amount: int, remaining_health: int)
 @export var speed = 100
 @export var max_health = 100
 @export_enum("Básico:1", "Medio:2", "Fuerte:3") var enemy_type = 1  # Tipo de enemigo para cálculo de daño
-@export var damage_from_attack = 25  # Daño que recibe del ataque del jugador
+@export var damage_from_attack = 20  # Daño que recibe del ataque del jugador
 @export var coin_reward = 20
 
 @export_category("Sistema de Combate")
@@ -223,7 +223,16 @@ func _handle_combat() -> void:
 	if not Global.player_current_attack:
 		return
 	
-	take_damage(damage_from_attack, true)
+	# --- MODIFICACIÓN: OBTENER DAÑO DEL JUGADOR ---
+	var current_damage = damage_from_attack # Valor de respaldo por si falla
+	# Verificamos si tenemos una referencia al jugador
+	if player:
+		# Opción 1: Si tu variable en el player se llama "damage"
+		if "damage" in player:
+			current_damage = player.damage
+			
+	# Aplicamos el daño obtenido del jugador
+	take_damage(current_damage, true)
 
 func _get_damage_reduction() -> float:
 	# Override en clases hijas para reducción de daño en estados especiales

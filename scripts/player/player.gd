@@ -6,26 +6,27 @@ extends CharacterBody2D
 @onready var sfx_salto = $AudioSalto
 
 #Señales
-signal health_changed(current_health, max_health)
+signal health_changed(health, max_health)
 signal coin_changed(new_coins)
 
 # Movimiento
-const SPEED = 170.0
+var SPEED = 170.0
 const JUMP_VELOCITY = -350.0
 const KNOCKBACK_STRENGTH = 150.0
 const KNOCKBACK_JUMP = -150.0
 
 var can_double_jump = true
-const MAX_JUMPS = 2
+var MAX_JUMPS = 2
 var jumps_remaining = MAX_JUMPS
 
 # Salud
-const MAX_HEALTH = 200
+var MAX_HEALTH = 200
 var health = MAX_HEALTH
 var max_regeneration = MAX_HEALTH * 0.7
 var player_alive = true
 
 # Estado
+var damage = 20
 var is_attacking = false
 var is_hurt = false
 var is_invulnerable = false
@@ -358,7 +359,7 @@ func _on_player_hit_box_area_entered(area: Area2D) -> void:
 	# Detectar si el área pertenece a un enemigo (para RECIBIR daño)
 	if area.name == "enemy_hitbox" and area.get_parent().has_method("enemy"):
 		enemy_in_range = area.get_parent()
-
+		
 func _on_player_hit_box_area_exited(area: Area2D) -> void:
 	# Verificar si el área que salió es del enemigo actual en rango
 	if area.name == "enemy_hitbox" and area.get_parent() == enemy_in_range:
