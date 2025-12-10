@@ -1,0 +1,55 @@
+[gd_scene load_steps=5 format=3 uid="uid://2li6pvr0ea4s"]
+
+[ext_resource type="Texture2D" uid="uid://bqxqvwtxsewyf" path="res://assets/environment/parallax/parallaxDarkBosque/parallax-demon-woods-bg.png" id="1_t2nbi"]
+[ext_resource type="Texture2D" uid="uid://055w5hyxm0ej" path="res://assets/environment/parallax/parallaxDarkBosque/parallax-demon-woods-close-trees.png" id="2_kb203"]
+[ext_resource type="Texture2D" uid="uid://b716iolebjf04" path="res://assets/environment/parallax/parallaxDarkBosque/parallax-demon-woods-far-trees.png" id="3_st8xx"]
+[ext_resource type="Texture2D" uid="uid://dqotemccvsva5" path="res://assets/environment/parallax/parallaxDarkBosque/parallax-demon-woods-mid-trees.png" id="4_so164"]
+
+[node name="nivelBosque" type="ParallaxBackground"]
+scale = Vector2(1.4, 1.4)
+transform = Transform2D(1.4, 0, 0, 1.4, 0, 0)
+
+[node name="parte 3" type="ParallaxLayer" parent="."]
+position = Vector2(-422.857, -294.286)
+scale = Vector2(1.4, 1.4)
+motion_scale = Vector2(0.05, 1)
+motion_mirroring = Vector2(480, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="parte 3"]
+scale = Vector2(1.4, 1.4)
+texture = ExtResource("1_t2nbi")
+centered = false
+
+[node name="parte 1" type="ParallaxLayer" parent="."]
+position = Vector2(-422.857, -294.286)
+scale = Vector2(1.4, 1.4)
+motion_scale = Vector2(0.1, 1)
+motion_mirroring = Vector2(592, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="parte 1"]
+scale = Vector2(1.4, 1.4)
+texture = ExtResource("3_st8xx")
+centered = false
+
+[node name="parte 0" type="ParallaxLayer" parent="."]
+position = Vector2(-422.857, -294.286)
+scale = Vector2(1.4, 1.4)
+motion_scale = Vector2(0.3, 1)
+motion_mirroring = Vector2(592, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="parte 0"]
+scale = Vector2(1.4, 1.4)
+texture = ExtResource("4_so164")
+centered = false
+
+[node name="parte 2" type="ParallaxLayer" parent="."]
+position = Vector2(-422.857, -294.286)
+scale = Vector2(1.4, 1.4)
+motion_scale = Vector2(0.5, 1)
+motion_mirroring = Vector2(592, 0)
+
+[node name="Sprite2D" type="Sprite2D" parent="parte 2"]
+position = Vector2(0, 16)
+scale = Vector2(1.4, 1.4)
+texture = ExtResource("2_kb203")
+centered = false
