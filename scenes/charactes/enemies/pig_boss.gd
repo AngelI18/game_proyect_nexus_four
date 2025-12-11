@@ -7,20 +7,20 @@ class_name pig_boss
 
 # --- CONFIGURACIÓN DE ESTADÍSTICAS ---
 @export_category("Estadísticas de Jefe")
-@export var boss_max_health = 5000
+@export var boss_max_health = 10000
 @export var walk_speed = 50.0
 @export var charge_speed = 250.0 # Velocidad de la embestida
 @export var charge_prep_time = 1.0 # Tiempo que avisa antes de cargar
 
 # --- DAÑO DE ATAQUES ---
 # Define cuánto duele cada golpe
-var dmg_contact = 20    # Solo por tocarlo
-var dmg_gore = 40       # Cornada (ataque fuerte)
-var dmg_charge = 30     # Embestida
+var dmg_contact = 40    # Solo por tocarlo
+var dmg_gore = 60       # Cornada (ataque fuerte)
+var dmg_charge = 80     # Embestida
 
 # --- DISTANCIAS DE IA ---
 var dist_gore = 70.0    # Distancia para usar Cornada (Cerca)
-var dist_charge = 250.0 # Distancia mínima para Cargar (Lejos)
+var dist_charge = 120.0 # Distancia mínima para Cargar (Lejos)
 
 # --- MÁQUINA DE ESTADOS ---
 enum State { IDLE, CHASE, PREPARE_CHARGE, CHARGING, GORE_ATTACK, COOLDOWN, DEATH }
