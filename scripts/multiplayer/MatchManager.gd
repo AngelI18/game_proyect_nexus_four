@@ -63,8 +63,6 @@ func _on_message_received(event: String, payload: Dictionary):
 				match_ended.emit("VICTORY", "opponent_surrendered")
 			
 		"game-ended":
-			# El servidor envía esto cuando el OPONENTE ganó (envió finish-game)
-			# Significa que nosotros perdimos
 			print("[MATCH] El oponente completó su juego primero - Derrota")
 			match_ended.emit("DEFEAT", "opponent_won")
 			
