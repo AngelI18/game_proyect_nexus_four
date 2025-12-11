@@ -21,7 +21,6 @@ func _ready():
 func open(player):
 	player_ref = player
 	visible = true
-	get_tree().paused = true # Pausar el juego
 	# NO pausar el juego en la tienda
 	# get_tree().paused = true
 	
@@ -76,7 +75,6 @@ func _on_item_clicked(slot_ref, item_data):
 
 func close_shop():
 	visible = false
-	get_tree().paused = false
 	# NO despausar porque nunca pausamos
 	# get_tree().paused = false
 
