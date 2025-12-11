@@ -1,0 +1,38 @@
+[gd_scene load_steps=9 format=3 uid="uid://bqbf4w2pl5mg"]
+
+[ext_resource type="PackedScene" uid="uid://cxau7qmm7g6tk" path="res://scenes/environment/parallax_muelle/muelle.tscn" id="1_bbchc"]
+[ext_resource type="Script" uid="uid://0es8mkqawesu" path="res://nivel_vale.gd" id="1_mysm4"]
+[ext_resource type="PackedScene" uid="uid://do6i7mtwk50p1" path="res://scenes/charactes/enemies/enemy.tscn" id="2_1q6ng"]
+[ext_resource type="PackedScene" uid="uid://beciacngul30n" path="res://scenes/charactes/enemies/buoh.tscn" id="3_15lqb"]
+[ext_resource type="PackedScene" uid="uid://bdx2knyy6lhm4" path="res://scenes/charactes/enemies/buitre.tscn" id="4_nqquh"]
+[ext_resource type="PackedScene" uid="uid://bikv58734gngk" path="res://scenes/charactes/enemies/nutria.tscn" id="5_mysm4"]
+[ext_resource type="PackedScene" uid="uid://r8q27fq3slfd" path="res://scenes/charactes/enemies/jabali_carga.tscn" id="6_sihct"]
+[ext_resource type="TileSet" uid="uid://bwjtj27yicfyi" path="res://assets/environment/tilesets/terreno.tres" id="9_mysm4"]
+
+[node name="NivelVale" type="Node2D"]
+script = ExtResource("1_mysm4")
+
+[node name="Muelle" parent="." instance=ExtResource("1_bbchc")]
+
+[node name="Enemy" parent="." instance=ExtResource("2_1q6ng")]
+position = Vector2(613, 250)
+
+[node name="Buoh" parent="." instance=ExtResource("3_15lqb")]
+position = Vector2(797, 120)
+
+[node name="Buitre" parent="." instance=ExtResource("4_nqquh")]
+position = Vector2(871, 134)
+scale = Vector2(-0.553741, -0.617217)
+
+[node name="Nutria" parent="." instance=ExtResource("5_mysm4")]
+position = Vector2(327, 292)
+scale = Vector2(1, 0.919999)
+
+[node name="jabali_carga" parent="." instance=ExtResource("6_sihct")]
+position = Vector2(194, 269)
+scale = Vector2(0.56, 0.24)
+
+[node name="TileMapLayer" type="TileMapLayer" parent="."]
+rotation = 0.100989
+tile_map_data = PackedByteArray(0, 0, 3, 0, 29, 0, 0, 0, 0, 0, 3, 0, 0, 0, 4, 0, 29, 0, 0, 0, 0, 0, 3, 0, 0, 0, 5, 0, 29, 0, 0, 0, 0, 0, 3, 0, 0, 0, 6, 0, 29, 0, 0, 0, 0, 0, 3, 0, 0, 0, 7, 0, 29, 0, 0, 0, 0, 0, 3, 0, 0, 0)
+tile_set = ExtResource("9_mysm4")

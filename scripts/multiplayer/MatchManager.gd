@@ -59,21 +59,20 @@ func _on_message_received(event: String, payload: Dictionary):
 			
 			# Check for custom defeat signal from opponent
 			if content.get("type") == "defeat":
-				print("🏆 [MATCH] ¡Oponente se rindió! Victoria")
+				print("[MATCH] Oponente se rindió - Victoria")
 				match_ended.emit("VICTORY", "opponent_surrendered")
 			
 		"game-ended":
-			# Server dice que el juego terminó (el oponente ganó)
-			print("💀 [MATCH] El oponente ganó la partida")
+			# El servidor envía esto cuando el OPONENTE ganó (envió finish-game)
+			# Significa que nosotros perdimos
+			print("[MATCH] El oponente completó su juego primero - Derrota")
 			match_ended.emit("DEFEAT", "opponent_won")
 			
 		"close-match":
-			# Oponente se desconectó o abandonó
-			print("🏆 [MATCH] ¡Oponente se desconectó! Victoria")
+			# El oponente abandonó la sala después del juego
+			print("[MATCH] Oponente abandonó la sala - Victoria")
 			opponent_left.emit()
 			match_ended.emit("VICTORY", "opponent_disconnected")
 			
 		"match-accepted":
-			# This might be handled in Lobby, but sometimes it flows here?
-			# In original script, match-accepted sets match_id and connects.
 			pass

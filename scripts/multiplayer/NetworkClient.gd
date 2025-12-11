@@ -18,7 +18,7 @@ func connect_to_url(url: String) -> void:
 	# Cerrar conexión anterior si existe
 	var current_state = _ws.get_ready_state()
 	if current_state == WebSocketPeer.STATE_OPEN or current_state == WebSocketPeer.STATE_CONNECTING:
-		print("⚠️ [NetworkClient] Cerrando conexión anterior antes de reconectar")
+		print("[NetworkClient] Cerrando conexión anterior antes de reconectar")
 		_ws.close()
 		await get_tree().create_timer(0.5).timeout
 	

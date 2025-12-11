@@ -51,13 +51,13 @@ func _ready():
 
 # === NETWORK HANDLERS ===
 func _on_connected():
-	print("✅ Conectado al servidor.")
+	print("Conectado al servidor.")
 	# Auto-refresh players if in that menu
 	if posicion_menu == 1 and modo == 0:
 		Network.refresh_players()
 
 func _on_disconnected():
-	print("⚠️ Desconectado.")
+	print("Desconectado.")
 	_limpiar_ui()
 	label.text = "Desconectado"
 
@@ -71,15 +71,15 @@ func _on_invitation_received(invitation: Dictionary):
 		_render_invitations()
 	else:
 		# Maybe show a notification?
-		print("📩 Invitación recibida de " + invitation.get("name", ""))
+		print("Invitación recibida de " + invitation.get("name", ""))
 
 func _on_match_connected(match_id: String, rival_name: String):
-	print("🔗 Conectado al match: ", match_id)
+	print("Conectado al match: ", match_id)
 	jugadores_del_match = [MY_PLAYER_NAME, rival_name]
 	_abrir_lobby()
 
 func _on_match_ready():
-	print("🟢 Match listo. Esperando inicio...")
+	print("Match listo. Esperando inicio...")
 	# Update UI to show ready status
 	_actualizar_ready_ui(true) # Assume both ready? Or wait for individual pings?
 	# The server sends players-ready when both are connected.
@@ -87,20 +87,20 @@ func _on_match_ready():
 	# Network.gd handles sending ping if we click "Ready".
 
 func _on_match_started(rival_name: String):
-	print("🚀 Partida iniciada contra: ", rival_name)
+	print("Partida iniciada contra: ", rival_name)
 	await get_tree().process_frame
 	var random_level = Global.get_random_level()
 	if random_level != "":
 		get_tree().change_scene_to_file(random_level)
 	else:
-		print("❌ Error: No level found")
+		print("Error: No level found")
 
 func _on_game_over(result: String, reason: String):
-	print("🏁 Game Over: ", result, " Reason: ", reason)
+	print("Game Over: ", result, " Reason: ", reason)
 	_finalizar_partida_ui()
 
 func _on_opponent_left():
-	print("🚪 Oponente salió.")
+	print("Oponente salió.")
 	_finalizar_partida_ui()
 	label.text = "El rival abandonó la sala"
 

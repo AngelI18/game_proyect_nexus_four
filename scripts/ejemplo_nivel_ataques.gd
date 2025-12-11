@@ -18,14 +18,14 @@ func _connect_to_network():
 		# Señal cuando recibes un ataque
 		if network.has_signal("ataque_recibido"):
 			network.ataque_recibido.connect(_on_ataque_recibido)
-			print("✅ [NIVEL] Conectado a señal ataque_recibido")
+			print("[NIVEL] Conectado a señal ataque_recibido")
 		
 		# Opcional: escuchar todos los mensajes de juego
 		if network.has_signal("game_message_received"):
 			network.game_message_received.connect(_on_game_message_received)
-			print("✅ [NIVEL] Conectado a señal game_message_received")
+			print("[NIVEL] Conectado a señal game_message_received")
 	else:
-		print("⚠️ [NIVEL] Network no encontrado")
+		print("[NIVEL] Network no encontrado")
 
 
 func _connect_to_player():
@@ -33,9 +33,9 @@ func _connect_to_player():
 	if player:
 		# Si tu jugador tiene una señal de enemy_killed, conéctala
 		# Ejemplo: player.enemy_killed.connect(_on_player_killed_enemy)
-		print("✅ [NIVEL] Jugador encontrado")
+		print("[NIVEL] Jugador encontrado")
 	else:
-		print("⚠️ [NIVEL] Jugador no encontrado")
+		print("[NIVEL] Jugador no encontrado")
 
 
 # =========================================
@@ -48,9 +48,9 @@ func _on_ataque_recibido(attack_data: Dictionary):
 	var damage = attack_data.get("damage", 10)
 	
 	print("==================================================")
-	print("💥 [NIVEL] ¡ATAQUE RECIBIDO!")
-	print("💥 [NIVEL] Atacante: ", attacker)
-	print("💥 [NIVEL] Daño: ", damage)
+	print("[NIVEL] ATAQUE RECIBIDO")
+	print("[NIVEL] Atacante: ", attacker)
+	print("[NIVEL] Daño: ", damage)
 	print("==================================================")
 	
 	# Aplicar daño al jugador
@@ -66,7 +66,7 @@ func _on_ataque_recibido(attack_data: Dictionary):
 func _on_game_message_received(data: Dictionary):
 	"""Se llama para TODOS los mensajes de juego (debug)"""
 	var msg_type = data.get("type", "unknown")
-	print("📨 [NIVEL] Mensaje recibido - Tipo: ", msg_type)
+	print("[NIVEL] Mensaje recibido - Tipo: ", msg_type)
 
 
 # =========================================
@@ -77,9 +77,9 @@ func _apply_damage_to_player(damage: int):
 	"""Aplica daño al jugador"""
 	if player and player.has_method("take_damage"):
 		player.take_damage(damage)
-		print("💔 [NIVEL] Aplicando ", damage, " de daño al jugador")
+		print("[NIVEL] Aplicando ", damage, " de daño al jugador")
 	else:
-		print("⚠️ [NIVEL] No se pudo aplicar daño (método no encontrado)")
+		print("[NIVEL] No se pudo aplicar daño (método no encontrado)")
 
 
 func _play_attack_effects():
@@ -116,7 +116,7 @@ func _shake_camera(camera: Camera2D, duration: float, intensity: float):
 
 func _spawn_extra_enemies(count: int):
 	"""Spawnea enemigos extra como castigo por recibir ataque"""
-	print("👾 [NIVEL] Spawneando ", count, " enemigos extra")
+	print("[NIVEL] Spawneando ", count, " enemigos extra")
 	
 	# Aquí va tu lógica de spawn
 	# Ejemplo:
@@ -153,7 +153,7 @@ func send_manual_attack(damage: int = 10):
 	"""Envía un ataque manual inmediatamente"""
 	if has_node("/root/Network"):
 		get_node("/root/Network").send_attack(damage)
-		print("⚔️ [NIVEL] Ataque manual enviado")
+		print("[NIVEL] Ataque manual enviado")
 
 
 # =========================================
@@ -167,7 +167,7 @@ func _input(event):
 			KEY_F1:
 				# Enviar ataque de prueba
 				send_manual_attack(15)
-				print("🧪 [TEST] F1: Ataque manual enviado")
+				print("[TEST] F1: Ataque manual enviado")
 			
 			KEY_F2:
 				# Simular recibir ataque
@@ -176,9 +176,9 @@ func _input(event):
 					"player": "TestPlayer",
 					"damage": 20
 				})
-				print("🧪 [TEST] F2: Ataque simulado")
+				print("[TEST] F2: Ataque simulado")
 			
 			KEY_F3:
 				# Simular matar enemigo
 				_on_player_killed_enemy()
-				print("🧪 [TEST] F3: Enemigo simulado")
+				print("[TEST] F3: Enemigo simulado")
