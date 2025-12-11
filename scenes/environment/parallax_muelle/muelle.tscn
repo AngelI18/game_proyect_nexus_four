@@ -9,6 +9,6 @@
 [node name="unicAimagen" type="Parallax2D" parent="muelle"]
 
 [node name="Sprite2D" type="Sprite2D" parent="muelle/unicAimagen"]
-position = Vector2(538, 168)
-scale = Vector2(0.149368, 0.0764393)
+position = Vector2(717.5, 357.5)
+scale = Vector2(0.266927, 0.172956)
 texture = ExtResource("1_cx0lp")

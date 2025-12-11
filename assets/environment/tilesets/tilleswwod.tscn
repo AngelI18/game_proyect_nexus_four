@@ -1,9 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://bkxyekw80chi2"]
-
-[sub_resource type="TileSet" id="TileSet_cvlcl"]
-physics_layer_0/collision_layer = 1
-terrain_set_0/mode = 0
-
-[node name="Tilles_tres" type="TileMap"]
-tile_set = SubResource("TileSet_cvlcl")
-format = 2
