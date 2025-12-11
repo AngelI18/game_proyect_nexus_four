@@ -3,6 +3,8 @@ extends CanvasLayer
 @onready var btn_reiniciar = $PanelContainer/VBoxContainer/reiniciar
 @onready var panel = $PanelContainer
 
+var menu_abierto = false
+
 func _unhandled_input(event):
 	if event.is_action_pressed("ui_cancel"):
 		# Evitar pausar en menús (Main Menu, Multijugador, Opciones)
@@ -100,20 +102,13 @@ func _on_reiniciar_pressed():
 
 
 func _on_salir_pressed():
-	# Si estamos en multijugador, enviar señal de derrota y salir
+	# Si estamos en multijugador, enviar señal de quit por payload
 	if _is_in_multiplayer_match():
-		print("[PAUSE] Abandonando partida - Enviando señal de derrota")
+		print("[PAUSE] Abandonando partida - Enviando quit-match por payload")
 		if has_node("/root/Network"):
 			var network = get_node("/root/Network")
-			if network.has_method("notify_player_died"):
-				network.notify_player_died()  # Envía defeat al oponente
-				await get_tree().create_timer(0.3).timeout
-			if network.has_method("leave_match"):
-				network.leave_match()  # Sale de la match
-				await get_tree().create_timer(0.3).timeout
-			if network.has_method("set_player_available"):
-				network.set_player_available()  # Se marca disponible
-				print("[PAUSE] Jugador marcado como disponible")
+			network.send_game_data({"type": "quit-match"})
+			await get_tree().create_timer(0.3).timeout
 		_show_hud()
 	
 	Global.reset_player_data()
@@ -126,5 +121,6 @@ func _on_salir_pressed():
 	panel.visible = false
 	panel.modulate.a = 0.0
 	visible = false
+	menu_abierto = false
 	
 	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")

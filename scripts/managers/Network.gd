@@ -94,6 +94,10 @@ func _conectar():
 func apagar():
 	print("[Network] Apagando conexión...")
 	
+	# Rechazar todas las invitaciones pendientes
+	if lobby:
+		lobby.reject_all_pending_invitations()
+	
 	# Resetear puntos de enemigos
 	enemy_points = 0.0
 	
@@ -121,11 +125,15 @@ func refresh_players():
 func send_invitation(player_id: String):
 	if lobby: lobby.send_invitation(player_id)
 
-func accept_invitation(p_match_id: String):
-	if lobby: lobby.accept_invitation(p_match_id)
-
 func reject_invitation(p_match_id: String):
 	if lobby: lobby.reject_invitation(p_match_id)
+
+func reject_all_pending_invitations():
+	"""Rechaza todas las invitaciones pendientes"""
+	if lobby: lobby.reject_all_pending_invitations()
+
+func accept_invitation(p_match_id: String):
+	if lobby: lobby.accept_invitation(p_match_id)
 
 # === Match Actions ===
 func send_ready_ping():

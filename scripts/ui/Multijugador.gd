@@ -292,6 +292,8 @@ func _on_volver_pressed():
 		return
 
 	if posicion_menu == 0:
+		# Rechazar todas las invitaciones pendientes antes de salir
+		Network.reject_all_pending_invitations()
 		Network.apagar()
 		get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
 	else:

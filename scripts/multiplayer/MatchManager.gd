@@ -62,6 +62,12 @@ func _on_message_received(event: String, payload: Dictionary):
 				print("[MATCH] Oponente se rindió - Victoria")
 				match_ended.emit("VICTORY", "opponent_surrendered")
 			
+			# Check for quit-match via payload (carga close-match internamente)
+			if content.get("type") == "quit-match":
+				print("[MATCH] Oponente abandonó - close-match interno")
+				opponent_left.emit()
+				match_ended.emit("VICTORY", "opponent_disconnected")
+			
 		"game-ended":
 			print("[MATCH] El oponente completó su juego primero - Derrota")
 			match_ended.emit("DEFEAT", "opponent_won")

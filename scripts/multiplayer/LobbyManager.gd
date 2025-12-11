@@ -33,6 +33,15 @@ func set_player_available():
 	# Notificar al servidor que el jugador está disponible nuevamente
 	_network.send("player-status", {"status": "AVAILABLE"})
 
+func reject_all_pending_invitations():
+	"""Rechaza todas las invitaciones pendientes antes de desconectar"""
+	for inv in invitations:
+		var match_id = inv.get("matchId", "")
+		if match_id != "":
+			_network.send("reject-match", {"matchId": match_id})
+			print("[LOBBY] Rechazando invitación de: ", inv.get("name", "desconocido"))
+	invitations.clear()
+
 func _on_message_received(event: String, payload: Dictionary):
 	var data = payload.get("data", {})
 	
