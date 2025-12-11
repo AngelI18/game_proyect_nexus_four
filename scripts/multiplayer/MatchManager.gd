@@ -29,18 +29,8 @@ func send_ping():
 func send_game_data(data: Dictionary):
 	_network.send("send-game-data", {"payload": data})
 
-func claim_victory():
-	_network.send("finish-game", {"matchId": match_id})
-	match_ended.emit("VICTORY", "claimed_victory")
-
-func forfeit_match():
-	# If we want to explicitly lose, we can quit.
-	# Or we can send a custom data packet saying we lost.
-	# For now, let's just quit which triggers close-match on other side.
-	_network.send("quit-match", {"matchId": match_id})
-	match_ended.emit("DEFEAT", "forfeited")
-
 func leave_match():
+	"""Sale de la partida sin enviar señales de victoria/derrota"""
 	_network.send("quit-match", {"matchId": match_id})
 	match_id = ""
 	rival_name = ""
@@ -69,16 +59,17 @@ func _on_message_received(event: String, payload: Dictionary):
 			
 			# Check for custom defeat signal from opponent
 			if content.get("type") == "defeat":
-				claim_victory()
+				print("🏆 [MATCH] ¡Oponente se rindió! Victoria")
+				match_ended.emit("VICTORY", "opponent_surrendered")
 			
 		"game-ended":
-			# Server says game ended. If I didn't claim victory, I lost.
-			# Wait, if I claimed victory, I don't get game-ended?
-			# Docs: "En el punto 6, el jugador que manda el evento no recibirá game-ended"
+			# Server dice que el juego terminó (el oponente ganó)
+			print("💀 [MATCH] El oponente ganó la partida")
 			match_ended.emit("DEFEAT", "opponent_won")
 			
 		"close-match":
-			# Opponent left.
+			# Oponente se desconectó o abandonó
+			print("🏆 [MATCH] ¡Oponente se desconectó! Victoria")
 			opponent_left.emit()
 			match_ended.emit("VICTORY", "opponent_disconnected")
 			

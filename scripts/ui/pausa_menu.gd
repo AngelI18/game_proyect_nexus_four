@@ -1,5 +1,6 @@
 extends CanvasLayer
 @onready var bg = $ColorRect
+@onready var btn_reiniciar = $Panel/Reiniciar  # Referencia al botón reiniciar
 
 func _unhandled_input(event):
 	if event.is_action_pressed("ui_cancel"):
@@ -43,38 +44,26 @@ func _show_hud():
 		print("👁️ [PAUSE] HUD mostrado")
 
 func toggle_pausa():
-	# Verificar si estamos en multijugador
-	var is_multiplayer = _is_in_multiplayer_match()
-
-	if is_multiplayer:
-		# En multijugador: NO pausar el juego, solo mostrar menú y ocultar HUD
-		print("🎮 [PAUSE] Modo multijugador - El juego sigue corriendo")
-		
-		if visible:
-			# Cerrar menú
-			$AnimationPlayer.play_backwards("blur")
-			await $AnimationPlayer.animation_finished
-			visible = false
-			bg.visible = false
-			_show_hud()
+	# Comportamiento normal de pausa (tanto single como multiplayer)
+	get_tree().paused = !get_tree().paused
+	
+	if get_tree().paused:
+		_hide_hud()
+		# Deshabilitar reiniciar si estamos en multiplayer
+		if _is_in_multiplayer_match() and btn_reiniciar:
+			btn_reiniciar.disabled = true
+			btn_reiniciar.modulate = Color(0.5, 0.5, 0.5, 0.5)
 		else:
-			# Abrir menú
-			_hide_hud()
-			$AnimationPlayer.play("blur")
-			visible = true
-			bg.visible = true
+			if btn_reiniciar:
+				btn_reiniciar.disabled = false
+				btn_reiniciar.modulate = Color(1, 1, 1, 1)
+		$AnimationPlayer.play("blur")
+		visible = true
 	else:
-		# En singleplayer: pausar el juego Y ocultar HUD
-		get_tree().paused = !get_tree().paused
-		if get_tree().paused:
-			_hide_hud()
-			$AnimationPlayer.play("blur")
-			visible = true
-		else:
-			_show_hud()
-			$AnimationPlayer.play_backwards("blur")
-			await $AnimationPlayer.animation_finished
-			visible = false
+		_show_hud()
+		$AnimationPlayer.play_backwards("blur")
+		await $AnimationPlayer.animation_finished
+		visible = false
 
 
 func _on_jugar_pressed():
@@ -95,10 +84,26 @@ func _on_reiniciar_pressed():
 
 
 func _on_salir_pressed():
-	Global.reset_player_data()
-	# Mostrar HUD si estamos en multijugador antes de salir
+	# Si estamos en multijugador, enviar señal de derrota y salir
 	if _is_in_multiplayer_match():
+		print("🏳️ [PAUSE] Abandonando partida - Enviando señal de derrota")
+		if has_node("/root/Network"):
+			var network = get_node("/root/Network")
+			if network.has_method("notify_player_died"):
+				network.notify_player_died()  # Envía defeat al oponente
+				await get_tree().create_timer(0.3).timeout
+			if network.has_method("leave_match"):
+				network.leave_match()  # Sale de la match
+				await get_tree().create_timer(0.3).timeout
+			if network.has_method("set_player_available"):
+				network.set_player_available()  # Se marca disponible
+				print("✅ [PAUSE] Jugador marcado como disponible")
 		_show_hud()
+	
+	Global.reset_player_data()
+	# Despausar
+	if get_tree().paused:
+		get_tree().paused = false
 	toggle_pausa()
 	bg.visible = false
 	await $AnimationPlayer.animation_finished

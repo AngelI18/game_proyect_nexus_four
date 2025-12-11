@@ -42,7 +42,6 @@ func _ready() -> void:
 	enemy_type = 2  # 12% de daño
 	speed = walk_speed
 	max_health = 150
-	damage_from_attack = 25
 	coin_reward = 35
 	knockback_strength = 250.0
 	lock_direction_on_attack = true  # NO seguir al jugador durante carga/ataque

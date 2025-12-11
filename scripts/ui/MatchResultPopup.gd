@@ -25,6 +25,19 @@ func _create_timer():
 	var t := Timer.new()
 	t.wait_time = show_time
 	t.one_shot = true
-	t.timeout.connect(queue_free)
+	t.timeout.connect(_on_timer_timeout)
 	add_child(t)
 	t.start()
+
+func _on_timer_timeout():
+	# Al cerrar el popup de resultado, marcar al jugador como disponible
+	# para que pueda enviar/recibir nuevas solicitudes de partida
+	if has_node("/root/Network"):
+		var network = get_node("/root/Network")
+		if network.has_method("leave_match"):
+			network.leave_match()  # Primero salir de la match
+			await get_tree().create_timer(0.3).timeout
+		if network.has_method("set_player_available"):
+			network.set_player_available()  # Luego marcarse disponible
+			print("✅ [MATCH_RESULT] Jugador marcado como disponible para nuevas partidas")
+	queue_free()
