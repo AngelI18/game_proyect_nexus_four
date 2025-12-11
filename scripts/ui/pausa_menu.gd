@@ -70,11 +70,17 @@ func toggle_pausa():
 
 	# Si estamos en partida multijugador, no pausar el árbol
 	if _is_in_multiplayer_match():
-		_show_menu_overlay(true)
+		if not menu_abierto:
+			_show_menu_overlay(true)
+			menu_abierto = true
+		else:
+			_hide_menu_overlay()
+			menu_abierto = false
 		return
 
 	# Toggle normal (single player): pausar/despausar
 	tree.paused = !tree.paused
+	menu_abierto = tree.paused
 	
 	if tree.paused:
 		_show_menu_overlay(false)
@@ -82,24 +88,34 @@ func toggle_pausa():
 		_hide_menu_overlay()
 
 func _on_jugar_pressed():
+	menu_abierto = false
+	
 	# Si estábamos en overlay sin pausar (multijugador), solo ocultar overlay
 	if _is_in_multiplayer_match():
 		_hide_menu_overlay()
 		return
 
-	_show_hud()
-	toggle_pausa()
+	# Single player: despausar
+	if get_tree().paused:
+		get_tree().paused = false
+	_hide_menu_overlay()
 
 func _on_reiniciar_pressed():
+	menu_abierto = false
+	
 	if _is_in_multiplayer_match():
 		return
 
 	# Recargar la escena completa, incluyendo jugador
 	if get_tree().paused:
 		get_tree().paused = false
+	
+	_hide_menu_overlay()
 	get_tree().reload_current_scene()
 
 func _on_salir_pressed():
+	menu_abierto = false
+	
 	# Si estamos en multijugador, enviar señal de derrota y salir
 	if _is_in_multiplayer_match():
 		print("[PAUSE] Abandonando partida - Enviando señal de derrota")
@@ -114,7 +130,6 @@ func _on_salir_pressed():
 			if network.has_method("set_player_available"):
 				network.set_player_available()  # Se marca disponible
 				print("[PAUSE] Jugador marcado como disponible")
-		_show_hud()
 	
 	Global.reset_player_data()
 	
@@ -122,10 +137,6 @@ func _on_salir_pressed():
 		get_tree().paused = false
 	
 	# Ocultamos todo manualmente antes de salir
-	bg.visible = false
-	panel.visible = false
-	panel.modulate.a = 0.0
-	visible = false
-	menu_abierto = false
+	_hide_menu_overlay()
 	
 	get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
