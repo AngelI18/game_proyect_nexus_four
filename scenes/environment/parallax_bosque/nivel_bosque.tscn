@@ -27,33 +27,33 @@ scale = Vector2(1.51185, 0.885246)
 texture = ExtResource("1_22xse")
 centered = false
 
-[node name="parte 10" type="ParallaxLayer" parent="."]
+[node name="sky fondo" type="ParallaxLayer" parent="."]
 position = Vector2(-445, -368)
 motion_scale = Vector2(0.1, 1)
 motion_mirroring = Vector2(928, 693)
 
-[node name="Sprite2D" type="Sprite2D" parent="parte 10"]
+[node name="Sprite2D" type="Sprite2D" parent="sky fondo"]
 position = Vector2(4, 10)
 scale = Vector2(1.54957, 0.886507)
 texture = ExtResource("2_71yej")
 centered = false
 
-[node name="parte 9" type="ParallaxLayer" parent="."]
+[node name="arboles fondo" type="ParallaxLayer" parent="."]
 position = Vector2(-445, -368)
 motion_scale = Vector2(0.15, 1)
 motion_mirroring = Vector2(928, 0)
 
-[node name="Sprite2D" type="Sprite2D" parent="parte 9"]
+[node name="Sprite2D" type="Sprite2D" parent="arboles fondo"]
 scale = Vector2(1.56142, 0.918033)
 texture = ExtResource("3_k17u7")
 centered = false
 
-[node name="parte 8" type="ParallaxLayer" parent="."]
+[node name="arboles mitad" type="ParallaxLayer" parent="."]
 position = Vector2(-445, -368)
 motion_scale = Vector2(0.2, 1)
 motion_mirroring = Vector2(928, 0)
 
-[node name="Sprite2D" type="Sprite2D" parent="parte 8"]
+[node name="Sprite2D" type="Sprite2D" parent="arboles mitad"]
 scale = Vector2(1.56789, 0.907945)
 texture = ExtResource("4_j2c1k")
 centered = false
