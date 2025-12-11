@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://cxau7qmm7g6tk"]
+
+[ext_resource type="Texture2D" uid="uid://dcgqgnjd30t8n" path="res://assets/environment/parallax/Parallaxmuelle/muelleatardecer.jpg" id="1_cx0lp"]
+
+[node name="Muelle" type="Node2D"]
+
+[node name="muelle" type="ParallaxBackground" parent="."]
+
+[node name="unicAimagen" type="Parallax2D" parent="muelle"]
+
+[node name="Sprite2D" type="Sprite2D" parent="muelle/unicAimagen"]
+position = Vector2(717.5, 357.5)
+scale = Vector2(0.266927, 0.172956)
+texture = ExtResource("1_cx0lp")
