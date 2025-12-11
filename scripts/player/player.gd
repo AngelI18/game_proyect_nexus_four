@@ -416,7 +416,9 @@ func _on_player_attack_hit_box_body_exited(body: Node2D) -> void:
 func _on_enemy_killed(_coin_reward: int, hits_received: int = 1) -> void:
 	"""Incrementa el contador cuando el jugador mata un enemigo"""
 	enemies_killed_this_run += 1
-	
+	if Global:
+		Global.enemies_killed_total += 1
+		# print("Muertes totales: ", Global.enemies_killed_total)
 	# Calcular puntos según la dificultad (golpes necesarios)
 	var points = 1  # Por defecto 1 punto
 	if hits_received >= 4:

@@ -8,6 +8,7 @@ var player_health: int = 200
 var player_max_health: int = 200
 var player_coins: int = 0
 var player_last_position: Vector2 = Vector2.ZERO
+var enemies_killed_total: int = 0
 
 # Récords permanentes
 var best_coins_record: int = 0

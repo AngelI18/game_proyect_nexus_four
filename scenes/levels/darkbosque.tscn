@@ -1,10 +1,11 @@
-[gd_scene load_steps=6 format=4 uid="uid://btog8uqvgtjhu"]
+[gd_scene load_steps=7 format=4 uid="uid://btog8uqvgtjhu"]
 
 [ext_resource type="PackedScene" uid="uid://2li6pvr0ea4s" path="res://scenes/environment/parallax_darkBosque/dark.tscn" id="1_f83iy"]
 [ext_resource type="PackedScene" uid="uid://ccg021l8va1nb" path="res://scenes/charactes/player/player.tscn" id="2_vvid6"]
 [ext_resource type="TileSet" uid="uid://bwjtj27yicfyi" path="res://assets/environment/tilesets/terreno.tres" id="3_c81rx"]
 [ext_resource type="PackedScene" uid="uid://bcy11d1akfql8" path="res://scenes/charactes/enemies/enemy_spawner.tscn" id="5_f144o"]
 [ext_resource type="PackedScene" uid="uid://sd71cnst7d3j" path="res://scenes/game/shop.tscn" id="5_jtg0n"]
+[ext_resource type="PackedScene" uid="uid://d4ge1a3qbcqm6" path="res://scenes/charactes/enemies/boss_mushroom.tscn" id="6_4mtml"]
 
 [node name="Nivelbosque" type="Node2D"]
 position = Vector2(1, -344)
@@ -31,3 +32,6 @@ position = Vector2(1416, 595)
 
 [node name="Shop" parent="." instance=ExtResource("5_jtg0n")]
 position = Vector2(1943, 337)
+
+[node name="BossMushroom" parent="." instance=ExtResource("6_4mtml")]
+position = Vector2(3203, 604)
