@@ -23,21 +23,7 @@ func send_invitation(player_id: String):
 	_network.send("send-match-request", {"playerId": player_id})
 
 func accept_invitation(match_id: String):
-	_network.send("accept-match", {"matchId": match_id}) # Server expects matchId? Or just event?
-	# Original script: _enviar({"event": "accept-match"}) -> Wait, original script didn't send matchId in accept-match?
-	# Let's check original script:
-	# func _aceptar_invitacion(info: Dictionary): ... _enviar({"event": "accept-match"})
-	# It seems it relies on the server knowing the pending invitation? 
-	# But wait, the server docs say:
-	# "accept-match" is not in the summary table?
-	# Ah, the docs provided are for "GameMatch". There might be "Lobby" docs.
-	# Let's assume the original script was correct: `_enviar({"event": "accept-match"})`
-	# However, if there are multiple invitations, how does it know?
-	# The original script: `_enviar({"event": "accept-match"})` inside `_aceptar_invitacion`.
-	# It seems the server might only support one pending invitation or tracks the last one?
-	# Actually, looking at `_aceptar_invitacion` in original script:
-	# `_enviar({"event": "accept-match"})`
-	# It doesn't send data.
+	_network.send("accept-match", {"matchId": match_id}) 
 	_network.send("accept-match")
 
 func reject_invitation(match_id: String):

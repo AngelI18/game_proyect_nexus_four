@@ -1,5 +1,6 @@
-[gd_scene load_steps=19 format=3 uid="uid://dyh5kfftkhqjp"]
+[gd_scene load_steps=20 format=3 uid="uid://dyh5kfftkhqjp"]
 
+[ext_resource type="Script" uid="uid://b3mcr53lhcsd" path="res://scripts/ui/hud/mini_mapa.gd" id="1_erw67"]
 [ext_resource type="Texture2D" uid="uid://qlv74o4poatw" path="res://assets/ui/hud/left.png" id="2_8qguk"]
 [ext_resource type="Script" uid="uid://cwru7qcn20st1" path="res://scripts/ui/hud/hud.gd" id="2_h022r"]
 [ext_resource type="Texture2D" uid="uid://mqm603mwvxk" path="res://assets/ui/hud/right.png" id="3_136eg"]
@@ -30,6 +31,48 @@ size = Vector2(74, 74)
 size = Vector2(118, 114)
 
 [node name="HUD" type="CanvasLayer"]
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -367.0
+offset_top = 1.0
+offset_right = -119.0
+offset_bottom = 170.0
+grow_horizontal = 0
+script = ExtResource("1_erw67")
+
+[node name="ColorRect" type="ColorRect" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TextureRect" type="TextureRect" parent="UI"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="UI"]
+layout_mode = 0
+offset_right = 512.0
+offset_bottom = 512.0
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="UI/SubViewportContainer"]
+handle_input_locally = false
+render_target_update_mode = 4
+
+[node name="minimap" type="Camera2D" parent="UI/SubViewportContainer/SubViewport"]
+zoom = Vector2(0.2, 0.2)
+
+[node name="PlayerMarker" type="ColorRect" parent="UI/SubViewportContainer/SubViewport"]
+offset_right = 40.0
+offset_bottom = 40.0
 
 [node name="Control" type="Control" parent="."]
 layout_mode = 3

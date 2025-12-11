@@ -21,13 +21,7 @@ var levels: Array = [
 	"res://scenes/levels/test_level.tscn"
 ]
 
-var boss_rooms: Array = [
-	# Agrega aquí tus escenas de jefes cuando las tengas
-	# "res://scenes/levels/boss_room_1.tscn"
-]
-
 var _recent_levels: Array = []
-var _recent_boss_rooms: Array = []
 const MAX_RECENT_HISTORY := 3
 
 const STATS_SAVE_PATH := "user://player_stats.cfg"
@@ -41,13 +35,6 @@ func _ready() -> void:
 
 func get_random_level() -> String:
 	return _get_unique_random_scene(levels, _recent_levels)
-
-
-func get_random_boss_room() -> String:
-	if boss_rooms.is_empty():
-		push_warning("No hay salas de jefe definidas en Global.boss_rooms")
-		return ""
-	return _get_unique_random_scene(boss_rooms, _recent_boss_rooms)
 
 
 func _get_unique_random_scene(source_list: Array, history_list: Array) -> String:

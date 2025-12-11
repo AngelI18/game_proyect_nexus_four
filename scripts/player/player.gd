@@ -422,7 +422,7 @@ func _on_enemy_killed(_coin_reward: int, hits_received: int = 1) -> void:
 	if hits_received >= 4:
 		points = 2  # Si necesitó 4 o más golpes, cuenta como 2
 	
-	print("💥 Enemigo eliminado con ", hits_received, " golpes = ", points, " punto(s)")
+	print("Enemigo eliminado con ", hits_received, " golpes = ", points, " punto(s)")
 	
 	# Notificar al Network para el sistema de ataques
 	if has_node("/root/Network"):

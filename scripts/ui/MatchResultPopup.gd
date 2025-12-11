@@ -12,10 +12,10 @@ func show_result(result: String):
 	match result.to_upper():
 		"VICTORY":
 			txt = victory_text
-			label.modulate = Color(0.2, 0.8, 0.2)
+			label.modulate = Color("00ff00")
 		"DEFEAT":
 			txt = defeat_text
-			label.modulate = Color(0.9, 0.2, 0.2)
+			label.modulate = Color("ff0000")
 		_:
 			label.modulate = Color(0.9, 0.9, 0.9)
 	label.text = txt
@@ -39,5 +39,5 @@ func _on_timer_timeout():
 			await get_tree().create_timer(0.3).timeout
 		if network.has_method("set_player_available"):
 			network.set_player_available()  # Luego marcarse disponible
-			print("✅ [MATCH_RESULT] Jugador marcado como disponible para nuevas partidas")
+			print("[MATCH_RESULT] Jugador marcado como disponible para nuevas partidas")
 	queue_free()
