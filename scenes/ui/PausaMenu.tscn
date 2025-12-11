@@ -1,11 +1,15 @@
-[gd_scene load_steps=5 format=3 uid="uid://f45rq8ydwwoh"]
+[gd_scene load_steps=7 format=3 uid="uid://f45rq8ydwwoh"]
 
 [ext_resource type="Script" uid="uid://cjkh2q0473qmt" path="res://scripts/ui/pausa_menu.gd" id="1_nggwh"]
 [ext_resource type="Shader" uid="uid://gje18y5aiaty" path="res://scenes/ui/PausaMenu.gdshader" id="2_nggwh"]
+[ext_resource type="FontFile" uid="uid://dkl3bob77eb85" path="res://assets/ui/fonts/pixelpurl.medium.ttf" id="3_6viru"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_6viru"]
 shader = ExtResource("2_nggwh")
 shader_parameter/lod = 0.0
+
+[sub_resource type="Theme" id="Theme_ls7qe"]
+default_font = ExtResource("3_6viru")
 
 [sub_resource type="Theme" id="Theme_xuc83"]
 
@@ -33,29 +37,31 @@ offset_left = 382.0
 offset_top = 182.0
 offset_right = 1037.0
 offset_bottom = 272.0
+scale = Vector2(2.5, 2.5)
 mouse_filter = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer"]
 process_mode = 3
 layout_mode = 2
+theme = SubResource("Theme_ls7qe")
 
 [node name="jugar" type="Button" parent="PanelContainer/VBoxContainer"]
 process_mode = 3
 layout_mode = 2
 theme = SubResource("Theme_xuc83")
-text = "jugar"
+text = "Jugar"
 
 [node name="reiniciar" type="Button" parent="PanelContainer/VBoxContainer"]
 process_mode = 3
 layout_mode = 2
-text = "reiniciar"
+text = "Reiniciar"
 
 [node name="salir" type="Button" parent="PanelContainer/VBoxContainer"]
 process_mode = 3
 layout_mode = 2
-text = "salir"
+text = "Salir"
 
 [connection signal="pressed" from="PanelContainer/VBoxContainer/jugar" to="." method="_on_jugar_pressed"]
-[connection signal="pressed" from="PanelContainer/VBoxContainer/reiniciar" to="." method="_on_reiniciar_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/reiniciar" to="." method="_on_opciones_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/reiniciar" to="." method="_on_reiniciar_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/salir" to="." method="_on_salir_pressed"]
