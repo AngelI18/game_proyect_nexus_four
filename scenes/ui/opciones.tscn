@@ -3,10 +3,10 @@
 [ext_resource type="Texture2D" uid="uid://dcit4ht8le4n7" path="res://assets/ui/Background/Image_fx (2).jpg" id="1_shw8h"]
 [ext_resource type="Script" uid="uid://dmaeoh27ddhcq" path="res://scenes/ui/opciones.gd" id="1_yuibf"]
 [ext_resource type="Script" uid="uid://0s78ywh5mxw2" path="res://scripts/ui/opciones.gd" id="2_inluw"]
-[ext_resource type="FontFile" uid="uid://bl4v5etmmwsm4" path="res://assets/ui/fonts/ka1.ttf" id="2_shw8h"]
+[ext_resource type="FontFile" uid="uid://dkl3bob77eb85" path="res://assets/ui/fonts/pixelpurl.medium.ttf" id="3_yuibf"]
 
-[sub_resource type="Theme" id="Theme_yuibf"]
-default_font = ExtResource("2_shw8h")
+[sub_resource type="Theme" id="Theme_flr5y"]
+default_font = ExtResource("3_yuibf")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_blink"]
 
@@ -63,11 +63,12 @@ offset_right = 959.5
 offset_bottom = 357.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = SubResource("Theme_yuibf")
+theme = SubResource("Theme_flr5y")
 theme_override_constants/separation = 12
 
 [node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 40
 text = "Musica"
 
 [node name="SliderMusica" type="HSlider" parent="VBoxContainer"]
@@ -78,6 +79,7 @@ value = 1.0
 
 [node name="Label2" type="Label" parent="VBoxContainer"]
 layout_mode = 2
+theme_override_font_sizes/font_size = 40
 text = "Efectos"
 
 [node name="SliderSFX" type="HSlider" parent="VBoxContainer"]
