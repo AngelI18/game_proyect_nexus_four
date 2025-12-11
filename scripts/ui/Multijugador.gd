@@ -10,7 +10,11 @@ extends Control
 @onready var lobby_panel: Panel = $Panel/Lobby
 
 # === CONFIGURACIÓN DEL JUEGO ===
+<<<<<<< Updated upstream
 const MY_PLAYER_NAME := "Clapt"
+=======
+const MY_PLAYER_NAME := ""
+>>>>>>> Stashed changes
 const MY_GAME_ID := "A"
 const MY_GAME_KEY := "5NLQK3EMIZ"
 const MY_GAME_NAME := "Guardian del falapito"
@@ -92,9 +96,9 @@ func _on_match_ready():
 func _on_match_started(rival_name: String):
 	print("Partida iniciada contra: ", rival_name)
 	await get_tree().process_frame
-	var random_level = Global.get_random_level()
-	if random_level != "":
-		get_tree().change_scene_to_file(random_level)
+	var first_level = Global.get_first_level()
+	if first_level != "":
+		get_tree().change_scene_to_file(first_level)
 	else:
 		print("Error: No level found")
 

@@ -450,6 +450,9 @@ volume_db = -19.259
 
 [node name="pop_penance" parent="." instance=ExtResource("13_iqrax")]
 
+[node name="Timer_penance" type="Timer" parent="."]
+wait_time = 20.0
+
 [connection signal="area_entered" from="player_hit_box" to="." method="_on_player_hit_box_area_entered"]
 [connection signal="area_exited" from="player_hit_box" to="." method="_on_player_hit_box_area_exited"]
 [connection signal="body_entered" from="player_attack_hit_box" to="." method="_on_player_attack_hit_box_body_entered"]

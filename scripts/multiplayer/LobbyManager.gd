@@ -10,10 +10,12 @@ var players: Dictionary = {}
 var invitations: Array = []
 var _network: Node # NetworkClient
 var _my_player_name: String
+var _get_match_id_callback: Callable  # Callback para verificar si hay match activa
 
-func _init(network: Node, my_player_name: String):
+func _init(network: Node, my_player_name: String, get_match_id_callback: Callable = Callable()):
 	_network = network
 	_my_player_name = my_player_name
+	_get_match_id_callback = get_match_id_callback
 	_network.message_received.connect(_on_message_received)
 
 func refresh_players():
@@ -44,6 +46,11 @@ func reject_all_pending_invitations():
 
 func _on_message_received(event: String, payload: Dictionary):
 	var data = payload.get("data", {})
+	
+	# Ignorar eventos de conectados/desconectados si hay match activa
+	if event in ["player-connected", "player-disconnected"]:
+		if _get_match_id_callback.is_valid() and _get_match_id_callback.call() != "":
+			return
 	
 	match event:
 		"online-players":

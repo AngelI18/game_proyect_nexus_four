@@ -14,6 +14,8 @@ var best_coins_record: int = 0
 var total_enemies_killed: int = 0
 
 # === GESTIÓN DE NIVELES ===
+const FIRST_LEVEL := "res://scenes/levels/nicooo_level2.tscn"
+
 var levels: Array = [
 	"res://scenes/levels/angel_level.tscn",
 	"res://scenes/levels/nicooo_level2.tscn",
@@ -35,6 +37,9 @@ func _ready() -> void:
 
 func get_random_level() -> String:
 	return _get_unique_random_scene(levels, _recent_levels)
+
+func get_first_level() -> String:
+	return FIRST_LEVEL
 
 
 func _get_unique_random_scene(source_list: Array, history_list: Array) -> String:

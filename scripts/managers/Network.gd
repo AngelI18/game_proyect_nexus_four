@@ -66,7 +66,7 @@ func iniciar(nombre, gameId, gameKey):
 	_game_id = gameId
 	_game_key = gameKey
 	
-	lobby = LobbyManagerScript.new(client, _player_name)
+	lobby = LobbyManagerScript.new(client, _player_name, func(): return match_manager.match_id if match_manager else "")
 	match_manager = MatchManagerScript.new(client)
 	
 	# Connect Lobby Signals
@@ -195,6 +195,11 @@ func _on_connected():
 	connected_to_server.emit()
 
 func _on_disconnected():
+	# Si se desconecta, limpiamos la match activa
+	if match_manager:
+		match_manager.match_id = ""
+		match_manager.rival_name = ""
+
 	connection_closed.emit()
 
 func _on_global_message(event: String, payload: Dictionary):
@@ -230,6 +235,11 @@ func _on_match_started():
 	match_started.emit(match_manager.rival_name)
 
 func _on_attack_received(attack_data: Dictionary):
+	# Validar que sigue habiendo match activa
+	if not match_manager or match_manager.match_id == "":
+		print("[NETWORK] Ataque ignorado: no hay match activa")
+		return
+	
 	print("[NETWORK] ATAQUE RECIBIDO")
 	print("[NETWORK] Jugador: ", attack_data.get("player", "desconocido"))
 	print("[NETWORK] Daño: ", attack_data.get("damage", 0))

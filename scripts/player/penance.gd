@@ -5,6 +5,10 @@ extends Node
 
 signal penance_applied(penance_data: Dictionary)
 
+@onready var title_message = $VBoxContainer/Title
+@onready var corpus_message = $VBoxContainer/message
+@onready var vbox_container = $VBoxContainer
+
 var penitencias_list = [
 	{
 		"id": "p_speed",
@@ -46,10 +50,13 @@ var penitencias_list = [
 var active_penance: Dictionary = {}
 var countdown_timer: Timer
 var effect_timer: Timer
-var popup_label: Label
-var countdown_label: Label
+var is_penance_active: bool = false
+var countdown_value: int = 4
 
 func _ready():
+	# Ocultar UI al inicio
+	vbox_container.visible = false
+	
 	# Conectar señal de ataque recibido
 	if has_node("/root/Network"):
 		var network = get_node("/root/Network")
@@ -67,50 +74,36 @@ func _ready():
 	add_child(effect_timer)
 
 func _on_attack_received(_attack_data: Dictionary):
+	if is_penance_active:
+		print("[PENANCE] Ya hay penitencia activa, ignorando ataque")
+		return
+	
 	print("[PENANCE] Ataque recibido - Iniciando penitencia")
 	_show_warning_popup()
 
 func _show_warning_popup():
 	"""Muestra popup de advertencia con contador de 4 segundos"""
-	# Crear label si no existe
-	if not countdown_label:
-		countdown_label = Label.new()
-		countdown_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		countdown_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		countdown_label.add_theme_font_size_override("font_size", 32)
-		countdown_label.add_theme_color_override("font_color", Color.RED)
-		
-		# Añadir a la CanvasLayer (self)
-		add_child(countdown_label)
-		# Centrar en pantalla
-		var viewport_size = get_viewport().get_visible_rect().size
-		countdown_label.position = Vector2(viewport_size.x / 2 - 150, 50)
-		countdown_label.custom_minimum_size = Vector2(300, 50)
-	
-	# Iniciar contador
-	countdown_label.visible = true
-	countdown_label.text = "PENITENCIA EN CAMINO 4"
+	countdown_value = 4
+	vbox_container.visible = true
+	title_message.text = "⚠ PENITENCIA EN CAMINO"
+	corpus_message.text = str(countdown_value)
 	countdown_timer.wait_time = 1.0
 	countdown_timer.start()
-
-var countdown_value = 4
 
 func _on_countdown_tick():
 	countdown_value -= 1
 	
 	if countdown_value > 0:
-		countdown_label.text = "PENITENCIA EN CAMINO " + str(countdown_value)
+		corpus_message.text = str(countdown_value)
 	else:
-		# Termina el contador
 		countdown_timer.stop()
-		countdown_label.visible = false
-		countdown_value = 4
 		_apply_random_penance()
 
 func _apply_random_penance():
 	"""Aplica una penitencia aleatoria al jugador"""
 	var penance = penitencias_list.pick_random()
 	active_penance = penance
+	is_penance_active = true
 	
 	print("[PENANCE] Aplicando: ", penance.name)
 	
@@ -123,32 +116,19 @@ func _apply_random_penance():
 	# Emitir señal
 	penance_applied.emit(penance)
 	
-	# Programar fin de penitencia (30 segundos)
-	effect_timer.wait_time = 30.0
+	# Programar fin de penitencia (20 segundos)
+	effect_timer.wait_time = 20.0
 	effect_timer.start()
 
 func _show_penance_popup(penance: Dictionary):
 	"""Muestra el popup con la penitencia aplicada"""
-	if not popup_label:
-		popup_label = Label.new()
-		popup_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		popup_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		popup_label.add_theme_font_size_override("font_size", 28)
-		popup_label.add_theme_color_override("font_color", Color.ORANGE_RED)
-		
-		# Añadir a la CanvasLayer (self)
-		add_child(popup_label)
-		var viewport_size = get_viewport().get_visible_rect().size
-		popup_label.position = Vector2(viewport_size.x / 2 - 200, 50)
-		popup_label.custom_minimum_size = Vector2(400, 100)
-	
-	popup_label.text = penance.name + "\n" + penance.description
-	popup_label.visible = true
+	vbox_container.visible = true
+	title_message.text = penance.name
+	corpus_message.text = penance.description
 	
 	# Ocultar después de 5 segundos
 	await get_tree().create_timer(5.0).timeout
-	if popup_label:
-		popup_label.visible = false
+	vbox_container.visible = false
 
 func _apply_effect_to_player(penance: Dictionary):
 	"""Aplica el efecto de la penitencia al jugador"""
@@ -162,33 +142,33 @@ func _apply_effect_to_player(penance: Dictionary):
 	
 	match stat_target:
 		"move_speed":
-			if player.has("speed"):
-				player.speed *= multiplier
-				print("[PENANCE] Velocidad reducida a: ", player.speed)
+			if "SPEED" in player:
+				player.SPEED *= multiplier
+				print("[PENANCE] Velocidad reducida a: ", player.SPEED)
 		
 		"jump_height":
-			if player.has("jump_velocity"):
-				player.jump_velocity *= multiplier
-				print("[PENANCE] Salto reducido a: ", player.jump_velocity)
+			if "JUMP_VELOCITY" in player:
+				player.JUMP_VELOCITY *= multiplier
+				print("[PENANCE] Salto reducido a: ", player.JUMP_VELOCITY)
 		
 		"dash_cooldown":
-			if player.has("dash_cooldown"):
-				player.dash_cooldown *= multiplier
-				print("[PENANCE] Dash cooldown aumentado a: ", player.dash_cooldown)
+			if "DASH_COOLDOWN" in player:
+				player.DASH_COOLDOWN *= multiplier
+				print("[PENANCE] Dash cooldown aumentado a: ", player.DASH_COOLDOWN)
 		
 		"attack_damage":
-			if player.has("attack_damage"):
-				player.attack_damage *= multiplier
-				print("[PENANCE] Daño reducido a: ", player.attack_damage)
+			if "damage" in player:
+				player.damage *= multiplier
+				print("[PENANCE] Daño reducido a: ", player.damage)
 		
 		"max_health":
-			if player.has("max_health"):
-				var old_max = player.max_health
-				player.max_health = int(old_max * multiplier)
+			if "MAX_HEALTH" in player:
+				var old_max = player.MAX_HEALTH
+				player.MAX_HEALTH = int(old_max * multiplier)
 				# Ajustar vida actual si supera el nuevo máximo
-				if player.current_health > player.max_health:
-					player.current_health = player.max_health
-				print("[PENANCE] Vida máxima reducida a: ", player.max_health)
+				if player.health > player.MAX_HEALTH:
+					player.health = player.MAX_HEALTH
+				print("[PENANCE] Vida máxima reducida a: ", player.MAX_HEALTH)
 
 func _on_penance_end():
 	"""Restaura las estadísticas del jugador al terminar la penitencia"""
@@ -196,6 +176,7 @@ func _on_penance_end():
 	
 	var player = get_tree().get_first_node_in_group("player")
 	if not player or active_penance.is_empty():
+		is_penance_active = false
 		return
 	
 	var stat_target = active_penance.stat_target
@@ -204,31 +185,25 @@ func _on_penance_end():
 	# Revertir el efecto dividiendo por el multiplicador
 	match stat_target:
 		"move_speed":
-			if player.has("speed"):
-				player.speed /= multiplier
+			if "SPEED" in player:
+				player.SPEED /= multiplier
 		
 		"jump_height":
-			if player.has("jump_velocity"):
-				player.jump_velocity /= multiplier
+			if "JUMP_VELOCITY" in player:
+				player.JUMP_VELOCITY /= multiplier
 		
 		"dash_cooldown":
-			if player.has("dash_cooldown"):
-				player.dash_cooldown /= multiplier
+			if "DASH_COOLDOWN" in player:
+				player.DASH_COOLDOWN /= multiplier
 		
 		"attack_damage":
-			if player.has("attack_damage"):
-				player.attack_damage /= multiplier
+			if "damage" in player:
+				player.damage /= multiplier
 		
 		"max_health":
-			if player.has("max_health"):
-				player.max_health = int(player.max_health / multiplier)
+			if "MAX_HEALTH" in player:
+				player.MAX_HEALTH = int(player.MAX_HEALTH / multiplier)
 	
 	active_penance = {}
+	is_penance_active = false
 	print("[PENANCE] Estadísticas restauradas")
-
-func _exit_tree():
-	# Limpiar labels
-	if countdown_label:
-		countdown_label.queue_free()
-	if popup_label:
-		popup_label.queue_free()

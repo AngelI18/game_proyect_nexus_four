@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://c1jb675isjs8x"]
+[gd_scene load_steps=7 format=3 uid="uid://c1jb675isjs8x"]
 
 [ext_resource type="Script" uid="uid://dsl1p3yreo66s" path="res://scripts/ui/Multijugador.gd" id="1_ni7w4"]
 [ext_resource type="FontFile" uid="uid://dkl3bob77eb85" path="res://assets/ui/fonts/pixelpurl.medium.ttf" id="2_h81ph"]
@@ -16,6 +16,9 @@ corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ekk4b"]
+bg_color = Color(0.213254, 0.178648, 0.454347, 1)
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -122,3 +125,14 @@ theme_override_fonts/font = ExtResource("2_h81ph")
 theme_override_font_sizes/font_size = 47
 theme_override_styles/normal = SubResource("StyleBoxFlat_ni7w4")
 text = "Volver"
+
+[node name="Create name" type="Panel" parent="."]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_ekk4b")
+
+[node name="ingresar nombre usuario" type="Label" parent="Create name"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0

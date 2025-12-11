@@ -44,59 +44,60 @@ func _show_hud():
 	if hud:
 		hud.visible = true
 
+func _show_menu_overlay(disable_reiniciar: bool):
+	_hide_hud()
+	if btn_reiniciar:
+		btn_reiniciar.disabled = disable_reiniciar
+		btn_reiniciar.modulate = Color(0.5, 0.5, 0.5, 0.5) if disable_reiniciar else Color(1, 1, 1, 1)
+
+	visible = true
+	bg.visible = true
+	panel.visible = true
+	var tween = create_tween()
+	tween.tween_property(panel, "modulate:a", 1.0, 0.2)
+
+func _hide_menu_overlay():
+	_show_hud()
+	var tween = create_tween()
+	tween.tween_property(panel, "modulate:a", 0.0, 0.2)
+	await tween.finished
+	bg.visible = false
+	panel.visible = false
+	visible = false
+
 func toggle_pausa():
 	var tree = get_tree()
+
+	# Si estamos en partida multijugador, no pausar el árbol
+	if _is_in_multiplayer_match():
+		_show_menu_overlay(true)
+		return
+
+	# Toggle normal (single player): pausar/despausar
 	tree.paused = !tree.paused
 	
 	if tree.paused:
-		_hide_hud()
-		if _is_in_multiplayer_match() and btn_reiniciar:
-			btn_reiniciar.disabled = true
-			btn_reiniciar.modulate = Color(0.5, 0.5, 0.5, 0.5)
-		else:
-			if btn_reiniciar:
-				btn_reiniciar.disabled = false
-				btn_reiniciar.modulate = Color(1, 1, 1, 1)
-		
-		# Animación simple para que se vea mejor
-		visible = true
-		bg.visible = true
-		panel.visible = true
-		var tween = create_tween()
-		tween.tween_property(panel, "modulate:a", 1.0, 0.2)
-		
+		_show_menu_overlay(false)
 	else:
-		_show_hud()
-		var tween = create_tween()
-		tween.tween_property(panel, "modulate:a", 0.0, 0.2)
-		await tween.finished
-		bg.visible = false
-		panel.visible = false
-		visible = false
+		_hide_menu_overlay()
 
 func _on_jugar_pressed():
+	# Si estábamos en overlay sin pausar (multijugador), solo ocultar overlay
+	if _is_in_multiplayer_match():
+		_hide_menu_overlay()
+		return
+
 	_show_hud()
 	toggle_pausa()
 
 func _on_reiniciar_pressed():
-	Global.reset_player_data()
-	
-	var player = get_tree().get_first_node_in_group("player")
-	if player and player.has_method("_load_saved_data"):
-		player._load_saved_data() 
-		player.position = Vector2.ZERO 
-		print("[PAUSE] Jugador reiniciado")
-	
-	_show_hud()
-	# Es importante despausar ANTES de recargar para evitar conflictos
+	if _is_in_multiplayer_match():
+		return
+
+	# Recargar la escena completa, incluyendo jugador
 	if get_tree().paused:
-		toggle_pausa()
-	
-	var random_level = Global.get_random_level()
-	if random_level != "":
-		get_tree().change_scene_to_file(random_level)
-	else:
-		get_tree().reload_current_scene()
+		get_tree().paused = false
+	get_tree().reload_current_scene()
 
 func _on_salir_pressed():
 	# Si estamos en multijugador, enviar señal de derrota y salir

@@ -38,6 +38,10 @@ func leave_match():
 func _on_message_received(event: String, payload: Dictionary):
 	var data = payload.get("data", {})
 	
+	# Ignorar mensajes de match si ya salimos (match_id vacío)
+	if event in ["receive-game-data", "game-ended"] and match_id == "":
+		return
+	
 	match event:
 		"connect-match":
 			if payload.get("status") == "OK":
