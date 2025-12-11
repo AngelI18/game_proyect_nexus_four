@@ -1,9 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://dfpvwtpka4mji"]
-
-[ext_resource type="AudioStream" uid="uid://xt5lpwnwsj12" path="res://assets/audio/Peaceful Place.ogg" id="1_s5sd4"]
-
-[node name="MusicaGlobal" type="AudioStreamPlayer"]
-process_mode = 3
-stream = ExtResource("1_s5sd4")
-volume_db = -15.0
-autoplay = true

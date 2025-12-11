@@ -1,16 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://81lsgobjkd8o"]
+[gd_scene load_steps=8 format=3 uid="uid://81lsgobjkd8o"]
 
 [ext_resource type="Texture2D" uid="uid://dcit4ht8le4n7" path="res://assets/ui/Background/Image_fx (2).jpg" id="1_shw8h"]
+[ext_resource type="Script" uid="uid://dmaeoh27ddhcq" path="res://scenes/ui/opciones.gd" id="1_yuibf"]
 [ext_resource type="Script" uid="uid://0s78ywh5mxw2" path="res://scripts/ui/opciones.gd" id="2_inluw"]
 [ext_resource type="FontFile" uid="uid://bl4v5etmmwsm4" path="res://assets/ui/fonts/ka1.ttf" id="2_shw8h"]
-[ext_resource type="Script" uid="uid://dq5yo2bdn7m5y" path="res://scripts/ui/BlinkingButton.gd" id="3_blink"]
 
 [sub_resource type="Theme" id="Theme_yuibf"]
 default_font = ExtResource("2_shw8h")
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_blink"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_shw8h"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_yuibf"]
 
@@ -22,6 +20,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 size_flags_horizontal = 4
 size_flags_vertical = 4
+script = ExtResource("1_yuibf")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -67,22 +66,25 @@ grow_vertical = 2
 theme = SubResource("Theme_yuibf")
 theme_override_constants/separation = 12
 
-[node name="Volumen" type="Button" parent="VBoxContainer"]
+[node name="Label" type="Label" parent="VBoxContainer"]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme_override_colors/font_hover_color = Color(0.647059, 0.647059, 0.647059, 1)
-theme_override_colors/font_focus_color = Color(0.647059, 0.647059, 0.647059, 1)
-theme_override_colors/font_pressed_color = Color(0.439216, 0.439216, 0.439216, 1)
-theme_override_font_sizes/font_size = 50
-theme_override_styles/focus = SubResource("StyleBoxEmpty_blink")
-theme_override_styles/disabled = SubResource("StyleBoxEmpty_blink")
-theme_override_styles/hover = SubResource("StyleBoxEmpty_blink")
-theme_override_styles/pressed = SubResource("StyleBoxEmpty_blink")
-theme_override_styles/normal = SubResource("StyleBoxTexture_shw8h")
-text = "volumen
-"
-script = ExtResource("3_blink")
+text = "Musica"
+
+[node name="SliderMusica" type="HSlider" parent="VBoxContainer"]
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 1.0
+
+[node name="Label2" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Efectos"
+
+[node name="SliderSFX" type="HSlider" parent="VBoxContainer"]
+layout_mode = 2
+max_value = 1.0
+step = 0.05
+value = 1.0
 
 [node name="Back" type="Button" parent="VBoxContainer"]
 layout_mode = 2
@@ -100,6 +102,7 @@ theme_override_styles/normal = SubResource("StyleBoxTexture_yuibf")
 text = "atras"
 script = ExtResource("2_inluw")
 
-[connection signal="pressed" from="VBoxContainer/Volumen" to="." method="_on_play_pressed"]
+[connection signal="value_changed" from="VBoxContainer/SliderMusica" to="." method="_on_slider_musica_value_changed"]
+[connection signal="value_changed" from="VBoxContainer/SliderSFX" to="." method="_on_slider_sfx_value_changed"]
 [connection signal="pressed" from="VBoxContainer/Back" to="." method="_on_quit_pressed"]
 [connection signal="pressed" from="VBoxContainer/Back" to="VBoxContainer/Back" method="_on_pressed"]
