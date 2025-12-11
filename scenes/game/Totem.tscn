@@ -1,0 +1,70 @@
+[gd_scene load_steps=7 format=3 uid="uid://ffs0n5jkmwc5"]
+
+[ext_resource type="Texture2D" uid="uid://dejje6o6g3ojd" path="res://assets/ui/map/Totem.png" id="1_bwnle"]
+[ext_resource type="Script" uid="uid://g0d58t6jckih" path="res://scenes/game/totem.gd" id="1_ua211"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pb6kd"]
+atlas = ExtResource("1_bwnle")
+region = Rect2(0, 0, 48, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k77be"]
+atlas = ExtResource("1_bwnle")
+region = Rect2(48, 0, 48, 48)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_3lmnu"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pb6kd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k77be")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 1.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bwnle"]
+size = Vector2(24.5, 45)
+
+[node name="Node2D" type="Area2D"]
+script = ExtResource("1_ua211")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_3lmnu")
+animation = &"idle"
+autoplay = "idle"
+frame_progress = 0.0614562
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-0.25, 1.5)
+shape = SubResource("RectangleShape2D_bwnle")
+
+[node name="Invocar" type="Node2D" parent="."]
+
+[node name="PanelContainer" type="PanelContainer" parent="Invocar"]
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 14.0
+offset_top = -13.0
+offset_right = 194.0
+offset_bottom = 47.0
+grow_horizontal = 0
+grow_vertical = 2
+scale = Vector2(0.5, 0.5)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Invocar/PanelContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Invocar/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Estas Preparado...?"
+horizontal_alignment = 1
+
+[node name="BtnInvocar" type="Button" parent="Invocar/PanelContainer/VBoxContainer"]
+layout_mode = 2
+text = "Desatar Calamidad.."
