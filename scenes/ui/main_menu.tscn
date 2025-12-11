@@ -84,15 +84,15 @@ anchor_left = 5.855
 anchor_top = 8.872
 anchor_right = 5.855
 anchor_bottom = 8.872
-offset_left = -494.585
-offset_top = -335.88
-offset_right = 407.415
-offset_bottom = 91.12
+offset_left = -70.585
+offset_top = -291.88
+offset_right = 544.415
+offset_bottom = 106.12
 grow_horizontal = 2
 grow_vertical = 2
-scale = Vector2(1.8, 1.8)
+scale = Vector2(1.5, 1.5)
 theme = SubResource("Theme_m1kxf")
-theme_override_constants/separation = 12
+theme_override_constants/separation = 23
 
 [node name="Play" type="Button" parent="VBoxContainer"]
 layout_mode = 2
