@@ -10,7 +10,7 @@ extends Control
 @onready var lobby_panel: Panel = $Panel/Lobby
 
 # === CONFIGURACIÓN DEL JUEGO ===
-const MY_PLAYER_NAME := "PC Nexus 4"
+const MY_PLAYER_NAME := "Clapt"
 const MY_GAME_ID := "A"
 const MY_GAME_KEY := "5NLQK3EMIZ"
 const MY_GAME_NAME := "Guardian del falapito"

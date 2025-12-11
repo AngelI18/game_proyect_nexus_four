@@ -440,11 +440,11 @@ func _on_deal_attack_timer_timeout() -> void:
 	_disable_attack_hitbox()
 
 func _on_player_is_hurt_timeout() -> void:
+	is_taking_damage = false
 	is_hurt = false
 
 func _on_invulnerability_timer_timeout() -> void:
 	is_invulnerable = false
-	is_taking_damage = false
 
 
 
