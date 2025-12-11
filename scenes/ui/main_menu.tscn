@@ -84,12 +84,13 @@ anchor_left = 5.855
 anchor_top = 8.872
 anchor_right = 5.855
 anchor_bottom = 8.872
-offset_left = 110.415
-offset_top = -201.88
-offset_right = 784.415
-offset_bottom = 347.12
+offset_left = -494.585
+offset_top = -335.88
+offset_right = 407.415
+offset_bottom = 91.12
 grow_horizontal = 2
 grow_vertical = 2
+scale = Vector2(1.8, 1.8)
 theme = SubResource("Theme_m1kxf")
 theme_override_constants/separation = 12
 
