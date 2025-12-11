@@ -58,7 +58,7 @@ func _ready():
 func iniciar(nombre, gameId, gameKey):
 	# Evitar múltiples inicializaciones
 	if _is_initialized:
-		print("⚠️ [Network] Ya está inicializado, reconectando...")
+		print("[Network] Ya está inicializado, reconectando...")
 		apagar()
 		await get_tree().create_timer(0.5).timeout
 	
@@ -92,7 +92,7 @@ func _conectar():
 	client.connect_to_url(url)
 
 func apagar():
-	print("🔌 [Network] Apagando conexión...")
+	print("[Network] Apagando conexión...")
 	
 	# Resetear puntos de enemigos
 	enemy_points = 0.0
@@ -107,7 +107,7 @@ func apagar():
 		match_manager.rival_name = ""
 	
 	_is_initialized = false
-	print("✅ [Network] Conexión cerrada correctamente")
+	print("[Network] Conexión cerrada correctamente")
 
 # === Legacy / Wrapper Methods ===
 func _enviar(dic: Dictionary):
@@ -137,9 +137,9 @@ func send_game_data(data: Dictionary):
 func notify_player_died():
 	"""Envía señal de derrota al oponente (NO abandona la match ni desmarca disponibilidad)"""
 	if match_manager:
-		print("💀 [NETWORK] Enviando señal de derrota al oponente...")
+		print("[NETWORK] Enviando señal de derrota al oponente...")
 		match_manager.send_game_data({"type": "defeat"})
-		print("✅ [NETWORK] Señal de derrota enviada")
+		print("[NETWORK] Señal de derrota enviada")
 
 func leave_match():
 	if match_manager: match_manager.leave_match()
@@ -156,7 +156,7 @@ func send_attack(damage: int = 10):
 		"damage": damage
 	}
 	
-	print("⚔️ [ATTACK] Enviando ataque:", payload)
+	print("[ATTACK] Enviando ataque:", payload)
 	send_game_data(payload)
 
 func add_enemy_points(points: int):
@@ -214,14 +214,14 @@ func _on_match_started():
 	match_started.emit(match_manager.rival_name)
 
 func _on_attack_received(attack_data: Dictionary):
-	print("⚔️ [NETWORK] ¡ATAQUE RECIBIDO!")
-	print("⚔️ [NETWORK] Jugador: ", attack_data.get("player", "desconocido"))
-	print("⚔️ [NETWORK] Daño: ", attack_data.get("damage", 0))
-	print("⚔️ [NETWORK] Datos completos: ", attack_data)
+	print("[NETWORK] ATAQUE RECIBIDO")
+	print("[NETWORK] Jugador: ", attack_data.get("player", "desconocido"))
+	print("[NETWORK] Daño: ", attack_data.get("damage", 0))
+	print("[NETWORK] Datos completos: ", attack_data)
 	ataque_recibido.emit(attack_data)
 
 func _on_match_ended(result: String, reason: String):
-	print("🏁 [NETWORK] Partida terminada: ", result, " - ", reason)
+	print("[NETWORK] Partida terminada: ", result, " - ", reason)
 	_show_match_result_popup(result)
 	game_over.emit(result, reason)
 	

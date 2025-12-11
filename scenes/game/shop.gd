@@ -2,7 +2,7 @@ extends Area2D
 
 # Referencias a la UI
 @onready var shop_ui = $ShopUI
-@onready var anim = $AnimatedSprite2D
+@onready var anim = $Sprite2D
 @onready var big_shop_ui = $BigShopUI
 
 # Referencias a los botones (Ajusta la ruta si cambiaste nombres)
@@ -32,11 +32,6 @@ func _on_body_exited(body):
 	if body.is_in_group("player"):
 		player_ref = null
 		_close_shop() # Cerrar tienda si se aleja
-
-func _input(event):
-	# Si hay jugador y presiona interactuar
-	if player_ref and event.is_action_pressed("interact") and not shop_ui.visible:
-		open_shop()
 
 # --- Lógica de la Tienda ---
 func open_shop():
