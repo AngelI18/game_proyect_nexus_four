@@ -87,8 +87,8 @@ shape = SubResource("CircleShape2D_i1wgb")
 one_shot = true
 
 [node name="health_bar" type="ProgressBar" parent="."]
-offset_left = -8.0
-offset_top = -6.0
+offset_left = -14.0
+offset_top = -8.0
 offset_right = 11.0
 offset_bottom = -4.0
 theme_override_styles/background = SubResource("StyleBoxFlat_4g15c")
