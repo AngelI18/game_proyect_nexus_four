@@ -29,3 +29,6 @@ position = Vector2(609, 327)
 
 [node name="BossMushroom" parent="." instance=ExtResource("6_4mtml")]
 position = Vector2(512, 586)
+
+[node name="EnemySpawner" parent="." instance=ExtResource("5_f144o")]
+position = Vector2(-277, 484)

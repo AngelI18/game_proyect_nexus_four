@@ -347,7 +347,6 @@ shape = SubResource("RectangleShape2D_befd6")
 one_shot = true
 
 [node name="health_bar" type="ProgressBar" parent="."]
-visible = false
 offset_left = -80.0
 offset_top = -58.0
 offset_right = 106.0
@@ -360,7 +359,6 @@ value = 500.0
 show_percentage = false
 
 [node name="Atack area" type="Area2D" parent="."]
-visible = false
 collision_layer = 4
 collision_mask = 8
 
