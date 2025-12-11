@@ -22,6 +22,8 @@ func open(player):
 	player_ref = player
 	visible = true
 	get_tree().paused = true # Pausar el juego
+	# NO pausar el juego en la tienda
+	# get_tree().paused = true
 	
 	# Limpiar items viejos si los hubiera
 	for child in grid.get_children():
@@ -75,6 +77,8 @@ func _on_item_clicked(slot_ref, item_data):
 func close_shop():
 	visible = false
 	get_tree().paused = false
+	# NO despausar porque nunca pausamos
+	# get_tree().paused = false
 
 func _animar_error(boton: Control):
 	# Si ya hay una animación corriendo en este botón, la matamos para que no se peleen

@@ -21,6 +21,7 @@ Global="*res://scripts/global.gd"
 PausaMenu="*res://scenes/ui/PausaMenu.tscn"
 Network="*res://scripts/managers/Network.gd"
 MusicaGlobal="*res://scenes/Musica/musica_global.tscn"
+Penance="*res://scenes/charactes/player/pop_penance.tscn"
 
 [display]
 

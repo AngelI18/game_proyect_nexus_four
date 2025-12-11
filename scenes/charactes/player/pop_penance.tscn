@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bybeldppkq1qn"]
+
+[ext_resource type="Script" uid="uid://goxcjmswr647" path="res://scripts/player/penance.gd" id="1_mmfgt"]
+
+[node name="pop_penance" type="CanvasLayer"]
+script = ExtResource("1_mmfgt")

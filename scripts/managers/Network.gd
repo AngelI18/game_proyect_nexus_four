@@ -140,7 +140,10 @@ func send_ready_ping():
 	if match_manager: match_manager.send_ping()
 
 func send_game_data(data: Dictionary):
-	if match_manager: match_manager.send_game_data(data)
+	if match_manager and match_manager.match_id != "":
+		match_manager.send_game_data(data)
+	else:
+		print("[NETWORK] No se puede enviar datos: no hay match activa")
 
 func notify_player_died():
 	"""Envía señal de derrota al oponente (NO abandona la match ni desmarca disponibilidad)"""
@@ -169,6 +172,11 @@ func send_attack(damage: int = 10):
 
 func add_enemy_points(points: int):
 	"""Agrega puntos por enemigo muerto y envía ataque si llega al límite"""
+	# Verificar que hay una partida activa
+	if not match_manager or match_manager.match_id == "":
+		print("💠 [NETWORK] No hay partida activa, puntos no acumulados")
+		return
+	
 	enemy_points += points
 	print("💠 [NETWORK] Puntos de enemigos: ", enemy_points, "/", POINTS_FOR_ATTACK)
 	
