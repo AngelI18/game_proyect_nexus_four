@@ -6,6 +6,9 @@ extends Panel
 @onready var scroll: ScrollContainer = $MarginContainer/GridContainer/scroll
 @onready var players_names: VBoxContainer = $"MarginContainer/GridContainer/scroll/player names"
 
+# === VARIABLES ===
+var scan_timer: Timer
+
 # === READY ===
 func _ready() -> void:
 	# Conectar señales
@@ -15,6 +18,13 @@ func _ready() -> void:
 		btn_connect.pressed.connect(_on_connect_pressed)
 	if not input.text_submitted.is_connected(Callable(self, "_on_connect_pressed")):
 		input.text_submitted.connect(func(_new_text): _on_connect_pressed())
+	
+	# Crear timer para scan periódico
+	scan_timer = Timer.new()
+	scan_timer.wait_time = 4.0
+	scan_timer.autostart = true
+	scan_timer.timeout.connect(_on_scan_timer_timeout)
+	add_child(scan_timer)
 	
 	# Mostrar siempre el panel con el nombre actual
 	visible = true
@@ -26,6 +36,11 @@ func _ready() -> void:
 	else:
 		input.placeholder_text = "Ingresa tu nombre"
 		input.grab_focus()
+
+func _on_scan_timer_timeout() -> void:
+	"""Escanea jugadores conectados cada 4 segundos"""
+	if visible and Network.lobby:
+		Network.refresh_players()
 
 # === METHODS ===
 func _on_player_list_updated(players: Dictionary) -> void:
@@ -62,9 +77,8 @@ func _on_connect_pressed() -> void:
 	if parent and parent.has_method("_iniciar_con_nombre"):
 		parent._iniciar_con_nombre(nombre)
 	
-	# El panel sigue visible pero muestra el nombre actual
-	input.text = nombre
-	input.placeholder_text = "Cambiar nombre"
+	# Ocultar panel después de conectar
+	visible = false
 
 func _nombre_existe(nombre: String) -> bool:
 	"""Verifica si el nombre ya existe en la lista de jugadores"""
