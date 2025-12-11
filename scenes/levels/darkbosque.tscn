@@ -1,12 +1,11 @@
-[gd_scene load_steps=8 format=4 uid="uid://btog8uqvgtjhu"]
+[gd_scene load_steps=7 format=4 uid="uid://btog8uqvgtjhu"]
 
 [ext_resource type="PackedScene" uid="uid://2li6pvr0ea4s" path="res://scenes/environment/parallax_darkBosque/dark.tscn" id="1_f83iy"]
 [ext_resource type="PackedScene" uid="uid://ccg021l8va1nb" path="res://scenes/charactes/player/player.tscn" id="2_vvid6"]
 [ext_resource type="TileSet" uid="uid://bwjtj27yicfyi" path="res://assets/environment/tilesets/terreno.tres" id="3_c81rx"]
 [ext_resource type="PackedScene" uid="uid://bikv58734gngk" path="res://scenes/charactes/enemies/nutria.tscn" id="4_cfv47"]
 [ext_resource type="PackedScene" uid="uid://bcy11d1akfql8" path="res://scenes/charactes/enemies/enemy_spawner.tscn" id="5_f144o"]
-[ext_resource type="PackedScene" uid="uid://bdx2knyy6lhm4" path="res://scenes/charactes/enemies/buitre.tscn" id="6_fix2h"]
-[ext_resource type="PackedScene" uid="uid://beciacngul30n" path="res://scenes/charactes/enemies/buoh.tscn" id="7_hn6t8"]
+[ext_resource type="PackedScene" uid="uid://d4ge1a3qbcqm6" path="res://scenes/charactes/enemies/mushroom_boss.tscn" id="6_4mtml"]
 
 [node name="Nivelbosque" type="Node2D"]
 position = Vector2(1, -344)
@@ -28,9 +27,5 @@ position = Vector2(976, 608)
 [node name="EnemySpawner2" parent="." instance=ExtResource("5_f144o")]
 position = Vector2(609, 327)
 
-[node name="Buitre" parent="." instance=ExtResource("6_fix2h")]
-position = Vector2(390, 519)
-
-[node name="Buoh" parent="." instance=ExtResource("7_hn6t8")]
-visible = false
-position = Vector2(-324, 479)
+[node name="BossMushroom" parent="." instance=ExtResource("6_4mtml")]
+position = Vector2(512, 586)
