@@ -287,24 +287,29 @@ func _check_enemy_damage() -> void:
 	if enemy_in_range == null:
 		return
 	
-	var damage_amount = 0
-	var enemy_type = 1
+	var damage_final = 0
 	
-	if enemy_in_range.has_method("get_enemy_type"):
-		enemy_type = enemy_in_range.get_enemy_type()
+	# --- CORRECCIÓN CLAVE ---
+	# Primero preguntamos: ¿El enemigo tiene definida su propia variable de daño?
+	if "damage_from_attack" in enemy_in_range:
+		# ¡SÍ! Usamos el daño exacto que dice el Boss (40, 60 u 80)
+		damage_final = enemy_in_range.damage_from_attack
+		
+	else:
+		# NO tiene variable, usamos la lógica antigua de porcentajes por Tipo
+		var enemy_type = 1
+		if enemy_in_range.has_method("get_enemy_type"):
+			enemy_type = enemy_in_range.get_enemy_type()
+		
+		match enemy_type:
+			1: damage_final = int(MAX_HEALTH * 0.08)
+			2: damage_final = int(MAX_HEALTH * 0.12)
+			3: damage_final = int(MAX_HEALTH * 0.16)
+			_: damage_final = int(MAX_HEALTH * 0.08)
 	
-	match enemy_type:
-		1:
-			damage_amount = int(MAX_HEALTH * 0.08)
-		2:
-			damage_amount = int(MAX_HEALTH * 0.12)
-		3:
-			damage_amount = int(MAX_HEALTH * 0.16)
-		_:
-			damage_amount = int(MAX_HEALTH * 0.08)
-	
+	# Aplicar el daño calculado
 	var knockback_direction = (global_position - enemy_in_range.global_position).normalized()
-	take_damage(damage_amount, knockback_direction, 2.0)
+	take_damage(damage_final, knockback_direction, 1.0) # Ajusté el tiempo a 1.0s, 2.0s era mucho
 
 func _check_tile_damage() -> void:
 	for i in range(get_slide_collision_count()):
