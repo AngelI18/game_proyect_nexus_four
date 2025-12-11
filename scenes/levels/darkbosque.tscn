@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://bcy11d1akfql8" path="res://scenes/charactes/enemies/enemy_spawner.tscn" id="5_f144o"]
 [ext_resource type="PackedScene" uid="uid://sd71cnst7d3j" path="res://scenes/game/shop.tscn" id="7_f83iy"]
 [ext_resource type="PackedScene" uid="uid://ffs0n5jkmwc5" path="res://scenes/game/Totem.tscn" id="7_vvid6"]
-[ext_resource type="PackedScene" uid="uid://bmk3tngcrk4xx" path="res://scenes/charactes/enemies/pig_boss.tscn" id="8_c81rx"]
+[ext_resource type="PackedScene" uid="uid://d4ge1a3qbcqm6" path="res://scenes/charactes/enemies/mushroom_boss.tscn" id="8_vvid6"]
 
 [node name="Nivelbosque" type="Node2D"]
 position = Vector2(1, -344)
@@ -40,7 +40,7 @@ position = Vector2(1867, 257)
 
 [node name="Node2D" parent="." instance=ExtResource("7_vvid6")]
 position = Vector2(4650, 616)
-boss_scene = ExtResource("8_c81rx")
+boss_scene = ExtResource("8_vvid6")
 spawn_marker_path = NodePath("../BossSpawnPoint")
 
 [node name="BossSpawnPoint" type="Marker2D" parent="."]

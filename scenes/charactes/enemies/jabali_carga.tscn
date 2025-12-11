@@ -255,7 +255,7 @@ rotation = 1.5708
 shape = SubResource("CapsuleShape2D_v0xqh")
 
 [node name="take_damage_cooldown" type="Timer" parent="."]
-wait_time = 0.5
+wait_time = 0.2
 one_shot = true
 
 [node name="health_bar" type="ProgressBar" parent="."]

@@ -344,6 +344,7 @@ position = Vector2(14.5, 4.5)
 shape = SubResource("RectangleShape2D_befd6")
 
 [node name="take_damage_cooldown" type="Timer" parent="."]
+wait_time = 0.2
 one_shot = true
 
 [node name="health_bar" type="ProgressBar" parent="."]
