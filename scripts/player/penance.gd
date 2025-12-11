@@ -80,14 +80,12 @@ func _show_warning_popup():
 		countdown_label.add_theme_font_size_override("font_size", 32)
 		countdown_label.add_theme_color_override("font_color", Color.RED)
 		
-		# Añadir al árbol
-		var root = get_tree().root
-		if root:
-			root.add_child(countdown_label)
-			# Centrar en pantalla
-			var viewport_size = get_viewport().get_visible_rect().size
-			countdown_label.position = Vector2(viewport_size.x / 2 - 150, 50)
-			countdown_label.custom_minimum_size = Vector2(300, 50)
+		# Añadir a la CanvasLayer (self)
+		add_child(countdown_label)
+		# Centrar en pantalla
+		var viewport_size = get_viewport().get_visible_rect().size
+		countdown_label.position = Vector2(viewport_size.x / 2 - 150, 50)
+		countdown_label.custom_minimum_size = Vector2(300, 50)
 	
 	# Iniciar contador
 	countdown_label.visible = true
@@ -138,12 +136,11 @@ func _show_penance_popup(penance: Dictionary):
 		popup_label.add_theme_font_size_override("font_size", 28)
 		popup_label.add_theme_color_override("font_color", Color.ORANGE_RED)
 		
-		var root = get_tree().root
-		if root:
-			root.add_child(popup_label)
-			var viewport_size = get_viewport().get_visible_rect().size
-			popup_label.position = Vector2(viewport_size.x / 2 - 200, 50)
-			popup_label.custom_minimum_size = Vector2(400, 100)
+		# Añadir a la CanvasLayer (self)
+		add_child(popup_label)
+		var viewport_size = get_viewport().get_visible_rect().size
+		popup_label.position = Vector2(viewport_size.x / 2 - 200, 50)
+		popup_label.custom_minimum_size = Vector2(400, 100)
 	
 	popup_label.text = penance.name + "\n" + penance.description
 	popup_label.visible = true

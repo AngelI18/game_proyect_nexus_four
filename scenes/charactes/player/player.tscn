@@ -1,6 +1,6 @@
-[gd_scene load_steps=61 format=3 uid="uid://ccg021l8va1nb"]
+[gd_scene load_steps=62 format=3 uid="uid://ccg021l8va1nb"]
 
-[ext_resource type="Script" uid="uid://bvfhmbyfrdwry" path="res://scripts/player/player.gd" id="1_yj2nq"]
+[ext_resource type="Script" uid="uid://goxcjmswr647" path="res://scripts/player/penance.gd" id="1_v4x4j"]
 [ext_resource type="Texture2D" uid="uid://dpws1jqb86o3k" path="res://assets/characters/player/sword attack.png" id="2_igqbg"]
 [ext_resource type="Texture2D" uid="uid://d22q88lm2gri4" path="res://assets/characters/player/Player Hurt 48x48.png" id="3_3yyo8"]
 [ext_resource type="Texture2D" uid="uid://n5kg423v8b7n" path="res://assets/characters/player/sword Idle.png" id="3_6igro"]
@@ -12,6 +12,7 @@
 [ext_resource type="AudioStream" uid="uid://c8srxgqu4rlfo" path="res://assets/audio/golpear/knifeSlice.ogg" id="9_uj01l"]
 [ext_resource type="AudioStream" uid="uid://desc8pt0ews2w" path="res://assets/audio/recibirDaño/clothBelt.ogg" id="10_dqix7"]
 [ext_resource type="AudioStream" uid="uid://deel88w70ttog" path="res://assets/audio/salto/cloth3.ogg" id="11_uj01l"]
+[ext_resource type="PackedScene" uid="uid://bybeldppkq1qn" path="res://scenes/charactes/player/pop_penance.tscn" id="13_iqrax"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_igqbg"]
 atlas = ExtResource("2_igqbg")
@@ -370,7 +371,7 @@ height = 28.0
 [node name="player" type="CharacterBody2D"]
 collision_layer = 7
 collision_mask = 11
-script = ExtResource("1_yj2nq")
+script = ExtResource("1_v4x4j")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(2, -16)
@@ -446,6 +447,8 @@ volume_db = -20.222
 [node name="AudioSalto" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("11_uj01l")
 volume_db = -19.259
+
+[node name="pop_penance" parent="." instance=ExtResource("13_iqrax")]
 
 [connection signal="area_entered" from="player_hit_box" to="." method="_on_player_hit_box_area_entered"]
 [connection signal="area_exited" from="player_hit_box" to="." method="_on_player_hit_box_area_exited"]
