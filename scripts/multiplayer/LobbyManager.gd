@@ -77,12 +77,21 @@ func _on_message_received(event: String, payload: Dictionary):
 			if payload.get("status") == "OK":
 				var match_id = data.get("matchId", "")
 				var rival_name = data.get("playerName", "")
-				# Fallback logic from original script
+				
+				# Si no viene el nombre, buscarlo en las invitaciones guardadas
+				if rival_name == "":
+					for inv in invitations:
+						if inv.get("matchId") == match_id:
+							rival_name = inv.get("name", "")
+							break
+				
+				# Fallback: buscar en players por playerId
 				if rival_name == "" and data.has("playerId"):
 					var pid = str(data["playerId"])
 					if players.has(pid):
 						rival_name = players[pid].get("name", "")
 				
+				print("[LOBBY] Aceptando invitación - Match: ", match_id, ", Rival: ", rival_name)
 				invitation_accepted.emit(match_id, rival_name)
 
 func _update_players(server_list: Array):
@@ -123,12 +132,33 @@ func _update_player_status(info: Dictionary):
 		players[pid]["status"] = info.get("playerStatus", "UNKNOWN")
 		player_list_updated.emit(players)
 
-func _handle_invitation(payload: Dictionary):
-	var info = payload.get("data", {})
-	var pid = info.get("playerId", "")
-	var mid = info.get("matchId", "")
-	var p_name = players.get(pid, {}).get("name", "Desconocido")
+func _handle_invitation(data: Dictionary):
+	var pid = str(data.get("playerId", ""))
+	var mid = str(data.get("matchId", ""))
+	var p_name = str(data.get("playerName", ""))
+	
+	print("[LOBBY] Invitación recibida - payload playerName: '", p_name, "', playerId: ", pid)
+	
+	# Si no viene el nombre en el payload, buscarlo en players
+	if p_name == "" or p_name == "Desconocido":
+		if players.has(pid):
+			p_name = players[pid].get("name", "")
+			print("[LOBBY] Nombre encontrado en players cache: '", p_name, "'")
+		
+		# Si aún no está en cache, hacer refresh y esperar
+		if p_name == "" or p_name == "Desconocido":
+			print("[LOBBY] Nombre no encontrado, haciendo refresh de jugadores...")
+			refresh_players()
+			# Esperar un momento para que llegue la respuesta
+			await _network.get_tree().create_timer(0.3).timeout
+			# Intentar de nuevo
+			if players.has(pid):
+				p_name = players[pid].get("name", "Jugador desconocido")
+			else:
+				p_name = "Jugador " + pid.substr(0, 4)
 	
 	var inv = {"playerId": pid, "matchId": mid, "name": p_name}
 	invitations.append(inv)
+	
+	print("[LOBBY] Invitación guardada - Match: ", mid, ", Nombre: '", p_name, "'")
 	invitation_received.emit(inv)

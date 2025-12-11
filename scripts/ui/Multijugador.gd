@@ -80,6 +80,13 @@ func _on_invitation_received(invitation: Dictionary):
 
 func _on_match_connected(match_id: String, rival_name: String):
 	print("Conectado al match: ", match_id)
+	print("Mi nombre: ", Global.player_name)
+	print("Rival: ", rival_name)
+	
+	# Si el rival_name está vacío, intentar obtenerlo
+	if rival_name == "" or rival_name == "Desconocido":
+		print("[WARNING] Nombre del rival vacío o desconocido")
+	
 	jugadores_del_match = [Global.player_name, rival_name]
 	_abrir_lobby()
 
@@ -300,9 +307,22 @@ func _on_volver_pressed():
 		return
 
 	if posicion_menu == 0:
+		# Mostrar mensaje de desconexión
+		label.text = "Desconectando..."
+		btn_enviar.visible = false
+		btn_ver.visible = false
+		volver.disabled = true
+		
 		# Rechazar todas las invitaciones pendientes antes de salir
 		Network.reject_all_pending_invitations()
+		
+		# Desconectar completamente del servidor
+		print("[MULTIJUGADOR] Desconectando del servidor...")
 		Network.apagar()
+		
+		# Esperar a que se complete la desconexión
+		await get_tree().create_timer(0.8).timeout
+		
 		get_tree().change_scene_to_file("res://scenes/ui/main_menu.tscn")
 	else:
 		_limpiar_ui()

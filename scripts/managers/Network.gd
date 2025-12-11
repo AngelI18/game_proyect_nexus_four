@@ -215,11 +215,20 @@ func _on_global_message(event: String, payload: Dictionary):
 		var m_id = data.get("matchId", "")
 		var rival_name = data.get("playerName", "")
 		
+		# Si no viene el nombre, buscarlo en invitaciones
+		if rival_name == "" and lobby:
+			for inv in lobby.invitations:
+				if inv.get("matchId") == m_id:
+					rival_name = inv.get("name", "")
+					break
+		
+		# Fallback: buscar en players
 		if rival_name == "" and data.has("playerId"):
 			var pid = str(data["playerId"])
 			if lobby and lobby.players.has(pid):
 				rival_name = lobby.players[pid].get("name", "")
 		
+		print("[NETWORK] match-accepted - Match: ", m_id, ", Rival: ", rival_name)
 		_start_match_process(m_id, rival_name)
 
 func _on_invitation_accepted(p_match_id: String, rival_name: String):
