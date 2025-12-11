@@ -1,8 +1,7 @@
-[gd_scene load_steps=7 format=4 uid="uid://dymk3gekb17o"]
+[gd_scene load_steps=6 format=4 uid="uid://dymk3gekb17o"]
 
 [ext_resource type="PackedScene" uid="uid://cxtrnhx07y64i" path="res://scenes/environment/parallax_backgrounds/sea.tscn" id="1_fr1um"]
 [ext_resource type="PackedScene" uid="uid://ccg021l8va1nb" path="res://scenes/charactes/player/player.tscn" id="1_jbqir"]
-[ext_resource type="PackedScene" uid="uid://do6i7mtwk50p1" path="res://scenes/charactes/enemies/enemy.tscn" id="4_v45ci"]
 [ext_resource type="TileSet" uid="uid://bwjtj27yicfyi" path="res://assets/environment/tilesets/terreno.tres" id="5_6xh4u"]
 [ext_resource type="PackedScene" uid="uid://r8q27fq3slfd" path="res://scenes/charactes/enemies/jabali_carga.tscn" id="5_48ne7"]
 [ext_resource type="PackedScene" uid="uid://bikv58734gngk" path="res://scenes/charactes/enemies/nutria.tscn" id="6_6xh4u"]
@@ -14,9 +13,6 @@ position = Vector2(-62, 27)
 
 [node name="player" parent="." instance=ExtResource("1_jbqir")]
 position = Vector2(75, 67)
-
-[node name="Enemy" parent="." instance=ExtResource("4_v45ci")]
-position = Vector2(341, 67)
 
 [node name="terreno_pisable" type="TileMapLayer" parent="."]
 light_mask = 3

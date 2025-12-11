@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://bcy11d1akfql8"]
 
-[ext_resource type="Script" path="res://scripts/enemies/enemy_spawner.gd" id="1_4hdre"]
+[ext_resource type="Script" uid="uid://cd3ct4mjxxvv7" path="res://scripts/enemies/enemy_spawner.gd" id="1_4hdre"]
 [ext_resource type="PackedScene" uid="uid://r8q27fq3slfd" path="res://scenes/charactes/enemies/jabali_carga.tscn" id="2_jabali"]
 [ext_resource type="PackedScene" uid="uid://bikv58734gngk" path="res://scenes/charactes/enemies/nutria.tscn" id="3_nutria"]
 [ext_resource type="PackedScene" uid="uid://bdx2knyy6lhm4" path="res://scenes/charactes/enemies/buitre.tscn" id="4_buitre"]

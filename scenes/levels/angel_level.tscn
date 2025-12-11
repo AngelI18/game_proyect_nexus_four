@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=4 uid="uid://cdhvpyptcu07"]
+[gd_scene load_steps=8 format=4 uid="uid://cdhvpyptcu07"]
 
 [ext_resource type="Script" uid="uid://dovyxxe5qn35l" path="res://scenes/levels/angel_level.gd" id="1_6jp0g"]
 [ext_resource type="PackedScene" uid="uid://ccg021l8va1nb" path="res://scenes/charactes/player/player.tscn" id="2_mdmnb"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://34vltm0vwt0r" path="res://scenes/environment/parallax_bosque/nivel_bosque.tscn" id="3_lfudv"]
 [ext_resource type="PackedScene" uid="uid://r8q27fq3slfd" path="res://scenes/charactes/enemies/jabali_carga.tscn" id="4_r4pq2"]
 [ext_resource type="PackedScene" uid="uid://bikv58734gngk" path="res://scenes/charactes/enemies/nutria.tscn" id="5_6jp0g"]
+[ext_resource type="PackedScene" uid="uid://bcy11d1akfql8" path="res://scenes/charactes/enemies/enemy_spawner.tscn" id="7_06xef"]
 
 [node name="angel_level" type="Node2D"]
 script = ExtResource("1_6jp0g")
@@ -27,3 +28,6 @@ position = Vector2(290, 244)
 
 [node name="Nutria" parent="." instance=ExtResource("5_6jp0g")]
 position = Vector2(564, -44)
+
+[node name="EnemySpawner" parent="." instance=ExtResource("7_06xef")]
+position = Vector2(-77, 118)

@@ -9,11 +9,28 @@ var current_enemies = 0
 # Referencia a nuestra caja visual
 @onready var zona = $ZonaAparicion
 
+# Array de escenas de enemigos regulares (sin bosses)
+var regular_enemy_scenes = [
+	preload("res://scenes/charactes/enemies/buitre.tscn"),
+	preload("res://scenes/charactes/enemies/buoh.tscn"),
+	preload("res://scenes/charactes/enemies/jabali_carga.tscn"),
+	preload("res://scenes/charactes/enemies/nutria.tscn")
+]
+
 func _ready():
 	$Timer.timeout.connect(_on_timer_timeout)
 
 func _on_timer_timeout():
-	current_enemies = get_tree().get_nodes_in_group("enemigos").size()
+	# Cuenta solo enemigos de scenes/charactes/enemies que no terminen en _boss
+	var all_enemies = get_tree().get_nodes_in_group("enemigos")
+	var regular_enemies = []
+	
+	for enemy in all_enemies:
+		if enemy != null and enemy.scene_file_path.find("scenes/charactes/enemies") != -1:
+			if not enemy.scene_file_path.ends_with("_boss.tscn"):
+				regular_enemies.append(enemy)
+	
+	current_enemies = regular_enemies.size()
 	if current_enemies >= max_enemies:
 		return 
 	spawn_enemy()
@@ -21,7 +38,10 @@ func _on_timer_timeout():
 func spawn_enemy():
 	var new_enemy
 	
-	if enemy_types.size() > 0:
+	# Prioriza el array de escenas regulares si está disponible
+	if regular_enemy_scenes.size() > 0:
+		new_enemy = regular_enemy_scenes.pick_random().instantiate()
+	elif enemy_types.size() > 0:
 		new_enemy = enemy_types.pick_random().instantiate()
 	elif enemy_scene:
 		new_enemy = enemy_scene.instantiate()

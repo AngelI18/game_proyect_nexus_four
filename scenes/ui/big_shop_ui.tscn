@@ -6,15 +6,6 @@
 layer = 10
 script = ExtResource("1_a15gw")
 
-[node name="Fondo" type="ColorRect" parent="."]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-color = Color(0.509286, 0.509286, 0.509286, 1)
-metadata/_edit_use_anchors_ = true
-
 [node name="Ventana" type="PanelContainer" parent="."]
 process_mode = 3
 anchors_preset = 8
