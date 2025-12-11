@@ -1,9 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://bcy11d1akfql8"]
+[gd_scene load_steps=6 format=3 uid="uid://bcy11d1akfql8"]
 
 [ext_resource type="Script" uid="uid://cd3ct4mjxxvv7" path="res://scripts/enemies/enemy_spawner.gd" id="1_4hdre"]
 [ext_resource type="PackedScene" uid="uid://r8q27fq3slfd" path="res://scenes/charactes/enemies/jabali_carga.tscn" id="2_jabali"]
 [ext_resource type="PackedScene" uid="uid://bikv58734gngk" path="res://scenes/charactes/enemies/nutria.tscn" id="3_nutria"]
 [ext_resource type="PackedScene" uid="uid://bdx2knyy6lhm4" path="res://scenes/charactes/enemies/buitre.tscn" id="4_buitre"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xi03g"]
+radius = 586.728
 
 [node name="EnemySpawner" type="Node2D"]
 script = ExtResource("1_4hdre")
@@ -11,9 +14,18 @@ enemy_scene = ExtResource("2_jabali")
 enemy_types = Array[PackedScene]([ExtResource("2_jabali"), ExtResource("3_nutria"), ExtResource("4_buitre")])
 
 [node name="Timer" type="Timer" parent="."]
-wait_time = 3.0
+wait_time = 10.0
 autostart = true
 
 [node name="ZonaAparicion" type="ReferenceRect" parent="."]
 offset_right = 40.0
 offset_bottom = 40.0
+
+[node name="detection_area" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="detection_area"]
+position = Vector2(0, -1)
+shape = SubResource("CircleShape2D_xi03g")
+
+[connection signal="body_entered" from="detection_area" to="." method="_on_detection_area_body_entered"]
+[connection signal="body_exited" from="detection_area" to="." method="_on_detection_area_body_exited"]

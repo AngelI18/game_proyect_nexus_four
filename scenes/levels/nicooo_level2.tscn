@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=4 uid="uid://cyx585oj314dk"]
+[gd_scene load_steps=13 format=4 uid="uid://cyx585oj314dk"]
 
 [ext_resource type="TileSet" uid="uid://bwjtj27yicfyi" path="res://assets/environment/tilesets/terreno.tres" id="1_8juui"]
 [ext_resource type="Script" uid="uid://houk0hp84u0s" path="res://scenes/levels/nicooo_level_2.gd" id="1_fek4i"]
@@ -11,6 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://bdx2knyy6lhm4" path="res://scenes/charactes/enemies/buitre.tscn" id="9_m63jl"]
 [ext_resource type="PackedScene" uid="uid://bmk3tngcrk4xx" path="res://scenes/charactes/enemies/pig_boss.tscn" id="11_pum8t"]
 [ext_resource type="PackedScene" uid="uid://ffs0n5jkmwc5" path="res://scenes/game/Totem.tscn" id="11_qxyb1"]
+[ext_resource type="PackedScene" uid="uid://bcy11d1akfql8" path="res://scenes/charactes/enemies/enemy_spawner.tscn" id="12_qxyb1"]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_fek4i")
@@ -108,8 +109,43 @@ position = Vector2(4368, 820)
 boss_scene = ExtResource("11_pum8t")
 spawn_marker_path = NodePath("../BossSpawnPoint")
 
+[node name="BossSpawnPoint" type="Marker2D" parent="."]
+position = Vector2(4181, 988)
+
+[node name="Buoh2" parent="." instance=ExtResource("8_t88kd")]
+position = Vector2(3638, -505)
+
+[node name="Buoh3" parent="." instance=ExtResource("8_t88kd")]
+position = Vector2(2577, -827)
+
+[node name="Buoh4" parent="." instance=ExtResource("8_t88kd")]
+position = Vector2(2464, 13)
+
+[node name="Buoh5" parent="." instance=ExtResource("8_t88kd")]
+position = Vector2(1641, -371)
+
+[node name="Buoh6" parent="." instance=ExtResource("8_t88kd")]
+position = Vector2(3179, -371)
+
+[node name="Buitre2" parent="." instance=ExtResource("9_m63jl")]
+position = Vector2(1438, -395)
+
+[node name="Buitre3" parent="." instance=ExtResource("9_m63jl")]
+position = Vector2(3874, -44)
+
+[node name="Buitre4" parent="." instance=ExtResource("9_m63jl")]
+position = Vector2(2859, -813)
+
+[node name="Buitre5" parent="." instance=ExtResource("9_m63jl")]
+position = Vector2(2813, -194)
+
 [node name="player" parent="." instance=ExtResource("2_512yb")]
 position = Vector2(622, 135)
 
-[node name="BossSpawnPoint" type="Marker2D" parent="."]
-position = Vector2(4181, 988)
+[node name="EnemySpawner" parent="." instance=ExtResource("12_qxyb1")]
+position = Vector2(2030, 108)
+enemy_types = Array[PackedScene]([ExtResource("5_mlcwe"), ExtResource("6_gof8j"), ExtResource("9_m63jl"), ExtResource("8_t88kd")])
+
+[node name="EnemySpawner2" parent="." instance=ExtResource("12_qxyb1")]
+position = Vector2(3347, -713)
+enemy_types = Array[PackedScene]([ExtResource("5_mlcwe"), ExtResource("6_gof8j"), ExtResource("9_m63jl"), ExtResource("8_t88kd")])

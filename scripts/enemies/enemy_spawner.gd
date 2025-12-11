@@ -18,6 +18,10 @@ var regular_enemy_scenes = [
 ]
 
 func _ready():
+# Asegurarnos de que el Timer empiece APAGADO para que no spawnee nada al inicio
+	$Timer.stop()
+	
+	# Si no conectaste la señal desde el editor, puedes descomentar esto:
 	$Timer.timeout.connect(_on_timer_timeout)
 
 func _on_timer_timeout():
@@ -67,3 +71,18 @@ func spawn_enemy():
 	# OJO: Si prefieres que sean independientes del spawner usa:
 	# get_parent().add_child(new_enemy)
 	# new_enemy.global_position = global_position + spawn_pos
+
+
+func _on_detection_area_body_entered(body: Node2D) -> void:
+	# Verificamos si lo que entró es el Jugador
+	# Asegúrate de que tu jugador esté en el grupo "player" o se llame "Player"
+	if body.is_in_group("player") or body.name == "Player":
+		print("Jugador detectado: Activando Spawner")
+		spawn_enemy() # (Opcional) Spawnea uno inmediatamente al entrar
+		$Timer.start() # Inicia el ciclo de 10 segundos
+
+func _on_detection_area_body_exited(body: Node2D) -> void:
+	# Si el jugador se va, apagamos la máquina
+	if body.is_in_group("player") or body.name == "Player":
+		print("Jugador se fue: Desactivando Spawner")
+		$Timer.stop()
