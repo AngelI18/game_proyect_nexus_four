@@ -30,6 +30,7 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="UI"]
+layout_mode = 0
 offset_left = -1192.0
 offset_right = -680.0
 offset_bottom = 512.0
