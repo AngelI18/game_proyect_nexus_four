@@ -108,6 +108,7 @@ position = Vector2(1196, -69)
 position = Vector2(4368, 820)
 boss_scene = ExtResource("11_pum8t")
 spawn_marker_path = NodePath("../BossSpawnPoint")
+next_level_path = "uid://cdhvpyptcu07"
 
 [node name="BossSpawnPoint" type="Marker2D" parent="."]
 position = Vector2(4181, 988)

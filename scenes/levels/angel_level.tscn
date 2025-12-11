@@ -39,6 +39,7 @@ enemy_types = Array[PackedScene]([ExtResource("4_r4pq2"), ExtResource("5_6jp0g")
 position = Vector2(2662, 313)
 boss_scene = ExtResource("9_ee5dw")
 spawn_marker_path = NodePath("../BossSpawnPoint")
+next_level_path = "uid://cyx585oj314dk"
 
 [node name="BossSpawnPoint" type="Marker2D" parent="."]
 position = Vector2(2377, 205)
