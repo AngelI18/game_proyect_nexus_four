@@ -257,7 +257,7 @@ script = ExtResource("1_in0wk")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(-10, -71)
-scale = Vector2(1.97917, 1.92361)
+scale = Vector2(2, 1.944)
 sprite_frames = SubResource("SpriteFrames_kqbfr")
 animation = &"atack_carga"
 autoplay = "idle"
@@ -287,7 +287,7 @@ one_shot = true
 [node name="BossUI" type="CanvasLayer" parent="."]
 
 [node name="health_bar" type="ProgressBar" parent="BossUI"]
-custom_minimum_size = Vector2(900, 40)
+custom_minimum_size = Vector2(700, 40)
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5

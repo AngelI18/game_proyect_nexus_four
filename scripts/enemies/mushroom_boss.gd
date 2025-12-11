@@ -23,8 +23,8 @@ var player_chase = false
 
 # Stats
 var damage_from_attack = 35
-var health = 500
-var max_health = 500
+var health = 5000
+var max_health = 5000
 
 @onready var animated_sprite = $AnimatedSprite2D 
 @onready var attack_area = $"Atack area" 
