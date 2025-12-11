@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://dfpvwtpka4mji"]
+
+[ext_resource type="AudioStream" uid="uid://xt5lpwnwsj12" path="res://assets/audio/musica/Peaceful Place.ogg" id="1_gclku"]
+
+[node name="MusicaGlobal" type="AudioStreamPlayer"]
+process_mode = 3
+stream = ExtResource("1_gclku")
+volume_db = -15.0
+autoplay = true
+bus = &"Musica"

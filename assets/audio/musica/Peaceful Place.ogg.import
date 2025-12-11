@@ -1,0 +1,19 @@
+[remap]
+
+importer="oggvorbisstr"
+type="AudioStreamOggVorbis"
+uid="uid://xt5lpwnwsj12"
+path="res://.godot/imported/Peaceful Place.ogg-cda621c2200d89ee7c24aac424f67e0c.oggvorbisstr"
+
+[deps]
+
+source_file="res://assets/audio/musica/Peaceful Place.ogg"
+dest_files=["res://.godot/imported/Peaceful Place.ogg-cda621c2200d89ee7c24aac424f67e0c.oggvorbisstr"]
+
+[params]
+
+loop=true
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
