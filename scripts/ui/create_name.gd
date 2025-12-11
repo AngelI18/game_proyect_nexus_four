@@ -16,25 +16,16 @@ func _ready() -> void:
 	if not input.text_submitted.is_connected(Callable(self, "_on_connect_pressed")):
 		input.text_submitted.connect(func(_new_text): _on_connect_pressed())
 	
-	# Verificar Global.player_name
-	if Global.player_name == "":
-		# Mostrar panel para introducir nombre
-		visible = true
+	# Mostrar siempre el panel con el nombre actual
+	visible = true
+	
+	# Cargar nombre actual si existe
+	if Global.player_name != "":
+		input.text = Global.player_name
+		input.placeholder_text = "Cambiar nombre"
+	else:
 		input.placeholder_text = "Ingresa tu nombre"
 		input.grab_focus()
-	else:
-		# Verificar si el nombre global ya está en uso
-		if _nombre_existe(Global.player_name):
-			# Nombre en uso, pedir nombre nuevo
-			visible = true
-			input.text = ""
-			input.placeholder_text = "Nombre en uso, ingresa otro"
-			input.grab_focus()
-			Global.player_name = ""  # Limpiar nombre global
-		else:
-			# Nombre válido, dejar escrito y ocultar panel
-			input.text = Global.player_name
-			visible = false
 
 # === METHODS ===
 func _on_player_list_updated(players: Dictionary) -> void:
@@ -66,13 +57,14 @@ func _on_connect_pressed() -> void:
 	Global.player_name = nombre
 	print("[CREATE_NAME] Nombre guardado: ", nombre)
 	
-	# Inicializar Network con el nuevo nombre
+	# Inicializar Network con el nombre (nuevo o actualizado)
 	var parent = get_parent()
 	if parent and parent.has_method("_iniciar_con_nombre"):
 		parent._iniciar_con_nombre(nombre)
 	
-	# Ocultar panel
-	visible = false
+	# El panel sigue visible pero muestra el nombre actual
+	input.text = nombre
+	input.placeholder_text = "Cambiar nombre"
 
 func _nombre_existe(nombre: String) -> bool:
 	"""Verifica si el nombre ya existe en la lista de jugadores"""
