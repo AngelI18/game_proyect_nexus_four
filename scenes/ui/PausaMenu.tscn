@@ -123,6 +123,6 @@ libraries = {
 }
 
 [connection signal="pressed" from="PanelContainer/VBoxContainer/jugar" to="." method="_on_jugar_pressed"]
-[connection signal="pressed" from="PanelContainer/VBoxContainer/reiniciar" to="." method="_on_reiniciar_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/reiniciar" to="." method="_on_opciones_pressed"]
+[connection signal="pressed" from="PanelContainer/VBoxContainer/reiniciar" to="." method="_on_reiniciar_pressed"]
 [connection signal="pressed" from="PanelContainer/VBoxContainer/salir" to="." method="_on_salir_pressed"]
