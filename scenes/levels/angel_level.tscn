@@ -8,8 +8,6 @@
 [ext_resource type="PackedScene" uid="uid://bikv58734gngk" path="res://scenes/charactes/enemies/nutria.tscn" id="5_6jp0g"]
 [ext_resource type="PackedScene" uid="uid://bcy11d1akfql8" path="res://scenes/charactes/enemies/enemy_spawner.tscn" id="7_06xef"]
 [ext_resource type="PackedScene" uid="uid://bdx2knyy6lhm4" path="res://scenes/charactes/enemies/buitre.tscn" id="8_b040y"]
-[ext_resource type="PackedScene" uid="uid://ffs0n5jkmwc5" path="res://scenes/game/Totem.tscn" id="8_f1dd7"]
-[ext_resource type="PackedScene" uid="uid://b6j3p0nyalwsg" path="res://scenes/charactes/enemies/bat_boss.tscn" id="9_ee5dw"]
 [ext_resource type="PackedScene" path="res://scenes/game/Totem.tscn" id="8_f1dd7"]
 [ext_resource type="PackedScene" path="res://scenes/charactes/enemies/bat_boss.tscn" id="9_ee5dw"]
 [ext_resource type="PackedScene" uid="uid://beciacngul30n" path="res://scenes/charactes/enemies/buoh.tscn" id="9_haq4n"]
