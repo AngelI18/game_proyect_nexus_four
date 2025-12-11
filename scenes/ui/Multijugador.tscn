@@ -4,11 +4,8 @@
 [ext_resource type="FontFile" uid="uid://dkl3bob77eb85" path="res://assets/ui/fonts/pixelpurl.medium.ttf" id="2_h81ph"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n6jst"]
-bg_color = Color(0.25116, 0.0422789, 0.327632, 1)
-corner_radius_top_left = 60
-corner_radius_top_right = 60
-corner_radius_bottom_right = 60
-corner_radius_bottom_left = 60
+bg_color = Color(0.151852, 0.124866, 0.341521, 1)
+corner_detail = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_syex5"]
 bg_color = Color(1, 1, 1, 1)
@@ -32,15 +29,9 @@ script = ExtResource("1_ni7w4")
 [node name="Panel" type="Panel" parent="."]
 custom_minimum_size = Vector2(980, 570)
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_n6jst")

@@ -10,7 +10,7 @@ extends Control
 @onready var lobby_panel: Panel = $Panel/Lobby
 
 # === CONFIGURACIÓN DEL JUEGO ===
-const MY_PLAYER_NAME := "PC Nexus 4"
+const MY_PLAYER_NAME := "PC Nexus 4 angel"
 const MY_GAME_ID := "A"
 const MY_GAME_KEY := "5NLQK3EMIZ"
 const MY_GAME_NAME := "Guardian del falapito"
@@ -66,12 +66,15 @@ func _on_player_list_updated(players: Dictionary):
 		_render_player_list(players)
 
 func _on_invitation_received(invitation: Dictionary):
-	# If we are in invitation view, refresh
-	if posicion_menu == 1 and modo == 2:
-		_render_invitations()
-	else:
-		# Maybe show a notification?
-		print("Invitación recibida de " + invitation.get("name", ""))
+	# Cambiar automáticamente a la vista de invitaciones
+	scroll.visible = true
+	btn_enviar.visible = false
+	btn_ver.visible = false
+	posicion_menu = 1
+	modo = 2
+	label.text = "Invitaciones recibidas"
+	_render_invitations()
+	print("Invitación recibida de " + invitation.get("name", ""))
 
 func _on_match_connected(match_id: String, rival_name: String):
 	print("Conectado al match: ", match_id)
