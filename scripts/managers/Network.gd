@@ -39,7 +39,7 @@ var match_id: String:
 
 var _game_id: String = "A"
 var _game_key: String = "5NLQK3EMIZ"
-var _player_name: String = "Player"
+var _player_name: String = ""
 var _is_initialized: bool = false
 
 # Sistema de ataques

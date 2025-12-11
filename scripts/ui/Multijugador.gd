@@ -8,13 +8,9 @@ extends Control
 @onready var btn_ver: Button = $Panel/Ver
 @onready var volver: Button = $Volver
 @onready var lobby_panel: Panel = $Panel/Lobby
+@onready var create_name_panel: Panel = $"Create name"
 
-# === CONFIGURACIÓN DEL JUEGO ===
-<<<<<<< Updated upstream
-const MY_PLAYER_NAME := "Clapt"
-=======
-const MY_PLAYER_NAME := ""
->>>>>>> Stashed changes
+# === CONSTANTES ===
 const MY_GAME_ID := "A"
 const MY_GAME_KEY := "5NLQK3EMIZ"
 const MY_GAME_NAME := "Guardian del falapito"
@@ -26,6 +22,7 @@ var jugadores_del_match: Array = []
 
 # === READY ===
 func _ready():
+	# El panel create_name se mostrará automáticamente si Global.player_name == ""
 	label.text = "Modo Multijugador"
 	lobby_panel.visible = false
 	_limpiar_ui()
@@ -46,8 +43,9 @@ func _ready():
 	btn_ver.pressed.connect(_on_ver_pressed)
 	volver.pressed.connect(_on_volver_pressed)
 	
-	# Start Connection
-	Network.iniciar(MY_PLAYER_NAME, MY_GAME_ID, MY_GAME_KEY)
+	# Start Connection solo si hay nombre
+	if Global.player_name != "":
+		Network.iniciar(Global.player_name, MY_GAME_ID, MY_GAME_KEY)
 
 	scroll.visible = false
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -82,7 +80,7 @@ func _on_invitation_received(invitation: Dictionary):
 
 func _on_match_connected(match_id: String, rival_name: String):
 	print("Conectado al match: ", match_id)
-	jugadores_del_match = [MY_PLAYER_NAME, rival_name]
+	jugadores_del_match = [Global.player_name, rival_name]
 	_abrir_lobby()
 
 func _on_match_ready():
@@ -199,7 +197,7 @@ func _abrir_lobby():
 	for p_name in jugadores_del_match:
 		if str(p_name).strip_edges() == "":
 			continue
-		var is_local = (p_name == MY_PLAYER_NAME)
+		var is_local = (p_name == Global.player_name)
 		var fila := HBoxContainer.new()
 		fila.alignment = BoxContainer.ALIGNMENT_CENTER
 		fila.add_child(_crear_label("👤 " + p_name, 24))
@@ -269,6 +267,12 @@ func _crear_boton(texto, font_size := 18, ancho := 140, alto := 45, accion = nul
 	if accion != null:
 		btn.pressed.connect(accion)
 	return btn
+
+# === MÉTODOS AUXILIARES ===
+func _iniciar_con_nombre(nombre: String):
+	"""Inicializa la conexión Network con el nombre creado"""
+	print("[MULTIJUGADOR] Iniciando conexión con nombre: ", nombre)
+	Network.iniciar(nombre, MY_GAME_ID, MY_GAME_KEY)
 
 # === BOTONES ===
 func _on_enviar_pressed():

@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://c1jb675isjs8x"]
+[gd_scene load_steps=8 format=3 uid="uid://c1jb675isjs8x"]
 
 [ext_resource type="Script" uid="uid://dsl1p3yreo66s" path="res://scripts/ui/Multijugador.gd" id="1_ni7w4"]
 [ext_resource type="FontFile" uid="uid://dkl3bob77eb85" path="res://assets/ui/fonts/pixelpurl.medium.ttf" id="2_h81ph"]
+[ext_resource type="Script" uid="uid://bxl1rqrhlwivl" path="res://scripts/ui/create_name.gd" id="3_0pcyu"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n6jst"]
 bg_color = Color(0.151852, 0.124866, 0.341521, 1)
@@ -10,15 +11,15 @@ corner_detail = 1
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_syex5"]
 bg_color = Color(1, 1, 1, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ekk4b"]
+bg_color = Color(0.213254, 0.178648, 0.454347, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ni7w4"]
 bg_color = Color(0.147672, 0.147672, 0.147672, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ekk4b"]
-bg_color = Color(0.213254, 0.178648, 0.454347, 1)
 
 [node name="Control" type="Control"]
 layout_mode = 3
@@ -115,24 +116,84 @@ offset_right = 40.0
 offset_bottom = 40.0
 alignment = 1
 
+[node name="Create name" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.0347222
+anchor_top = 0.0402778
+anchor_right = 0.971528
+anchor_bottom = 0.943056
+offset_left = -7.0
+offset_top = 4.0
+offset_right = -7.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ekk4b")
+script = ExtResource("3_0pcyu")
+
+[node name="MarginContainer" type="MarginContainer" parent="Create name"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -394.0
+offset_top = -87.0
+offset_right = 394.0
+offset_bottom = 87.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="GridContainer" type="GridContainer" parent="Create name/MarginContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 50
+columns = 2
+
+[node name="ingresar nombre" type="Label" parent="Create name/MarginContainer/GridContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_h81ph")
+theme_override_font_sizes/font_size = 55
+text = "Ingresar Nombre"
+
+[node name="jugadores online" type="Label" parent="Create name/MarginContainer/GridContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_h81ph")
+theme_override_font_sizes/font_size = 55
+text = "Jugadores conectados"
+
+[node name="LineEdit" type="LineEdit" parent="Create name/MarginContainer/GridContainer"]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_h81ph")
+theme_override_font_sizes/font_size = 35
+
+[node name="scroll" type="ScrollContainer" parent="Create name/MarginContainer/GridContainer"]
+layout_mode = 2
+
+[node name="player names" type="VBoxContainer" parent="Create name/MarginContainer/GridContainer/scroll"]
+layout_mode = 2
+
+[node name="connect" type="Button" parent="Create name/MarginContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("2_h81ph")
+theme_override_font_sizes/font_size = 35
+text = "conectar"
+
 [node name="Volver" type="Button" parent="."]
 layout_mode = 0
-offset_left = 28.0
-offset_top = 23.0
-offset_right = 159.0
-offset_bottom = 102.0
+offset_left = 49.0
+offset_top = 44.0
+offset_right = 180.0
+offset_bottom = 123.0
 theme_override_fonts/font = ExtResource("2_h81ph")
 theme_override_font_sizes/font_size = 47
 theme_override_styles/normal = SubResource("StyleBoxFlat_ni7w4")
 text = "Volver"
 
-[node name="Create name" type="Panel" parent="."]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_ekk4b")
-
-[node name="ingresar nombre usuario" type="Label" parent="Create name"]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+[connection signal="pressed" from="Create name/MarginContainer/GridContainer/connect" to="Create name" method="_on_connect_pressed"]

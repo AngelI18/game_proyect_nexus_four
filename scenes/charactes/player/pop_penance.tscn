@@ -26,7 +26,7 @@ metadata/_edit_use_anchors_ = true
 [node name="message" type="Label" parent="VBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_u73mr")
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 30
 
 [node name="Timer_penance" type="Timer" parent="."]
 wait_time = 20.0
